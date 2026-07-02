@@ -4,11 +4,16 @@ import SwiftData
 
 struct StatisticsView: View {
     @Query private var reports: [BigMacReport]
+    @Query private var settingsList: [AppSettings]
     @State private var selectedSegment = 0
     @State private var selectedCountry: String?
 
+    private var normalizationCurrency: String {
+        settingsList.first?.effectiveNormalizationCurrency ?? CurrencyConversionService.deviceLocaleCurrencyCode()
+    }
+
     private var summary: StatisticsSummary {
-        StatisticsService.summary(from: reports)
+        StatisticsService.summary(from: reports, normalizationCurrency: normalizationCurrency)
     }
 
     private var countries: [String] {
@@ -16,15 +21,15 @@ struct StatisticsView: View {
     }
 
     private var countryData: [PriceAggregate] {
-        StatisticsService.byCountry(from: reports)
+        StatisticsService.byCountry(from: reports, normalizationCurrency: normalizationCurrency)
     }
 
     private var subRegionData: [PriceAggregate] {
-        StatisticsService.bySubRegion(from: reports, country: selectedCountry)
+        StatisticsService.bySubRegion(from: reports, country: selectedCountry, normalizationCurrency: normalizationCurrency)
     }
 
     private var locationTypeData: [PriceAggregate] {
-        StatisticsService.byLocationType(from: reports)
+        StatisticsService.byLocationType(from: reports, normalizationCurrency: normalizationCurrency)
     }
 
     private var ratingData: [(rating: Int, count: Int)] {
@@ -35,6 +40,7 @@ struct StatisticsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    normalizationBanner
                     summaryCards
 
                     if !countryData.isEmpty {
@@ -59,7 +65,34 @@ struct StatisticsView: View {
             }
             .background(Color.bmiCream.opacity(0.4))
             .navigationTitle("Index Stats")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        Label("Currency Settings", systemImage: "dollarsign.circle")
+                    }
+                }
+            }
         }
+    }
+
+    private var normalizationBanner: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "arrow.left.arrow.right.circle.fill")
+                .foregroundStyle(.bmiBrown)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Normalized to \(normalizationCurrency)")
+                    .font(.subheadline.weight(.semibold))
+                Text("Original local prices are converted for cross-country comparison.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
     private var summaryCards: some View {
@@ -213,11 +246,7 @@ struct StatisticsView: View {
     }
 
     private func formatCost(_ value: Double, code: String) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = code
-        formatter.maximumFractionDigits = code == "JPY" || code == "KRW" ? 0 : 2
-        return formatter.string(from: NSNumber(value: value)) ?? "\(code) \(value)"
+        CurrencyConversionService.format(value, currencyCode: code)
     }
 }
 

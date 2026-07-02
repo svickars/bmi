@@ -42,10 +42,15 @@ final class BigMacReport {
     }
 
     var formattedCost: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = currencyCode
-        return formatter.string(from: NSNumber(value: cost)) ?? "\(currencyCode) \(cost)"
+        CurrencyConversionService.format(cost, currencyCode: currencyCode)
+    }
+
+    func normalizedCost(in currencyCode: String) -> Double {
+        CurrencyConversionService.convert(cost, from: self.currencyCode, to: currencyCode)
+    }
+
+    func formattedNormalizedCost(in currencyCode: String) -> String {
+        CurrencyConversionService.format(normalizedCost(in: currencyCode), currencyCode: currencyCode)
     }
 
     var purchasedItemsSummary: String {

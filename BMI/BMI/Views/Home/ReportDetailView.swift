@@ -1,7 +1,13 @@
 import SwiftUI
+import SwiftData
 
 struct ReportDetailView: View {
     let report: BigMacReport
+    @Query private var settingsList: [AppSettings]
+
+    private var normalizationCurrency: String {
+        settingsList.first?.effectiveNormalizationCurrency ?? CurrencyConversionService.deviceLocaleCurrencyCode()
+    }
 
     var body: some View {
         ScrollView {
@@ -21,12 +27,17 @@ struct ReportDetailView: View {
 
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Price")
+                        Text("Local Price")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         Text(report.formattedCost)
                             .font(.largeTitle.bold())
                             .foregroundStyle(.bmiRed)
+                        if report.currencyCode.uppercased() != normalizationCurrency.uppercased() {
+                            Text("≈ \(report.formattedNormalizedCost(in: normalizationCurrency)) normalized")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
 
                     Spacer()

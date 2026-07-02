@@ -10,6 +10,8 @@ final class UserProfile {
     var homeCountry: String
     var createdAt: Date
     var isCurrentUser: Bool
+    var appleUserID: String?
+    var email: String?
 
     @Relationship(deleteRule: .nullify, inverse: \BigMacReport.author)
     var reports: [BigMacReport]?
@@ -24,7 +26,9 @@ final class UserProfile {
         avatarEmoji: String = "🍔",
         homeCountry: String = "United States",
         createdAt: Date = .now,
-        isCurrentUser: Bool = false
+        isCurrentUser: Bool = false,
+        appleUserID: String? = nil,
+        email: String? = nil
     ) {
         self.id = id
         self.displayName = displayName
@@ -33,5 +37,7 @@ final class UserProfile {
         self.homeCountry = homeCountry
         self.createdAt = createdAt
         self.isCurrentUser = isCurrentUser
+        self.appleUserID = appleUserID
+        self.email = email
     }
 }

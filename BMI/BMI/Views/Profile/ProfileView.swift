@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct ProfileView: View {
+    @EnvironmentObject private var authService: AuthenticationService
     @Query(sort: \UserProfile.displayName) private var users: [UserProfile]
     @Query(sort: \BigMacReport.createdAt, order: .reverse) private var reports: [BigMacReport]
 
@@ -15,7 +16,7 @@ struct ProfileView: View {
     }
 
     private var friends: [UserProfile] {
-        users.filter { !$0.isCurrentUser }
+        users.filter { !$0.isCurrentUser && $0.appleUserID == nil }
     }
 
     var body: some View {
@@ -35,6 +36,11 @@ struct ProfileView: View {
                                     .font(.title2.bold())
                                 Text("@\(user.username)")
                                     .foregroundStyle(.secondary)
+                                if let email = user.email {
+                                    Text(email)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                                 Label(user.homeCountry, systemImage: "globe")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
@@ -56,9 +62,21 @@ struct ProfileView: View {
                             )
                         }
                     }
+
+                    Section("Account") {
+                        NavigationLink {
+                            SettingsView()
+                        } label: {
+                            Label("Currency & Settings", systemImage: "dollarsign.circle")
+                        }
+
+                        Button("Sign Out", role: .destructive) {
+                            authService.signOut()
+                        }
+                    }
                 }
 
-                Section("Friends (\(friends.count))") {
+                Section("Community Friends (\(friends.count))") {
                     ForEach(friends, id: \.id) { friend in
                         HStack(spacing: 12) {
                             Text(friend.avatarEmoji)
@@ -95,4 +113,5 @@ struct ProfileView: View {
 #Preview {
     ProfileView()
         .modelContainer(PreviewData.previewContainer)
+        .environmentObject(AuthenticationService())
 }

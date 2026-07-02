@@ -7,16 +7,29 @@ enum PreviewData {
     static let previewContainer: ModelContainer = {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(
-            for: BigMacReport.self, UserProfile.self, ReportPhoto.self,
+            for: BigMacReport.self, UserProfile.self, ReportPhoto.self, AppSettings.self,
             configurations: config
         )
-        SeedDataService.seed(into: container.mainContext)
+        let context = container.mainContext
+        _ = AppSettingsStore.current(in: context)
+        SeedDataService.seedPreviewData(into: context)
         return container
     }()
 }
 
 enum SeedDataService {
-    static func seed(into context: ModelContext) {
+    /// Community demo data (friends + global reports). Does not create the signed-in user.
+    static func seedCommunityData(into context: ModelContext) {
+        let existingReports = (try? context.fetch(FetchDescriptor<BigMacReport>())) ?? []
+        guard existingReports.isEmpty else { return }
+
+        let friends = ensureFriends(in: context)
+        insertSampleReports(friends: friends, currentUser: nil, into: context)
+        try? context.save()
+    }
+
+    /// Used by SwiftUI previews only.
+    static func seedPreviewData(into context: ModelContext) {
         let existing = (try? context.fetch(FetchDescriptor<UserProfile>())) ?? []
         guard existing.isEmpty else { return }
 
@@ -25,8 +38,25 @@ enum SeedDataService {
             username: "alexm",
             avatarEmoji: "🍟",
             homeCountry: "United States",
-            isCurrentUser: true
+            isCurrentUser: true,
+            appleUserID: "preview.apple.user",
+            email: "alex@example.com"
         )
+        context.insert(currentUser)
+
+        let friends = ensureFriends(in: context)
+        insertSampleReports(friends: friends, currentUser: currentUser, into: context)
+        _ = AppSettingsStore.current(in: context)
+        try? context.save()
+    }
+
+    private static func ensureFriends(in context: ModelContext) -> [UserProfile] {
+        let descriptor = FetchDescriptor<UserProfile>(
+            predicate: #Predicate { $0.isCurrentUser == false && $0.appleUserID == nil }
+        )
+        if let existing = try? context.fetch(descriptor), !existing.isEmpty {
+            return existing
+        }
 
         let friends = [
             UserProfile(displayName: "Jordan Lee", username: "jlee", avatarEmoji: "🌮", homeCountry: "Canada"),
@@ -34,10 +64,15 @@ enum SeedDataService {
             UserProfile(displayName: "Riley Chen", username: "rileyc", avatarEmoji: "🗼", homeCountry: "France"),
             UserProfile(displayName: "Casey Brooks", username: "caseyb", avatarEmoji: "🦘", homeCountry: "Australia")
         ]
-
-        context.insert(currentUser)
         friends.forEach { context.insert($0) }
+        return friends
+    }
 
+    private static func insertSampleReports(
+        friends: [UserProfile],
+        currentUser: UserProfile?,
+        into context: ModelContext
+    ) {
         let sampleReports: [(Double, String, String, String, String, LocationType, Int, String, [PurchasedItem], [Int])] = [
             (5.69, "USD", "United States", "California", "San Francisco Downtown", .downtown, 4, "Classic SF Big Mac — solid as always.", [.bigMacMeal], [0, 1]),
             (7.49, "CAD", "Canada", "Ontario", "Toronto Union Station", .trainStation, 5, "Best airport-adjacent McDonald's I've had.", [.bigMac, .fries], [0]),
@@ -68,6 +103,10 @@ enum SeedDataService {
             let (cost, currency, country, subRegion, locationName, locationType, rating, review, items, friendIndices) = sample
             let coord = coordinates[index]
             let tagged = friendIndices.compactMap { friends[safe: $0] }
+            let author: UserProfile? = {
+                if index % 3 == 0, let currentUser { return currentUser }
+                return friends[index % friends.count]
+            }()
 
             let report = BigMacReport(
                 cost: cost,
@@ -82,13 +121,11 @@ enum SeedDataService {
                 subRegion: subRegion,
                 locationType: locationType,
                 createdAt: Calendar.current.date(byAdding: .day, value: -index, to: .now) ?? .now,
-                author: index % 3 == 0 ? currentUser : friends[index % friends.count],
+                author: author,
                 taggedFriends: tagged
             )
             context.insert(report)
         }
-
-        try? context.save()
     }
 }
 

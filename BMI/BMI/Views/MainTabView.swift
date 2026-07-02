@@ -2,10 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct MainTabView: View {
-    @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 0
     @State private var showCreateReport = false
-    @State private var didSeed = false
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -39,15 +37,11 @@ struct MainTabView: View {
         .sheet(isPresented: $showCreateReport) {
             CreateReportView()
         }
-        .onAppear {
-            guard !didSeed else { return }
-            SeedDataService.seed(into: modelContext)
-            didSeed = true
-        }
     }
 }
 
 #Preview {
     MainTabView()
         .modelContainer(PreviewData.previewContainer)
+        .environmentObject(AuthenticationService())
 }

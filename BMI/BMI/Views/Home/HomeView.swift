@@ -3,8 +3,13 @@ import SwiftData
 
 struct HomeView: View {
     @Query(sort: \BigMacReport.createdAt, order: .reverse) private var reports: [BigMacReport]
+    @Query private var settingsList: [AppSettings]
     @State private var searchText = ""
     @State private var selectedCountry: String?
+
+    private var normalizationCurrency: String {
+        settingsList.first?.effectiveNormalizationCurrency ?? CurrencyConversionService.deviceLocaleCurrencyCode()
+    }
 
     private var countries: [String] {
         Array(Set(reports.map(\.country))).sorted()
@@ -63,7 +68,7 @@ struct HomeView: View {
     }
 
     private var headerBanner: some View {
-        let summary = StatisticsService.summary(from: reports)
+        let summary = StatisticsService.summary(from: reports, normalizationCurrency: normalizationCurrency)
 
         return VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -85,6 +90,10 @@ struct HomeView: View {
                 statPill(value: String(format: "%.1f", summary.averageRating), label: "Avg Rating")
                 statPill(value: "\(summary.countriesTracked)", label: "Countries")
             }
+
+            Text("Index comparisons shown in \(normalizationCurrency)")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.8))
         }
         .padding()
         .background(BMIGradient.header)

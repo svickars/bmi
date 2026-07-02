@@ -10,7 +10,8 @@ struct BMIApp: App {
         .modelContainer(for: [
             BigMacReport.self,
             UserProfile.self,
-            ReportPhoto.self
+            ReportPhoto.self,
+            AppSettings.self
         ], isAutosaveEnabled: true)
     }
 }
