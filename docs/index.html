@@ -3,68 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Big Mac Index — Crowdsourced global price tracking</title>
-  <meta name="description" content="Track Big Mac prices, quality, and photos worldwide. Live FX and inflation-adjusted comparisons.">
+  <title>The Big Mac Index</title>
+  <meta name="description" content="Track Big Mac prices worldwide.">
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>">
 </head>
-<body>
-  <header>
-    <div class="wrap">
+<body class="landing">
+  <main class="landing-main">
+    <div class="landing-content">
       <div class="hero-emoji">🍔</div>
-      <span class="badge">A side project on bysam.fun</span>
       <h1>The Big Mac Index</h1>
-      <p>Crowdsource McDonald's Big Mac prices, ratings, and photos. Compare meals around the world with live exchange rates and inflation-adjusted "today's dollars."</p>
-      <div class="cta-row">
-        <a class="button" href="https://testflight.apple.com/join/REPLACE_ME" id="testflight-link">Join TestFlight</a>
-        <a class="button secondary" href="https://github.com/svickars/bmi">View on GitHub</a>
-      </div>
-      <p style="margin-top:1rem;font-size:0.85rem;opacity:0.8;">Replace the TestFlight link in <code>docs/index.html</code> once your build is uploaded.</p>
-    </div>
-  </header>
-
-  <main>
-    <div class="wrap">
-      <div class="grid">
-        <article class="card">
-          <h2>📍 Report meals</h2>
-          <p>Log price, rating, location type, GPS, photos, and who you were with. Tag friends who shared the run.</p>
-        </article>
-        <article class="card">
-          <h2>🌍 Global index</h2>
-          <p>Public reports sync through CloudKit. See feed, map, and stats normalized to your comparison currency.</p>
-        </article>
-        <article class="card">
-          <h2>👥 Social</h2>
-          <p>Link friends by username, get activity notifications, and react to reports with emoji.</p>
-        </article>
-        <article class="card">
-          <h2>💱 Fair comparisons</h2>
-          <p>Frankfurter live FX plus US CPI inflation adjustment so last year's Tokyo run still compares to today's SF run.</p>
-        </article>
-      </div>
-
-      <section style="margin-top:2.5rem">
-        <h2>Open in the app</h2>
-        <p>Install BMI on iPhone, then these links open directly in the app:</p>
-        <div class="deep-link-box">
-          <p><strong>Profile</strong><br><code>https://bmi.bysam.fun/u/yourusername</code></p>
-          <p><strong>Report</strong><br><code>https://bmi.bysam.fun/report/report-uuid</code></p>
-        </div>
-      </section>
+      <p class="tagline">Track Big Mac prices around the world.</p>
+      <a class="button" href="https://testflight.apple.com/join/REPLACE_ME">Join TestFlight</a>
     </div>
   </main>
 
-  <footer>
-    <div class="wrap">
-      <nav>
-        <a href="/">Home</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/support.html">Support</a>
-        <a href="https://bysam.fun">bysam.fun</a>
-      </nav>
-      <p style="margin-top:1rem;">© 2026 Sam. Not affiliated with McDonald's or The Economist.</p>
-    </div>
+  <footer class="landing-footer">
+    <p>Made by Sam</p>
+    <nav>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms</a>
+    </nav>
   </footer>
 </body>
 </html>

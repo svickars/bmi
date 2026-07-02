@@ -110,6 +110,63 @@ footer nav a {
 
 .hero-emoji { font-size: 3rem; margin-bottom: 0.5rem; }
 
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--cream) 0%, #fff 50%);
+}
+
+.landing-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.landing-content {
+  text-align: center;
+  max-width: 24rem;
+}
+
+.landing-content h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+}
+
+.landing-content .tagline {
+  margin: 0 0 1.75rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.landing-content .button {
+  margin-top: 0;
+}
+
+.landing-footer {
+  text-align: center;
+  padding: 1.5rem;
+  border-top: 1px solid #eee;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.landing-footer p {
+  margin: 0 0 0.5rem;
+}
+
+.landing-footer nav a {
+  margin: 0 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.landing-footer nav a:hover {
+  color: var(--red);
+}
+
 .prose h2 { margin-top: 2rem; }
 .prose ul { padding-left: 1.25rem; }
 
