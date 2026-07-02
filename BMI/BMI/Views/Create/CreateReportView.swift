@@ -8,7 +8,7 @@ struct CreateReportView: View {
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
 
     @Query private var friendLinks: [FriendLink]
-    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
+    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser == true }) private var currentUsers: [UserProfile]
 
     @StateObject private var locationService = LocationService()
 

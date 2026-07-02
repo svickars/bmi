@@ -5,7 +5,6 @@ struct UsernameSetupView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var authService: AuthenticationService
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
-    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
 
     @State private var username = ""
     @State private var isChecking = false
@@ -14,8 +13,6 @@ struct UsernameSetupView: View {
     @State private var availabilityMessage: String?
     @State private var showsErrorAlert = false
     @State private var alertMessage = ""
-
-    private var currentUser: UserProfile? { currentUsers.first }
 
     var body: some View {
         NavigationStack {
@@ -79,8 +76,9 @@ struct UsernameSetupView: View {
                 }
             }
             .onAppear {
-                if let currentUser, !currentUser.username.hasPrefix("user_") {
-                    username = currentUser.username
+                if let profile = authService.currentUserProfile(in: modelContext),
+                   !profile.username.hasPrefix("user_") {
+                    username = profile.username
                 }
             }
             .alert("Could Not Register Username", isPresented: $showsErrorAlert) {
@@ -107,7 +105,7 @@ struct UsernameSetupView: View {
         do {
             let available = try await syncCoordinator.cloudSync.isUsernameAvailable(
                 normalized,
-                excludingAppleUserID: currentUser?.appleUserID
+                excludingAppleUserID: authService.currentUserProfile(in: modelContext)?.appleUserID
             )
             availabilityMessage = available ? "@\(normalized) is available." : nil
             validationMessage = available ? nil : UsernameError.taken.errorDescription
@@ -117,7 +115,7 @@ struct UsernameSetupView: View {
     }
 
     private func saveUsername() async {
-        guard let currentUser else {
+        guard let currentUser = authService.currentUserProfile(in: modelContext) else {
             presentError("No signed-in profile was found. Force-quit the app and sign in again.")
             return
         }

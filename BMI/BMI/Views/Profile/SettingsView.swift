@@ -5,7 +5,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
     @Query private var settingsList: [AppSettings]
-    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
+    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser == true }) private var currentUsers: [UserProfile]
     @State private var cpiSourceLabel = "Bundled US CPI-U"
 
     private var settings: AppSettings {

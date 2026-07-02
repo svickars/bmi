@@ -6,7 +6,7 @@ struct ContentView: View {
     @StateObject private var authService = AuthenticationService()
     @StateObject private var syncCoordinator = SyncCoordinator()
     @StateObject private var navigationRouter = AppNavigationRouter.shared
-    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
+    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser == true }) private var currentUsers: [UserProfile]
 
     private var currentUser: UserProfile? { currentUsers.first }
 
@@ -45,19 +45,23 @@ struct ContentView: View {
 
             AppNotificationRouter.shared.syncCoordinator = syncCoordinator
             AppNotificationRouter.shared.modelContext = modelContext
-            AppNotificationRouter.shared.currentUserProvider = { currentUsers.first }
+            AppNotificationRouter.shared.currentUserProvider = {
+                authService.currentUserProfile(in: modelContext)
+            }
         }
         .onChange(of: authService.isAuthenticated) { _, isAuthenticated in
             guard isAuthenticated, authService.hasPublicProfile else { return }
+            let user = authService.currentUserProfile(in: modelContext)
             Task {
-                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
+                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: user)
             }
         }
         .onChange(of: authService.hasPublicProfile) { _, isRegistered in
             guard authService.isAuthenticated, isRegistered else { return }
             authService.refreshPublicProfileStatus(from: modelContext)
+            let user = authService.currentUserProfile(in: modelContext)
             Task {
-                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
+                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: user)
             }
         }
     }
