@@ -194,13 +194,11 @@ struct BMIBiteClipShape: Shape {
     }
 }
 
-extension Shape {
+extension View {
     func bmiBiteClip() -> some View {
         clipShape(BMIBiteClipShape(), style: FillStyle(eoFill: true))
     }
-}
 
-extension View {
     func bmiFormScreen() -> some View {
         scrollContentBackground(.hidden)
             .background(BMIScreenBackground())
