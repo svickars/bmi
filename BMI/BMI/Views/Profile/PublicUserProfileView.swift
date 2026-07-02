@@ -38,8 +38,7 @@ struct PublicUserProfileView: View {
                 )
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(BMIScreenBackground())
+        .bmiFormScreen()
         .navigationTitle(isOwnProfile ? "Your Profile" : "@\(normalizedUsername)")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -101,8 +100,8 @@ struct PublicUserProfileView: View {
             if let message {
                 Section {
                     Text(message)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 }
             }
 
@@ -205,8 +204,7 @@ private struct ProfileViewEmbedded: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(BMIScreenBackground())
+        .bmiFormScreen()
     }
 }
 

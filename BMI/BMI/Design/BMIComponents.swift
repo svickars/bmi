@@ -198,3 +198,36 @@ extension Shape {
         clipShape(BMIBiteClipShape(), style: FillStyle(eoFill: true))
     }
 }
+
+extension View {
+    func bmiFormScreen() -> some View {
+        scrollContentBackground(.hidden)
+            .background(BMIScreenBackground())
+    }
+}
+
+struct SelectableAvatarChip: View {
+    let presentation: AvatarPresentation
+    let label: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                BMIAvatarView(presentation: presentation, size: 52)
+                    .overlay {
+                        Circle()
+                            .strokeBorder(isSelected ? Color.bmiRed : Color.clear, lineWidth: 2)
+                    }
+
+                Text(label)
+                    .font(BMITypography.ui(.caption2))
+                    .lineLimit(1)
+                    .foregroundStyle(Color.bmiInk)
+            }
+            .frame(width: 64)
+        }
+        .buttonStyle(.plain)
+    }
+}

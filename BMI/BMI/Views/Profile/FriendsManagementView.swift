@@ -66,8 +66,8 @@ struct FriendsManagementView: View {
             Section("Friends (\(accepted.count))") {
                 if accepted.isEmpty {
                     Text("Accepted friends can be tagged in your Big Mac reports.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 } else {
                     ForEach(accepted, id: \.id) { link in
                         friendRow(link)
@@ -75,8 +75,7 @@ struct FriendsManagementView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(BMIScreenBackground())
+        .bmiFormScreen()
         .navigationTitle("Friends")
         .refreshable {
             await refresh()

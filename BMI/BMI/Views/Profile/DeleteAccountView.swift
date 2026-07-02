@@ -19,8 +19,8 @@ struct DeleteAccountView: View {
         Form {
             Section {
                 Text("Deleting your account permanently removes your public BMI profile, reports, photos, friend links, reactions, and notifications from CloudKit and clears local app data.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(Color.bmiMuted)
             }
 
             Section("What happens next") {
@@ -51,11 +51,12 @@ struct DeleteAccountView: View {
             if let errorMessage {
                 Section {
                     Text(errorMessage)
-                        .font(.caption)
+                        .font(BMITypography.ui(.caption))
                         .foregroundStyle(.red)
                 }
             }
         }
+        .bmiFormScreen()
         .navigationTitle("Delete Account")
         .navigationBarTitleDisplayMode(.inline)
     }

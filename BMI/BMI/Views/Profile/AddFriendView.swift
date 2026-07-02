@@ -17,8 +17,8 @@ struct AddFriendView: View {
         Form {
             Section {
                 Text("Search for friends by the username they registered with Sign in with Apple.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(Color.bmiMuted)
             }
 
             Section("Find by Username") {
@@ -44,9 +44,10 @@ struct AddFriendView: View {
                             BMIAvatarView(user: user, size: 44)
                             VStack(alignment: .leading) {
                                 Text(user.displayName)
+                                    .font(BMITypography.ui(.subheadline, weight: .medium))
                                 Text("@\(user.username)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .font(BMITypography.ui(.caption))
+                                    .foregroundStyle(Color.bmiMuted)
                             }
                             Spacer()
                         }
@@ -63,11 +64,12 @@ struct AddFriendView: View {
             if let message {
                 Section {
                     Text(message)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 }
             }
         }
+        .bmiFormScreen()
         .navigationTitle("Add Friend")
     }
 

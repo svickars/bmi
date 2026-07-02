@@ -41,8 +41,7 @@ struct NotificationsView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(BMIScreenBackground())
+        .bmiFormScreen()
         .navigationTitle("Notifications")
         .toolbar {
             if notifications.contains(where: { !$0.isRead }) {
@@ -104,7 +103,7 @@ private struct NotificationRow: View {
             }
         }
         .padding(.vertical, 4)
-        .listRowBackground(notification.isRead ? Color.clear : Color.bmiCream.opacity(0.5))
+        .listRowBackground(notification.isRead ? Color.clear : Color.bmiPaper.opacity(0.65))
     }
 }
 

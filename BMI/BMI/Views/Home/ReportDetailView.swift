@@ -166,7 +166,7 @@ struct ReportDetailView: View {
                     .bmiBiteClip()
             } else {
                 ZStack {
-                    Color.bmiCream
+                    Color.bmiPaper
                     BMILayerMark(width: 160)
                 }
                 .frame(maxWidth: .infinity)
@@ -259,12 +259,12 @@ struct ReportDetailView: View {
                         HStack(spacing: 4) {
                             Text(item.emoji)
                             Text("\(item.count)")
-                                .font(.caption.weight(.medium))
-                                .foregroundStyle(.secondary)
+                                .font(BMITypography.ui(.caption, weight: .medium))
+                                .foregroundStyle(Color.bmiMuted)
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
-                        .background(Color.bmiCream)
+                        .background(Color.bmiPaper)
                         .clipShape(Capsule())
                     }
                 }
@@ -293,13 +293,13 @@ struct ReportDetailView: View {
 
                 if reactions.isEmpty {
                     Text("Be the first to react to this report.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 }
             } else {
                 Text("Sign in to react to public reports.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(Color.bmiMuted)
             }
             }
         }
@@ -326,11 +326,11 @@ struct ReportDetailView: View {
     private func detailLine(title: String, value: String) -> some View {
         HStack {
             Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(BMITypography.ui(.caption))
+                .foregroundStyle(Color.bmiMuted)
             Spacer()
             Text(value)
-                .font(.caption.weight(.medium))
+                .font(BMITypography.ui(.caption, weight: .medium))
         }
     }
 
@@ -341,10 +341,10 @@ struct ReportDetailView: View {
                 .foregroundStyle(.bmiBrown)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(Color.bmiMuted)
                 Text(value)
-                    .font(.subheadline)
+                    .font(BMITypography.ui(.subheadline))
             }
             Spacer()
         }

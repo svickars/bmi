@@ -127,8 +127,7 @@ struct ProfileView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .scrollContentBackground(.hidden)
-            .background(BMIScreenBackground())
+            .bmiFormScreen()
             .navigationTitle("Profile")
         }
     }

@@ -327,12 +327,12 @@ No parallax, no particle confetti, no haptic overload.
 
 When you run on device, it should feel:
 
-- [ ] **Beli-adjacent** in feed density, typography hierarchy, and photo prominence
-- [ ] **Understated** on settings, lists, and forms
-- [ ] **Delightful** at sign-in, first report, report detail, and stats share
-- [ ] **On-brand** via red price badges, yellow stars, layer mark — not red everywhere
-- [ ] **Cohesive** with `bmi.bysam.fun` after Phase 6
-- [ ] **Non-AI** — serif + paper + borders, not template cards with six emoji features
+- [x] **Beli-adjacent** in feed density, typography hierarchy, and photo prominence
+- [x] **Understated** on settings, lists, and forms (paper background via `.bmiFormScreen()`)
+- [ ] **Delightful** at sign-in, first report, report detail, and stats share *(first-report celebration deferred)*
+- [x] **On-brand** via red price badges, yellow stars, layer mark — not red everywhere
+- [x] **Cohesive** with `bmi.bysam.fun` after Phase 6
+- [x] **Non-AI** — serif + paper + borders, not template cards with six emoji features
 
 ---
 

@@ -94,7 +94,7 @@ struct ReportCardView: View {
                         .font(BMITypography.ui(.caption))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(Color.bmiCream)
+                        .background(Color.bmiPaper)
                         .clipShape(Capsule())
                 }
                 .padding(16)

@@ -8,28 +8,18 @@ struct TagLinkedFriendsView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
                 ForEach(friends, id: \.id) { friend in
-                    Button {
+                    SelectableAvatarChip(
+                        presentation: AvatarPresentation(
+                            style: .emoji,
+                            emoji: friend.friendAvatarEmoji.isEmpty ? "🍔" : friend.friendAvatarEmoji,
+                            initials: AvatarAppearance.defaultInitials(from: friend.friendDisplayName),
+                            backgroundHex: AvatarAppearance.defaultBackgroundHex(for: .emoji)
+                        ),
+                        label: friend.friendDisplayName.components(separatedBy: " ").first ?? friend.friendDisplayName,
+                        isSelected: selectedFriendAppleUserIDs.contains(friend.friendAppleUserID)
+                    ) {
                         toggle(friend.friendAppleUserID)
-                    } label: {
-                        VStack(spacing: 6) {
-                            Text(friend.friendAvatarEmoji)
-                                .font(.title2)
-                                .frame(width: 52, height: 52)
-                                .background(selectedFriendAppleUserIDs.contains(friend.friendAppleUserID) ? Color.bmiYellow.opacity(0.4) : Color(.systemGray6))
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle()
-                                        .stroke(selectedFriendAppleUserIDs.contains(friend.friendAppleUserID) ? Color.bmiRed : .clear, lineWidth: 2)
-                                )
-
-                            Text(friend.friendDisplayName.components(separatedBy: " ").first ?? friend.friendDisplayName)
-                                .font(.caption2)
-                                .lineLimit(1)
-                                .foregroundStyle(.primary)
-                        }
-                        .frame(width: 64)
                     }
-                    .buttonStyle(.plain)
                 }
             }
         }
