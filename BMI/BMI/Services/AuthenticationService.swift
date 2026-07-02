@@ -19,6 +19,7 @@ enum AuthStorage {
 final class AuthenticationService: NSObject, ObservableObject {
     @Published private(set) var isAuthenticated = false
     @Published private(set) var isCheckingCredential = true
+    @Published private(set) var hasPublicProfile = false
     @Published var errorMessage: String?
 
     private var modelContext: ModelContext?
@@ -79,7 +80,19 @@ final class AuthenticationService: NSObject, ObservableObject {
 
         AuthStorage.clear()
         isAuthenticated = false
+        hasPublicProfile = false
         try? modelContext.save()
+    }
+
+    func refreshPublicProfileStatus(from context: ModelContext) {
+        let descriptor = FetchDescriptor<UserProfile>(
+            predicate: #Predicate { $0.isCurrentUser }
+        )
+        hasPublicProfile = (try? context.fetch(descriptor).first?.isRegisteredPublicly) ?? false
+    }
+
+    func markPublicProfileRegistered() {
+        hasPublicProfile = true
     }
 
     private func completeSignIn(with credential: ASAuthorizationAppleIDCredential) {
@@ -94,6 +107,7 @@ final class AuthenticationService: NSObject, ObservableObject {
         let profile = upsertProfile(from: credential, userID: userID, in: modelContext)
         profile.isCurrentUser = true
         try? modelContext.save()
+        refreshPublicProfileStatus(from: modelContext)
         isAuthenticated = true
         errorMessage = nil
     }
@@ -115,6 +129,7 @@ final class AuthenticationService: NSObject, ObservableObject {
                 SeedDataService.seedCommunityData(into: modelContext)
             }
             try? modelContext.save()
+            refreshPublicProfileStatus(from: modelContext)
             return profile
         }
 
@@ -217,6 +232,7 @@ final class AuthenticationService: NSObject, ObservableObject {
 
         SeedDataService.seedCommunityData(into: context)
         try? context.save()
+        markPublicProfileRegistered()
         isAuthenticated = true
         isCheckingCredential = false
     }

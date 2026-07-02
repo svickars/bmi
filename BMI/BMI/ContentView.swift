@@ -15,7 +15,7 @@ struct ContentView: View {
             if authService.isCheckingCredential {
                 LaunchLoadingView()
             } else if authService.isAuthenticated {
-                if currentUser?.isRegisteredPublicly == true {
+                if authService.hasPublicProfile {
                     MainTabView()
                 } else {
                     UsernameSetupView()
@@ -40,6 +40,7 @@ struct ContentView: View {
         .onAppear {
             authService.configure(modelContext: modelContext)
             authService.checkExistingCredential()
+            authService.refreshPublicProfileStatus(from: modelContext)
             _ = AppSettingsStore.current(in: modelContext)
 
             AppNotificationRouter.shared.syncCoordinator = syncCoordinator
@@ -47,13 +48,14 @@ struct ContentView: View {
             AppNotificationRouter.shared.currentUserProvider = { currentUsers.first }
         }
         .onChange(of: authService.isAuthenticated) { _, isAuthenticated in
-            guard isAuthenticated, currentUser?.isRegisteredPublicly == true else { return }
+            guard isAuthenticated, authService.hasPublicProfile else { return }
             Task {
                 await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
             }
         }
-        .onChange(of: currentUser?.isRegisteredPublicly) { _, isRegistered in
-            guard authService.isAuthenticated, isRegistered == true else { return }
+        .onChange(of: authService.hasPublicProfile) { _, isRegistered in
+            guard authService.isAuthenticated, isRegistered else { return }
+            authService.refreshPublicProfileStatus(from: modelContext)
             Task {
                 await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
             }
