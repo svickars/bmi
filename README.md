@@ -4,101 +4,72 @@ An iOS app inspired by [The Economist's Big Mac Index](https://www.economist.com
 
 ## Features
 
-- **Sign in with Apple** — Secure account identity for your reports
-- **Global public index** — Reports sync to CloudKit's public database for real multi-user data
-- **Live exchange rates** — Frankfurter API for current and historical FX on each report date
-- **Today's dollars** — US CPI inflation adjustment so a meal logged today still compares fairly years later
-- **Real friend linking** — Search by username, send/accept friend requests via CloudKit, tag friends in reports
-- **Report meals** — Price, rating, review, photos (local), location type, GPS tagging
-- **Feed, map, and stats** — Browse and visualize the global index with normalized comparisons
+- **Sign in with Apple** with unique username registration
+- **CloudKit public index** — reports, photos, profiles, and friend links sync globally
+- **Live exchange rates** — Frankfurter API (current + historical per report date)
+- **Today's dollars** — US CPI-U inflation adjustment (live via FRED when API key configured)
+- **Friend linking** — search by username, accept requests, push notifications for incoming requests
+- **Meal reporting** — price, rating, review, photos, location type, GPS, friend tags
+- **Feed, map, stats** — normalized global comparisons
 
 ## Requirements
 
-- Xcode 15+
-- iOS 17+
-- Apple Developer account with **Sign in with Apple** and **CloudKit** enabled
-- iCloud signed in on device/simulator for public sync
+- Xcode 15+, iOS 17+
+- Apple Developer account (Sign in with Apple, CloudKit, Push Notifications)
+- iCloud signed in on device/simulator
 
 ## Getting Started
 
-1. Open `BMI/BMI.xcodeproj` in Xcode
-2. Set your development team under **Signing & Capabilities**
-3. Enable capabilities (entitlements included):
-   - Sign in with Apple
-   - iCloud → CloudKit → container `iCloud.com.bigmacindex.bmi`
-4. In [CloudKit Dashboard](https://icloud.developer.apple.com/), deploy schema record types:
-   - `PublicUser`
-   - `PublicReport`
+1. Open `BMI/BMI.xcodeproj`
+2. Enable capabilities: Sign in with Apple, iCloud (CloudKit), Push Notifications
+3. CloudKit container: `iCloud.com.bigmacindex.bmi`
+4. Deploy CloudKit schema record types in [CloudKit Dashboard](https://icloud.developer.apple.com/):
+   - `PublicUser` (includes `normalizedUsername`)
+   - `PublicReport` (includes `photoCount`)
+   - `PublicReportPhoto` (includes `imageAsset` CKAsset)
    - `FriendConnection`
-   (Fields match `CloudKitSchema.swift`)
-5. Build and run (`⌘R`)
-
-Debug builds include a preview account for simulator testing without Apple ID.
+5. Optional: add your [FRED API key](https://fred.stlouisfed.org/docs/api/api_key.html) to `Info.plist` as `FRED_API_KEY` for live CPI data
+6. Build and run
 
 ## Architecture
 
-### Data layers
+| Layer | Technology |
+|-------|------------|
+| Local cache | SwiftData |
+| Global sync | CloudKit Public Database |
+| Photos | CKAsset on `PublicReportPhoto` records (JPEG compressed) |
+| FX | Frankfurter API |
+| Inflation | FRED CPI-U (live) + bundled fallback |
+| Friend push | CloudKit subscriptions + APNs |
+| Auth | Sign in with Apple + unique username |
 
-| Layer | Purpose |
-|-------|---------|
-| **SwiftData (local)** | Offline cache, photos, settings, friend links |
-| **CloudKit Public DB** | Shared global reports, public profiles, friend requests |
-| **Frankfurter API** | Live + historical exchange rates |
-| **Bundled US CPI-U** | Inflation adjustment for "today's dollars" |
+## Key flows
 
-### How pricing normalization works
+### Photo sync
+Reports upload metadata to `PublicReport`. Each photo becomes a `PublicReportPhoto` with a compressed JPEG `CKAsset`. Other users download photos during public sync.
 
-When someone submits a ¥890 Big Mac in Tokyo:
+### Username uniqueness
+After Sign in with Apple, users choose a username checked against CloudKit `normalizedUsername` before joining the public index.
 
-1. **Historical FX** — Frankfurter converts ¥890 → USD using the rate on the report date
-2. **Snapshot stored** — `usdAtReportDate` saved on the report (and uploaded to CloudKit)
-3. **Today's dollars** — When viewing later, US CPI adjusts that USD for inflation
-4. **Display currency** — Adjusted USD converts to the viewer's locale or chosen currency using live rates
+### Friend request notifications
+CloudKit query subscriptions notify recipients when a pending friend request arrives. The app syncs connections and posts a local notification.
 
-This means a $10 Big Mac logged today will show its inflation-adjusted equivalent when someone views the index a year from now — apples-to-apples across time and country.
-
-### Multi-user public data
-
-Each signed-in user registers a `PublicUser` record (username, display name). Reports upload as `PublicReport` records. All clients fetch the public database to build the global feed and statistics.
-
-Photos remain local for now (CloudKit asset upload can be added later).
-
-### Friend linking
-
-1. Register a unique username (from Sign in with Apple profile)
-2. Search friends by username in the public database
-3. Send a `FriendConnection` request via CloudKit
-4. Recipient accepts in **Profile → Friends**
-5. Accepted friends appear in the report tagging picker
-
-## Project Structure
-
-```
-BMI/
-├── BMI.xcodeproj/
-└── BMI/
-    ├── Models/          # SwiftData models
-    ├── Services/        # Auth, CloudKit sync, FX, inflation, stats
-    ├── Views/           # SwiftUI screens
-    ├── BMI.entitlements
-    └── Assets.xcassets/
-```
+### Today's dollars
+1. Historical FX converts local price → USD at report date (`usdAtReportDate`)
+2. CPI inflation adjusts USD to today's purchasing power
+3. Live FX converts to viewer's comparison currency
 
 ## Settings
 
-**Profile → Currency & Sync Settings**
-
-- **Use Device Locale** — Default comparison currency from iPhone region
-- **Express in Today's Dollars** — CPI inflation adjustment (recommended ON)
-- **Sync with CloudKit** — Toggle public index participation
-- **Sync Now** — Manual refresh of global data
+Profile → Currency & Sync Settings:
+- Device locale vs custom comparison currency
+- Today's dollars toggle
+- CloudKit sync toggle + manual sync
+- Data source info (Frankfurter, FRED/bundled CPI)
 
 ## Privacy
 
-- Location (When In Use) — Tag McDonald's locations
-- Photo Library — Attach meal photos (stored locally)
-- Sign in with Apple — Account identity
-- iCloud / CloudKit — Public report metadata sync
+- Location, Photo Library, Sign in with Apple, iCloud/CloudKit, Push Notifications
 
 ## License
 

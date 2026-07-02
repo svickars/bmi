@@ -93,11 +93,6 @@ final class AuthenticationService: NSObject, ObservableObject {
 
         let profile = upsertProfile(from: credential, userID: userID, in: modelContext)
         profile.isCurrentUser = true
-
-        if (try? modelContext.fetch(FetchDescriptor<UserProfile>())) != nil {
-            SeedDataService.seedCommunityData(into: modelContext)
-        }
-
         try? modelContext.save()
         isAuthenticated = true
         errorMessage = nil
@@ -116,7 +111,9 @@ final class AuthenticationService: NSObject, ObservableObject {
                 users.forEach { $0.isCurrentUser = ($0.id == profile.id) }
             }
             profile.isCurrentUser = true
-            SeedDataService.seedCommunityData(into: modelContext)
+            if profile.isRegisteredPublicly {
+                SeedDataService.seedCommunityData(into: modelContext)
+            }
             try? modelContext.save()
             return profile
         }
@@ -198,6 +195,7 @@ final class AuthenticationService: NSObject, ObservableObject {
         let profile: UserProfile
         if let existing = try? context.fetch(descriptor).first {
             profile = existing
+            profile.isRegisteredPublicly = true
         } else {
             profile = UserProfile(
                 displayName: "Alex Morgan",
@@ -206,7 +204,8 @@ final class AuthenticationService: NSObject, ObservableObject {
                 homeCountry: "United States",
                 isCurrentUser: true,
                 appleUserID: "preview.apple.user",
-                email: "alex@example.com"
+                email: "alex@example.com",
+                isRegisteredPublicly: true
             )
             context.insert(profile)
         }
@@ -214,6 +213,7 @@ final class AuthenticationService: NSObject, ObservableObject {
         if let users = try? context.fetch(FetchDescriptor<UserProfile>()) {
             users.forEach { $0.isCurrentUser = ($0.id == profile.id) }
         }
+        profile.isRegisteredPublicly = true
 
         SeedDataService.seedCommunityData(into: context)
         try? context.save()

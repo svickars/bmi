@@ -15,8 +15,35 @@ final class CloudKitPublicSyncService: ObservableObject {
         self.container = container
     }
 
+    func isUsernameAvailable(_ username: String, excludingAppleUserID: String?) async throws -> Bool {
+        let normalized = UsernameValidator.normalize(username)
+        guard UsernameValidator.validate(normalized) == nil else { return false }
+
+        let predicate = NSPredicate(format: "%K == %@", CloudKitSchema.PublicUser.normalizedUsername, normalized)
+        let query = CKQuery(recordType: CloudKitSchema.RecordType.publicUser, predicate: predicate)
+        let (results, _) = try await publicDatabase.records(matching: query, resultsLimit: 5)
+
+        for (_, result) in results {
+            guard case .success(let record) = result,
+                  let ownerID = record[CloudKitSchema.PublicUser.appleUserID] as? String else { continue }
+            if ownerID != excludingAppleUserID {
+                return false
+            }
+        }
+        return true
+    }
+
     func registerCurrentUser(_ profile: UserProfile) async throws {
         guard let appleUserID = profile.appleUserID else { return }
+
+        let normalized = UsernameValidator.normalize(profile.username)
+        if let validationError = UsernameValidator.validate(normalized) {
+            throw UsernameError.invalid(validationError)
+        }
+
+        guard try await isUsernameAvailable(normalized, excludingAppleUserID: appleUserID) else {
+            throw UsernameError.taken
+        }
 
         let recordID = CKRecord.ID(recordName: "user.\(appleUserID)")
         let record: CKRecord
@@ -29,18 +56,21 @@ final class CloudKitPublicSyncService: ObservableObject {
 
         record[CloudKitSchema.PublicUser.appleUserID] = appleUserID as CKRecordValue
         record[CloudKitSchema.PublicUser.displayName] = profile.displayName as CKRecordValue
-        record[CloudKitSchema.PublicUser.username] = profile.username as CKRecordValue
+        record[CloudKitSchema.PublicUser.username] = normalized as CKRecordValue
+        record[CloudKitSchema.PublicUser.normalizedUsername] = normalized as CKRecordValue
         record[CloudKitSchema.PublicUser.avatarEmoji] = profile.avatarEmoji as CKRecordValue
         record[CloudKitSchema.PublicUser.homeCountry] = profile.homeCountry as CKRecordValue
         record[CloudKitSchema.PublicUser.updatedAt] = Date() as CKRecordValue
 
         let saved = try await publicDatabase.save(record)
+        profile.username = normalized
         profile.isRegisteredPublicly = true
         profile.publicRecordName = saved.recordID.recordName
     }
 
-    func uploadReport(_ report: BigMacReport, author: UserProfile) async throws {
-        guard report.isPublic, let authorAppleUserID = author.appleUserID else { return }
+    @discardableResult
+    func uploadReport(_ report: BigMacReport, author: UserProfile) async throws -> Int {
+        guard report.isPublic, let authorAppleUserID = author.appleUserID else { return 0 }
 
         let recordID = CKRecord.ID(recordName: "report.\(report.id.uuidString)")
         let record: CKRecord
@@ -50,6 +80,8 @@ final class CloudKitPublicSyncService: ObservableObject {
         } catch {
             record = CKRecord(recordType: CloudKitSchema.RecordType.publicReport, recordID: recordID)
         }
+
+        let photos = report.photos ?? []
 
         record[CloudKitSchema.PublicReport.reportID] = report.id.uuidString as CKRecordValue
         record[CloudKitSchema.PublicReport.authorAppleUserID] = authorAppleUserID as CKRecordValue
@@ -68,11 +100,53 @@ final class CloudKitPublicSyncService: ObservableObject {
         record[CloudKitSchema.PublicReport.locationTypeRaw] = report.locationTypeRaw as CKRecordValue
         record[CloudKitSchema.PublicReport.createdAt] = report.createdAt as CKRecordValue
         record[CloudKitSchema.PublicReport.taggedFriendAppleUserIDs] = report.taggedFriendAppleUserIDs as CKRecordValue
+        record[CloudKitSchema.PublicReport.photoCount] = photos.count as CKRecordValue
 
         let saved = try await publicDatabase.save(record)
         report.cloudRecordName = saved.recordID.recordName
         report.authorAppleUserID = authorAppleUserID
+
+        let uploadedPhotos = try await uploadPhotos(for: report)
         report.lastSyncedAt = .now
+        return uploadedPhotos
+    }
+
+    func uploadPhotos(for report: BigMacReport) async throws -> Int {
+        guard let photos = report.photos, !photos.isEmpty else { return 0 }
+
+        var uploaded = 0
+        for (index, photo) in photos.enumerated() {
+            if photo.isSynced { continue }
+            guard let payload = PhotoCompression.jpegData(from: photo.imageData) else { continue }
+
+            let recordID = CKRecord.ID(recordName: "photo.\(report.id.uuidString).\(photo.id.uuidString)")
+            let record: CKRecord
+            do {
+                record = try await publicDatabase.record(for: recordID)
+            } catch {
+                record = CKRecord(recordType: CloudKitSchema.RecordType.publicReportPhoto, recordID: recordID)
+            }
+
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent("\(photo.id.uuidString).jpg")
+            try payload.write(to: tempURL, options: .atomic)
+
+            record[CloudKitSchema.PublicReportPhoto.photoID] = photo.id.uuidString as CKRecordValue
+            record[CloudKitSchema.PublicReportPhoto.reportID] = report.id.uuidString as CKRecordValue
+            record[CloudKitSchema.PublicReportPhoto.sortIndex] = index as CKRecordValue
+            record[CloudKitSchema.PublicReportPhoto.caption] = photo.caption as CKRecordValue
+            record[CloudKitSchema.PublicReportPhoto.imageAsset] = CKAsset(fileURL: tempURL)
+            record[CloudKitSchema.PublicReportPhoto.createdAt] = photo.createdAt as CKRecordValue
+
+            let saved = try await publicDatabase.save(record)
+            photo.cloudRecordName = saved.recordID.recordName
+            photo.sortIndex = index
+            photo.lastSyncedAt = .now
+            uploaded += 1
+
+            try? FileManager.default.removeItem(at: tempURL)
+        }
+        return uploaded
     }
 
     func fetchPublicReports(into context: ModelContext, currentUser: UserProfile?) async throws -> Int {
@@ -111,17 +185,72 @@ final class CloudKitPublicSyncService: ObservableObject {
             }
 
             apply(record: record, to: report, currentUser: currentUser, context: context)
+            try await fetchPhotos(for: report, into: context)
         }
 
         try? context.save()
         return imported
     }
 
+    func fetchPhotos(for report: BigMacReport, into context: ModelContext) async throws {
+        let predicate = NSPredicate(format: "%K == %@", CloudKitSchema.PublicReportPhoto.reportID, report.id.uuidString)
+        let query = CKQuery(recordType: CloudKitSchema.RecordType.publicReportPhoto, predicate: predicate)
+        query.sortDescriptors = [NSSortDescriptor(key: CloudKitSchema.PublicReportPhoto.sortIndex, ascending: true)]
+
+        let (results, _) = try await publicDatabase.records(matching: query, resultsLimit: 10)
+
+        for (_, result) in results {
+            guard case .success(let record) = result,
+                  let photoIDString = record[CloudKitSchema.PublicReportPhoto.photoID] as? String,
+                  let photoUUID = UUID(uuidString: photoIDString),
+                  let asset = record[CloudKitSchema.PublicReportPhoto.imageAsset] as? CKAsset,
+                  let fileURL = asset.fileURL else { continue }
+
+            let data = try Data(contentsOf: fileURL)
+            let caption = record[CloudKitSchema.PublicReportPhoto.caption] as? String ?? ""
+            let sortIndex = record[CloudKitSchema.PublicReportPhoto.sortIndex] as? Int ?? 0
+
+            let descriptor = FetchDescriptor<ReportPhoto>(
+                predicate: #Predicate { $0.id == photoUUID }
+            )
+
+            let photo: ReportPhoto
+            if let existing = try? context.fetch(descriptor).first {
+                photo = existing
+                photo.imageData = data
+            } else {
+                photo = ReportPhoto(
+                    id: photoUUID,
+                    imageData: data,
+                    caption: caption,
+                    sortIndex: sortIndex,
+                    cloudRecordName: record.recordID.recordName,
+                    lastSyncedAt: .now
+                )
+                context.insert(photo)
+            }
+
+            photo.caption = caption
+            photo.sortIndex = sortIndex
+            photo.cloudRecordName = record.recordID.recordName
+            photo.lastSyncedAt = .now
+            photo.report = report
+
+            if report.photos == nil {
+                report.photos = [photo]
+            } else if report.photos?.contains(where: { $0.id == photo.id }) == false {
+                report.photos?.append(photo)
+            }
+        }
+
+        report.photos = report.photos?.sorted { $0.sortIndex < $1.sortIndex }
+    }
+
     func searchPublicUsers(username: String) async throws -> [PublicUserDTO] {
-        let normalized = username.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let normalized = UsernameValidator.normalize(username)
         guard !normalized.isEmpty else { return [] }
 
-        let predicate = NSPredicate(format: "%K == %@", CloudKitSchema.PublicUser.username, normalized)
+        let predicate = NSPredicate(format: "%K == %@", CloudKitSchema.PublicUser.normalizedUsername, normalized)
         let query = CKQuery(recordType: CloudKitSchema.RecordType.publicUser, predicate: predicate)
         let (results, _) = try await publicDatabase.records(matching: query, resultsLimit: 20)
 
@@ -150,7 +279,6 @@ final class CloudKitPublicSyncService: ObservableObject {
         report.taggedFriendAppleUserIDs = record[CloudKitSchema.PublicReport.taggedFriendAppleUserIDs] as? [String] ?? []
         report.cloudRecordName = record.recordID.recordName
         report.isPublic = true
-        report.lastSyncedAt = .now
 
         if let authorAppleUserID = report.authorAppleUserID {
             report.author = resolveAuthor(appleUserID: authorAppleUserID, context: context, currentUser: currentUser)
@@ -163,10 +291,6 @@ final class CloudKitPublicSyncService: ObservableObject {
         let descriptor = FetchDescriptor<UserProfile>(
             predicate: #Predicate { $0.appleUserID == appleUserID }
         )
-        if let existing = try? context.fetch(descriptor).first {
-            return existing
-        }
-
-        return nil
+        return try? context.fetch(descriptor).first
     }
 }

@@ -6,6 +6,7 @@ struct SettingsView: View {
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
     @Query private var settingsList: [AppSettings]
     @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
+    @State private var cpiSourceLabel = "Bundled US CPI-U"
 
     private var settings: AppSettings {
         if let first = settingsList.first {
@@ -99,12 +100,16 @@ struct SettingsView: View {
             }
 
             Section("Data Sources") {
-                Text("Exchange rates: Frankfurter API (live + historical). Inflation: bundled US CPI-U index. CloudKit public database stores anonymized report metadata for the global index.")
+                Text("Exchange rates: Frankfurter API (live + historical). Inflation: \(cpiSourceLabel). Photos and report metadata sync via CloudKit public database.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
         .navigationTitle("Settings")
+        .task {
+            await CPIService.shared.refreshIfNeeded()
+            cpiSourceLabel = await CPIService.shared.dataSourceLabel
+        }
     }
 
     private var localeCurrencyLabel: String {

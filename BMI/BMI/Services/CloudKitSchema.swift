@@ -1,4 +1,3 @@
-import CloudKit
 import Foundation
 
 enum CloudKitSchema {
@@ -7,6 +6,7 @@ enum CloudKitSchema {
     enum RecordType {
         static let publicUser = "PublicUser"
         static let publicReport = "PublicReport"
+        static let publicReportPhoto = "PublicReportPhoto"
         static let friendConnection = "FriendConnection"
     }
 
@@ -14,6 +14,7 @@ enum CloudKitSchema {
         static let appleUserID = "appleUserID"
         static let displayName = "displayName"
         static let username = "username"
+        static let normalizedUsername = "normalizedUsername"
         static let avatarEmoji = "avatarEmoji"
         static let homeCountry = "homeCountry"
         static let updatedAt = "updatedAt"
@@ -37,6 +38,16 @@ enum CloudKitSchema {
         static let locationTypeRaw = "locationTypeRaw"
         static let createdAt = "createdAt"
         static let taggedFriendAppleUserIDs = "taggedFriendAppleUserIDs"
+        static let photoCount = "photoCount"
+    }
+
+    enum PublicReportPhoto {
+        static let photoID = "photoID"
+        static let reportID = "reportID"
+        static let sortIndex = "sortIndex"
+        static let caption = "caption"
+        static let imageAsset = "imageAsset"
+        static let createdAt = "createdAt"
     }
 
     enum FriendConnection {
@@ -62,6 +73,8 @@ struct PublicUserDTO: Identifiable, Hashable {
     var id: String { appleUserID }
 }
 
+import CloudKit
+
 extension CKRecord {
     func publicUserDTO() -> PublicUserDTO? {
         guard recordType == CloudKitSchema.RecordType.publicUser,
@@ -78,5 +91,39 @@ extension CKRecord {
             avatarEmoji: self[CloudKitSchema.PublicUser.avatarEmoji] as? String ?? "🍔",
             homeCountry: self[CloudKitSchema.PublicUser.homeCountry] as? String ?? ""
         )
+    }
+}
+
+enum UsernameValidator {
+    static func normalize(_ username: String) -> String {
+        username.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+
+    static func validate(_ username: String) -> String? {
+        let normalized = normalize(username)
+        guard normalized.count >= 3 else { return "Username must be at least 3 characters." }
+        guard normalized.count <= 20 else { return "Username must be 20 characters or fewer." }
+        let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "_"))
+        guard normalized.unicodeScalars.allSatisfy({ allowed.contains($0) }) else {
+            return "Use letters, numbers, and underscores only."
+        }
+        return nil
+    }
+}
+
+enum UsernameError: LocalizedError {
+    case taken
+    case invalid(String)
+    case registrationFailed
+
+    var errorDescription: String? {
+        switch self {
+        case .taken:
+            "That username is already taken."
+        case .invalid(let message):
+            message
+        case .registrationFailed:
+            "Could not register your username. Try again."
+        }
     }
 }

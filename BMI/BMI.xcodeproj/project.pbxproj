@@ -47,6 +47,10 @@
 		A10000000000000000000039 /* TagLinkedFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000040 /* TagLinkedFriendsView.swift */; };
 		A10000000000000000000040 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000041 /* AddFriendView.swift */; };
 		A10000000000000000000041 /* FriendsManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000042 /* FriendsManagementView.swift */; };
+		A10000000000000000000042 /* CPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000043 /* CPIService.swift */; };
+		A10000000000000000000043 /* CloudKitNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000044 /* CloudKitNotificationService.swift */; };
+		A10000000000000000000044 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* AppDelegate.swift */; };
+		A10000000000000000000045 /* UsernameSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000046 /* UsernameSetupView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +96,10 @@
 		A20000000000000000000040 /* TagLinkedFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLinkedFriendsView.swift; sourceTree = "<group>"; };
 		A20000000000000000000041 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		A20000000000000000000042 /* FriendsManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsManagementView.swift; sourceTree = "<group>"; };
+		A20000000000000000000043 /* CPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPIService.swift; sourceTree = "<group>"; };
+		A20000000000000000000044 /* CloudKitNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitNotificationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000045 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A20000000000000000000046 /* UsernameSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameSetupView.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* BMI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -160,6 +168,9 @@
 				A20000000000000000000036 /* CloudKitSchema.swift */,
 				A20000000000000000000037 /* CloudKitPublicSyncService.swift */,
 				A20000000000000000000028 /* CurrencyConversionService.swift */,
+				A20000000000000000000043 /* CPIService.swift */,
+				A20000000000000000000044 /* CloudKitNotificationService.swift */,
+				A20000000000000000000045 /* AppDelegate.swift */,
 				A20000000000000000000033 /* ExchangeRateService.swift */,
 				A20000000000000000000038 /* FriendLinkService.swift */,
 				A20000000000000000000034 /* InflationService.swift */,
@@ -236,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000029 /* SignInView.swift */,
+				A20000000000000000000046 /* UsernameSetupView.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -367,6 +379,10 @@
 				A10000000000000000000039 /* TagLinkedFriendsView.swift in Sources */,
 				A10000000000000000000040 /* AddFriendView.swift in Sources */,
 				A10000000000000000000041 /* FriendsManagementView.swift in Sources */,
+				A10000000000000000000042 /* CPIService.swift in Sources */,
+				A10000000000000000000043 /* CloudKitNotificationService.swift in Sources */,
+				A10000000000000000000044 /* AppDelegate.swift in Sources */,
+				A10000000000000000000045 /* UsernameSetupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

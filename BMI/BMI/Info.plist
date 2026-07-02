@@ -26,6 +26,12 @@
 	<string>BMI uses your location to tag McDonald's restaurants and track regional Big Mac prices.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>BMI needs photo access so you can attach pictures of your Big Mac meal.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>FRED_API_KEY</key>
+	<string></string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -2,8 +2,7 @@ import Foundation
 
 /// Adjusts USD amounts for US CPI inflation so historical prices can be expressed in "today's dollars."
 enum InflationService {
-    /// Monthly US CPI-U index values (1982-84 = 100). Extend as new data is published.
-    private static let monthlyCPI: [String: Double] = [
+    static let bundledMonthlyCPI: [String: Double] = [
         "2020-01": 259.1, "2020-06": 257.1, "2020-12": 260.5,
         "2021-01": 261.6, "2021-06": 271.7, "2021-12": 278.8,
         "2022-01": 281.9, "2022-06": 296.3, "2022-12": 298.8,
@@ -13,7 +12,20 @@ enum InflationService {
         "2026-01": 326.0, "2026-06": 328.0
     ]
 
+    static func cpiIndex(on date: Date) async -> Double {
+        await CPIService.shared.cpiIndex(on: date)
+    }
+
     static func cpiIndex(on date: Date) -> Double {
+        if let cached = UserDefaults.standard.dictionary(forKey: "bmi.cpi.monthly.cache") as? [String: Double],
+           !cached.isEmpty {
+            let merged = cached.merging(bundledMonthlyCPI) { live, _ in live }
+            return interpolatedCPI(for: date, from: merged)
+        }
+        return interpolatedCPI(for: date, from: bundledMonthlyCPI)
+    }
+
+    static func interpolatedCPI(for date: Date, from monthlyCPI: [String: Double]) -> Double {
         let key = monthKey(for: date)
         if let exact = monthlyCPI[key] { return exact }
 
@@ -52,7 +64,6 @@ enum InflationService {
         return priorCPI + (nextCPI - priorCPI) * progress
     }
 
-    /// Converts a USD amount observed on `reportDate` into today's purchasing-power-adjusted USD.
     static func toTodaysDollars(usdAtReportDate: Double, reportDate: Date, asOf: Date = .now) -> Double {
         guard usdAtReportDate > 0 else { return 0 }
         let reportCPI = cpiIndex(on: reportDate)
@@ -68,12 +79,12 @@ enum InflationService {
         return ((toCPI / fromCPI) - 1) * 100
     }
 
-    private static func monthKey(for date: Date) -> String {
+    static func monthKey(for date: Date) -> String {
         let components = Calendar.current.dateComponents([.year, .month], from: date)
         return String(format: "%04d-%02d", components.year ?? 2024, components.month ?? 1)
     }
 
-    private static func dateFromMonthKey(_ key: String) -> Date? {
+    static func dateFromMonthKey(_ key: String) -> Date? {
         let parts = key.split(separator: "-")
         guard parts.count == 2,
               let year = Int(parts[0]),

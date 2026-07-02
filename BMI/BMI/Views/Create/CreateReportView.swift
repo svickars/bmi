@@ -140,7 +140,7 @@ struct CreateReportView: View {
                 }
 
                 Section("Sharing") {
-                    Text("Reports are published to the global BMI public index via CloudKit. Meal photos stay on your device for now.")
+                    Text("Reports and meal photos sync to the global BMI public index via CloudKit.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -226,7 +226,9 @@ struct CreateReportView: View {
                 return try? modelContext.fetch(descriptor).first
             }
 
-        let photos = photoData.map { ReportPhoto(imageData: $0) }
+        let photos = photoData.enumerated().map { index, data in
+            ReportPhoto(imageData: data, sortIndex: index)
+        }
 
         let report = BigMacReport(
             cost: cost,

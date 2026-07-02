@@ -7,12 +7,18 @@ struct ContentView: View {
     @StateObject private var syncCoordinator = SyncCoordinator()
     @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
 
+    private var currentUser: UserProfile? { currentUsers.first }
+
     var body: some View {
         Group {
             if authService.isCheckingCredential {
                 LaunchLoadingView()
             } else if authService.isAuthenticated {
-                MainTabView()
+                if currentUser?.isRegisteredPublicly == true {
+                    MainTabView()
+                } else {
+                    UsernameSetupView()
+                }
             } else {
                 SignInView()
             }
@@ -23,11 +29,21 @@ struct ContentView: View {
             authService.configure(modelContext: modelContext)
             authService.checkExistingCredential()
             _ = AppSettingsStore.current(in: modelContext)
+
+            AppNotificationRouter.shared.syncCoordinator = syncCoordinator
+            AppNotificationRouter.shared.modelContext = modelContext
+            AppNotificationRouter.shared.currentUserProvider = { currentUsers.first }
         }
         .onChange(of: authService.isAuthenticated) { _, isAuthenticated in
-            guard isAuthenticated else { return }
+            guard isAuthenticated, currentUser?.isRegisteredPublicly == true else { return }
             Task {
-                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUsers.first)
+                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
+            }
+        }
+        .onChange(of: currentUser?.isRegisteredPublicly) { _, isRegistered in
+            guard authService.isAuthenticated, isRegistered == true else { return }
+            Task {
+                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
             }
         }
     }
