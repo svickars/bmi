@@ -61,19 +61,7 @@ extension Color {
         let blue = Double(value & 0xFF) / 255
         self.init(red: red, green: green, blue: blue)
     }
-
-    var hexString: String {
-        guard let components = UIColor(self).cgColor.components, components.count >= 3 else {
-            return "DC143C"
-        }
-        let r = Int(components[0] * 255)
-        let g = Int(components[1] * 255)
-        let b = Int(components[2] * 255)
-        return String(format: "%02X%02X%02X", r, g, b)
-    }
 }
-
-import UIKit
 
 struct AvatarPresentation {
     let style: AvatarStyle
