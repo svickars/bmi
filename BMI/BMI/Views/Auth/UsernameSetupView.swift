@@ -44,7 +44,7 @@ struct UsernameSetupView: View {
                     } else if let availabilityMessage {
                         Text(availabilityMessage)
                             .font(.caption)
-                            .foregroundStyle(.bmiGreen)
+                            .foregroundStyle(Color.bmiGreen)
                     }
                 }
 

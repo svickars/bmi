@@ -49,11 +49,11 @@ enum PriceNormalizationService {
     static func captureUSDSnapshot(for cost: Double, currencyCode: String, on date: Date) async -> (usd: Double, rateDate: Date) {
         do {
             let usd = try await ExchangeRateService.shared.convertToUSD(amount: cost, currency: currencyCode, on: date)
-            let (_, ratesDate) = await ExchangeRateService.shared.latestRatesSnapshot()
-            return (usd, ratesDate)
+            let ratesDate = await ExchangeRateService.shared.latestRatesSnapshot().date
+            return (usd: usd, rateDate: ratesDate)
         } catch {
             let usd = CurrencyConversionService.convertToUSD(cost, from: currencyCode)
-            return (usd, date)
+            return (usd: usd, rateDate: date)
         }
     }
 

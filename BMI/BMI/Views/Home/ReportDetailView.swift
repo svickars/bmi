@@ -335,7 +335,7 @@ struct ReportDetailView: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .frame(width: 20)
-                .foregroundStyle(.bmiBrown)
+                .foregroundStyle(Color.bmiBrown)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(BMITypography.ui(.caption))

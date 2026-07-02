@@ -90,7 +90,7 @@ struct StatisticsView: View {
         BMICard {
             HStack(spacing: 8) {
                 Image(systemName: "arrow.left.arrow.right.circle.fill")
-                    .foregroundStyle(.bmiBrown)
+                    .foregroundStyle(Color.bmiBrown)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Normalized to \(normalizationCurrency)\(useTodaysDollars ? " in today's dollars" : "")")
                         .font(BMITypography.ui(.subheadline, weight: .semibold))
@@ -225,7 +225,7 @@ struct StatisticsView: View {
                         Spacer()
                         Text(formatCost(item.averageCost, code: item.currencyCode))
                             .font(BMITypography.ui(.subheadline, weight: .bold))
-                            .foregroundStyle(.bmiRed)
+                            .foregroundStyle(Color.bmiRed)
                     }
                     .padding(.vertical, 4)
 
