@@ -111,9 +111,13 @@ footer nav a {
 
 .hero-emoji { font-size: 3rem; margin-bottom: 0.5rem; }
 
+.bmi-mark,
 .layer-mark {
   display: block;
-  margin: 0 auto 1rem;
+  margin: 0 auto 1.25rem;
+  width: min(180px, 42vw);
+  height: auto;
+  aspect-ratio: 1;
 }
 
 .landing {

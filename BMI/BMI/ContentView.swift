@@ -64,12 +64,15 @@ struct ContentView: View {
 struct LaunchLoadingView: View {
     var body: some View {
         ZStack {
-            BMIScreenBackground()
-            VStack(spacing: 20) {
+            BMIBurgerStripesBackground()
+
+            VStack(spacing: 24) {
                 BMILayerMark(width: 140)
                 ProgressView()
-                    .tint(.bmiRed)
+                    .tint(.bmiStripePatty)
             }
+            .padding(28)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
     }
 }

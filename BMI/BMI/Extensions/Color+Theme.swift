@@ -16,6 +16,16 @@ extension Color {
     static let bmiPatty = Color(red: 0.36, green: 0.24, blue: 0.18)
     static let bmiCheese = Color(red: 1.0, green: 0.78, blue: 0.17)
     static let bmiLettuce = Color(red: 0.24, green: 0.55, blue: 0.25)
+
+    // Burger stripe palette (from official BMI mark artwork)
+    static let bmiStripeBun = Color(red: 0.973, green: 0.639, blue: 0.282)       // #F8A348
+    static let bmiStripeBunMid = Color(red: 0.976, green: 0.639, blue: 0.302)    // #F9A34D
+    static let bmiStripeOlive = Color(red: 0.541, green: 0.612, blue: 0.0)        // #8A9C00
+    static let bmiStripeCheese = Color(red: 0.984, green: 0.804, blue: 0.0)       // #FBCD00
+    static let bmiStripeLettuce = Color(red: 0.0, green: 0.624, blue: 0.271)      // #009F45
+    static let bmiStripeLettuceDark = Color(red: 0.0, green: 0.514, blue: 0.157) // #008328
+    static let bmiStripePatty = Color(red: 0.576, green: 0.212, blue: 0.078)       // #933614
+    static let bmiStripeSauce = Color(red: 0.910, green: 0.929, blue: 0.710)       // #E8EDB5
 }
 
 struct BMIGradient {

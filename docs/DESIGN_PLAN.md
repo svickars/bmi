@@ -301,11 +301,11 @@ No parallax, no particle confetti, no haptic overload.
 
 | Asset | Format | Notes |
 |-------|--------|-------|
-| Layer mark | SwiftUI Canvas + exported SVG | Original geometry; do not trace McDonald’s assets |
-| Bite mask | SwiftUI `Shape` | Asymmetric corner bites for hero clips |
-| Share card background | SwiftUI view | Rendered to image for share sheet |
-| App icon | ✅ exists | Use on sign-in + web |
-| Optional macro photo | User-generated only | Report photos supply this — don’t ship stock burger photo |
+| **BMI mark** | SVG + PNG (`BMIMark` asset, `AppIcon.png`) | Sam's flat stripe artwork — favicon, app icon, in-app mark |
+| Stripe takeover | SwiftUI `BMIBurgerStripesBackground` | Full-bleed moment backgrounds (sign-in, launch, photo-less heroes) |
+| Bite mask | SwiftUI `BMIBiteClipShape` | Asymmetric corner bites on hero clips |
+| Share card background | SwiftUI view | Rendered to image for share sheet *(deferred)* |
+| App icon | ✅ `AppIcon.png` from BMI mark | 1024×1024 generated from master SVG |
 
 **Legal:** Billboard references are *directional*. All shipped art should be original abstractions or user photos.
 
