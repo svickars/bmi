@@ -76,6 +76,7 @@ struct UsernameSetupView: View {
                 }
             }
             .onAppear {
+                authService.refreshPublicProfileStatus(from: modelContext)
                 if let profile = authService.currentUserProfile(in: modelContext),
                    !profile.username.hasPrefix("user_") {
                     username = profile.username
@@ -115,8 +116,13 @@ struct UsernameSetupView: View {
     }
 
     private func saveUsername() async {
+        guard authService.isAuthenticated else {
+            presentError("You are not signed in. Go back and sign in with Apple again.")
+            return
+        }
+
         guard let currentUser = authService.currentUserProfile(in: modelContext) else {
-            presentError("No signed-in profile was found. Force-quit the app and sign in again.")
+            presentError("Could not load your local profile. Delete the app, reinstall, and sign in again.")
             return
         }
 
