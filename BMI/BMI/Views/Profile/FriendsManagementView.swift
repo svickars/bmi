@@ -66,8 +66,8 @@ struct FriendsManagementView: View {
             Section("Friends (\(accepted.count))") {
                 if accepted.isEmpty {
                     Text("Accepted friends can be tagged in your Big Mac reports.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 } else {
                     ForEach(accepted, id: \.id) { link in
                         friendRow(link)
@@ -75,6 +75,7 @@ struct FriendsManagementView: View {
                 }
             }
         }
+        .bmiFormScreen()
         .navigationTitle("Friends")
         .refreshable {
             await refresh()
@@ -86,14 +87,13 @@ struct FriendsManagementView: View {
             PublicUserProfileView(username: link.friendUsername)
         } label: {
             HStack(spacing: 12) {
-                Text(link.friendAvatarEmoji)
-                    .font(.title2)
+                BMIAvatarView(friend: link, size: 44)
                 VStack(alignment: .leading) {
                     Text(link.friendDisplayName)
-                        .font(.subheadline.weight(.medium))
+                        .font(BMITypography.ui(.subheadline, weight: .medium))
                     Text("@\(link.friendUsername)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 }
             }
         }

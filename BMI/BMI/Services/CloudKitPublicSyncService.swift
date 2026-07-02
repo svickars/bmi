@@ -59,6 +59,9 @@ final class CloudKitPublicSyncService: ObservableObject {
         record[CloudKitSchema.PublicUser.username] = normalized as CKRecordValue
         record[CloudKitSchema.PublicUser.normalizedUsername] = normalized as CKRecordValue
         record[CloudKitSchema.PublicUser.avatarEmoji] = profile.avatarEmoji as CKRecordValue
+        record[CloudKitSchema.PublicUser.avatarStyleRaw] = profile.avatarStyleRaw as CKRecordValue
+        record[CloudKitSchema.PublicUser.avatarInitials] = profile.avatarInitials as CKRecordValue
+        record[CloudKitSchema.PublicUser.avatarBackgroundHex] = profile.avatarBackgroundHex as CKRecordValue
         record[CloudKitSchema.PublicUser.homeCountry] = profile.homeCountry as CKRecordValue
         record[CloudKitSchema.PublicUser.updatedAt] = Date() as CKRecordValue
 

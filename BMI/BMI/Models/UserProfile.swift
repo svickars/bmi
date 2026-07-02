@@ -7,6 +7,9 @@ final class UserProfile {
     var displayName: String
     var username: String
     var avatarEmoji: String
+    var avatarStyleRaw: String
+    var avatarInitials: String
+    var avatarBackgroundHex: String
     var homeCountry: String
     var createdAt: Date
     var isCurrentUser: Bool
@@ -26,6 +29,9 @@ final class UserProfile {
         displayName: String,
         username: String,
         avatarEmoji: String = "🍔",
+        avatarStyleRaw: String = AvatarStyle.emoji.rawValue,
+        avatarInitials: String = "",
+        avatarBackgroundHex: String = AvatarAppearance.defaultBackgroundHex(for: .emoji),
         homeCountry: String = "United States",
         createdAt: Date = .now,
         isCurrentUser: Bool = false,
@@ -38,6 +44,9 @@ final class UserProfile {
         self.displayName = displayName
         self.username = username
         self.avatarEmoji = avatarEmoji
+        self.avatarStyleRaw = avatarStyleRaw
+        self.avatarInitials = avatarInitials
+        self.avatarBackgroundHex = avatarBackgroundHex
         self.homeCountry = homeCountry
         self.createdAt = createdAt
         self.isCurrentUser = isCurrentUser

@@ -43,7 +43,9 @@ struct MapReportsView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
+            .background(BMIScreenBackground())
             .navigationTitle("Map")
+            .navigationBarTitleDisplayMode(.inline)
             .animation(.easeInOut, value: selectedReport?.id)
         }
     }
@@ -54,26 +56,29 @@ struct MapPinView: View {
     let rating: Int
 
     var body: some View {
-        VStack(spacing: 2) {
-            Text("🍔")
-                .font(.caption)
+        VStack(spacing: 4) {
             Text(cost)
-                .font(.caption2.bold())
-                .padding(.horizontal, 6)
-                .padding(.vertical, 3)
-                .background(.bmiRed)
-                .foregroundStyle(.white)
+                .font(BMITypography.data(11, weight: .bold))
+                .foregroundStyle(Color.bmiRed)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 5)
+                .background(Color.bmiSurface)
                 .clipShape(Capsule())
+                .overlay {
+                    Capsule()
+                        .strokeBorder(Color.bmiBorder, lineWidth: 1)
+                }
             StarRatingView(rating: rating, size: 8)
         }
         .padding(6)
         .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .shadow(radius: 4)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
     }
 }
 
 #Preview {
     MapReportsView()
         .modelContainer(PreviewData.previewContainer)
+        .environmentObject(AppNavigationRouter.shared)
 }

@@ -41,6 +41,7 @@ struct NotificationsView: View {
                 }
             }
         }
+        .bmiFormScreen()
         .navigationTitle("Notifications")
         .toolbar {
             if notifications.contains(where: { !$0.isRead }) {
@@ -89,7 +90,7 @@ private struct NotificationRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(notification.title)
-                        .font(.subheadline.weight(notification.isRead ? .regular : .semibold))
+                        .font(BMITypography.ui(.subheadline, weight: notification.isRead ? .regular : .semibold))
                     Spacer()
                     Text(notification.createdAt.formatted(date: .abbreviated, time: .shortened))
                         .font(.caption2)
@@ -102,7 +103,7 @@ private struct NotificationRow: View {
             }
         }
         .padding(.vertical, 4)
-        .listRowBackground(notification.isRead ? Color.clear : Color.bmiCream.opacity(0.5))
+        .listRowBackground(notification.isRead ? Color.clear : Color.bmiPaper.opacity(0.65))
     }
 }
 

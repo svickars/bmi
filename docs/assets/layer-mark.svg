@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 121" role="img" aria-label="Big Mac layer mark">
+  <rect x="0" y="0" width="220" height="22" rx="8" fill="#F7E8C8"/>
+  <circle cx="44" cy="8" r="4" fill="#fff" opacity="0.85"/>
+  <circle cx="66" cy="8" r="4" fill="#fff" opacity="0.85"/>
+  <circle cx="88" cy="8" r="4" fill="#fff" opacity="0.85"/>
+  <circle cx="110" cy="8" r="4" fill="#fff" opacity="0.85"/>
+  <circle cx="132" cy="8" r="4" fill="#fff" opacity="0.85"/>
+  <rect x="0" y="26" width="220" height="11" rx="4" fill="#5C3D2E"/>
+  <rect x="0" y="41" width="220" height="6" rx="3" fill="#F7E8C8"/>
+  <rect x="0" y="51" width="220" height="11" rx="4" fill="#5C3D2E"/>
+  <path d="M0 66 H220 V74 Q165 82 110 70 Q55 58 0 74 Z" fill="#3D8B40"/>
+  <rect x="0" y="81" width="220" height="11" rx="4" fill="#5C3D2E"/>
+  <rect x="0" y="96" width="220" height="8" rx="3" fill="#FFC72C"/>
+  <path d="M0 108 H220 V116 Q165 124 110 112 Q55 100 0 116 Z" fill="#3D8B40"/>
+  <rect x="0" y="107" width="220" height="14" rx="6" fill="#F7E8C8"/>
+</svg>

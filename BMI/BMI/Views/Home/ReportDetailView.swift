@@ -41,139 +41,100 @@ struct ReportDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(report.locationName)
-                        .font(.title.bold())
+                heroSection
 
-                    HStack {
-                        Label(report.locationType.displayName, systemImage: report.locationType.icon)
-                        Spacer()
-                        StarRatingView(rating: report.rating)
-                    }
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                }
+                BMICard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Local Price")
+                                    .font(BMITypography.ui(.caption))
+                                    .foregroundStyle(Color.bmiMuted)
+                                Text(report.formattedCost)
+                                    .font(BMITypography.display(32))
+                                    .foregroundStyle(Color.bmiRed)
+                            }
 
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Local Price")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            Text(report.formattedCost)
-                                .font(.largeTitle.bold())
-                                .foregroundStyle(.bmiRed)
-                        }
+                            Spacer()
 
-                        Spacer()
-
-                        VStack(alignment: .trailing) {
-                            Text("Purchased")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            Text(report.purchasedItemsSummary)
-                                .font(.subheadline.weight(.medium))
-                                .multilineTextAlignment(.trailing)
-                        }
-                    }
-
-                    Divider()
-
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Index Comparison")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
-
-                        if report.usdAtReportDate > 0 {
-                            let todaysUSD = useTodaysDollars
-                                ? InflationService.toTodaysDollars(usdAtReportDate: report.usdAtReportDate, reportDate: report.createdAt)
-                                : report.usdAtReportDate
-                            detailLine(
-                                title: "USD at report date",
-                                value: CurrencyConversionService.format(report.usdAtReportDate, currencyCode: "USD")
-                            )
-                            if useTodaysDollars {
-                                detailLine(
-                                    title: "Today's dollars",
-                                    value: CurrencyConversionService.format(todaysUSD, currencyCode: "USD")
-                                )
+                            VStack(alignment: .trailing, spacing: 4) {
+                                Text("Purchased")
+                                    .font(BMITypography.ui(.caption))
+                                    .foregroundStyle(Color.bmiMuted)
+                                Text(report.purchasedItemsSummary)
+                                    .font(BMITypography.ui(.subheadline, weight: .medium))
+                                    .multilineTextAlignment(.trailing)
                             }
                         }
 
-                        detailLine(
-                            title: "In \(normalizationCurrency)",
-                            value: report.formattedComparableValue(in: normalizationCurrency, useTodaysDollars: useTodaysDollars)
-                        )
+                        Divider()
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Index Comparison")
+                                .font(BMITypography.ui(.caption, weight: .semibold))
+                                .foregroundStyle(Color.bmiMuted)
+
+                            if report.usdAtReportDate > 0 {
+                                let todaysUSD = useTodaysDollars
+                                    ? InflationService.toTodaysDollars(usdAtReportDate: report.usdAtReportDate, reportDate: report.createdAt)
+                                    : report.usdAtReportDate
+                                detailLine(
+                                    title: "USD at report date",
+                                    value: CurrencyConversionService.format(report.usdAtReportDate, currencyCode: "USD")
+                                )
+                                if useTodaysDollars {
+                                    detailLine(
+                                        title: "Today's dollars",
+                                        value: CurrencyConversionService.format(todaysUSD, currencyCode: "USD")
+                                    )
+                                }
+                            }
+
+                            detailLine(
+                                title: "In \(normalizationCurrency)",
+                                value: report.formattedComparableValue(in: normalizationCurrency, useTodaysDollars: useTodaysDollars)
+                            )
+                        }
                     }
                 }
-                .padding()
-                .background(Color.bmiCream)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
 
                 if report.isPublic {
                     reactionsSection
                 }
 
-                if let photos = report.photos, !photos.isEmpty {
+                if !report.reviewText.isEmpty {
+                    BMICard {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Notes")
+                                .font(BMITypography.ui(.headline))
+                            Text(report.reviewText)
+                                .font(BMITypography.ui(.body))
+                                .foregroundStyle(Color.bmiMuted)
+                        }
+                    }
+                }
+
+                if let photos = report.photos, photos.count > 1 {
                     TabView {
-                        ForEach(photos, id: \.id) { photo in
+                        ForEach(Array(photos.dropFirst()), id: \.id) { photo in
                             if let uiImage = UIImage(data: photo.imageData) {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(height: 240)
-                                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                                    .frame(height: 220)
+                                    .bmiBiteClip()
                             }
                         }
                     }
-                    .frame(height: 240)
+                    .frame(height: 220)
                     .tabViewStyle(.page)
                 }
 
-                if !report.reviewText.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Review")
-                            .font(.headline)
-                        Text(report.reviewText)
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Location Details")
-                        .font(.headline)
-
-                    detailRow(icon: "globe", title: "Country", value: report.country)
-                    detailRow(icon: "map", title: "Region", value: report.subRegion)
-                    detailRow(icon: "calendar", title: "Reported", value: report.createdAt.formatted(date: .abbreviated, time: .shortened))
-                    detailRow(icon: "arrow.left.arrow.right", title: "FX snapshot", value: report.exchangeRateDate.formatted(date: .abbreviated, time: .omitted))
-
-                    if report.isPublic {
-                        detailRow(icon: "icloud.fill", title: "Public index", value: report.cloudRecordName == nil ? "Pending sync" : "Synced")
-                    }
-
-                    if let author = report.author {
-                        Button {
-                            navigationRouter.openUserProfile(username: author.username)
-                        } label: {
-                            detailRow(icon: "person.fill", title: "Reporter", value: "\(author.avatarEmoji) \(author.displayName)")
-                        }
-                        .buttonStyle(.plain)
-                    }
-
-                    if let tagged = report.taggedFriends, !tagged.isEmpty {
-                        detailRow(
-                            icon: "person.2.fill",
-                            title: "Tagged Friends",
-                            value: tagged.map { "\($0.avatarEmoji) \($0.displayName)" }.joined(separator: ", ")
-                        )
-                    }
-                }
+                locationDetailsSection
             }
             .padding()
         }
-        .background(Color.bmiCream.opacity(0.3))
+        .background(BMIScreenBackground())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if report.isPublic {
@@ -191,10 +152,106 @@ struct ReportDetailView: View {
         }
     }
 
+    @ViewBuilder
+    private var heroSection: some View {
+        ZStack(alignment: .bottomLeading) {
+            if let photo = report.photos?.first,
+               let uiImage = UIImage(data: photo.imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 280)
+                    .clipped()
+                    .bmiBiteClip()
+            } else {
+                ZStack {
+                    Color.bmiPaper
+                    BMILayerMark(width: 160)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 220)
+                .bmiBiteClip()
+            }
+
+            LinearGradient(
+                colors: [.black.opacity(0.55), .clear],
+                startPoint: .bottom,
+                endPoint: .center
+            )
+            .bmiBiteClip()
+            .allowsHitTesting(false)
+
+            HStack(alignment: .bottom) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(report.locationName)
+                        .font(BMITypography.display(26))
+                        .foregroundStyle(.white)
+                    HStack(spacing: 8) {
+                        Label(report.locationType.displayName, systemImage: report.locationType.icon)
+                        StarRatingView(rating: report.rating, size: 12)
+                    }
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(.white.opacity(0.9))
+                }
+                Spacer()
+                BMIPriceBadge(text: report.formattedCost, diameter: 64)
+            }
+            .padding(16)
+        }
+    }
+
+    private var locationDetailsSection: some View {
+        BMICard {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Location Details")
+                    .font(BMITypography.ui(.headline))
+
+                detailRow(icon: "globe", title: "Country", value: report.country)
+                detailRow(icon: "map", title: "Region", value: report.subRegion)
+                detailRow(icon: "calendar", title: "Reported", value: report.createdAt.formatted(date: .abbreviated, time: .shortened))
+                detailRow(icon: "arrow.left.arrow.right", title: "FX snapshot", value: report.exchangeRateDate.formatted(date: .abbreviated, time: .omitted))
+
+                if report.isPublic {
+                    detailRow(icon: "icloud.fill", title: "Public index", value: report.cloudRecordName == nil ? "Pending sync" : "Synced")
+                }
+
+                if let author = report.author {
+                    Button {
+                        navigationRouter.openUserProfile(username: author.username)
+                    } label: {
+                        HStack(alignment: .top, spacing: 12) {
+                            BMIAvatarView(user: author, size: 32)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Reporter")
+                                    .font(BMITypography.ui(.caption))
+                                    .foregroundStyle(Color.bmiMuted)
+                                Text(author.displayName)
+                                    .font(BMITypography.ui(.subheadline))
+                                    .foregroundStyle(Color.bmiInk)
+                            }
+                            Spacer()
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                if let tagged = report.taggedFriends, !tagged.isEmpty {
+                    detailRow(
+                        icon: "person.2.fill",
+                        title: "Tagged Friends",
+                        value: tagged.map { "\($0.avatarEmoji) \($0.displayName)" }.joined(separator: ", ")
+                    )
+                }
+            }
+        }
+    }
+
     private var reactionsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Reactions")
-                .font(.headline)
+        BMICard {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Reactions")
+                    .font(BMITypography.ui(.headline))
 
             if !reactionSummary.isEmpty {
                 FlowLayout(spacing: 8) {
@@ -202,12 +259,12 @@ struct ReportDetailView: View {
                         HStack(spacing: 4) {
                             Text(item.emoji)
                             Text("\(item.count)")
-                                .font(.caption.weight(.medium))
-                                .foregroundStyle(.secondary)
+                                .font(BMITypography.ui(.caption, weight: .medium))
+                                .foregroundStyle(Color.bmiMuted)
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
-                        .background(Color.bmiCream)
+                        .background(Color.bmiPaper)
                         .clipShape(Capsule())
                     }
                 }
@@ -236,18 +293,16 @@ struct ReportDetailView: View {
 
                 if reactions.isEmpty {
                     Text("Be the first to react to this report.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 }
             } else {
                 Text("Sign in to react to public reports.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(Color.bmiMuted)
+            }
             }
         }
-        .padding()
-        .background(Color.bmiCream.opacity(0.6))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
     private func toggleReaction(_ emoji: String) async {
@@ -271,11 +326,11 @@ struct ReportDetailView: View {
     private func detailLine(title: String, value: String) -> some View {
         HStack {
             Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(BMITypography.ui(.caption))
+                .foregroundStyle(Color.bmiMuted)
             Spacer()
             Text(value)
-                .font(.caption.weight(.medium))
+                .font(BMITypography.ui(.caption, weight: .medium))
         }
     }
 
@@ -286,10 +341,10 @@ struct ReportDetailView: View {
                 .foregroundStyle(.bmiBrown)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(Color.bmiMuted)
                 Text(value)
-                    .font(.subheadline)
+                    .font(BMITypography.ui(.subheadline))
             }
             Spacer()
         }

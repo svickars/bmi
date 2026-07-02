@@ -71,8 +71,9 @@ struct StatisticsView: View {
                 }
                 .padding()
             }
-            .background(Color.bmiCream.opacity(0.4))
+            .background(BMIScreenBackground())
             .navigationTitle("Index Stats")
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
@@ -86,21 +87,20 @@ struct StatisticsView: View {
     }
 
     private var normalizationBanner: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "arrow.left.arrow.right.circle.fill")
-                .foregroundStyle(.bmiBrown)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Normalized to \(normalizationCurrency)\(useTodaysDollars ? " in today's dollars" : "")")
-                    .font(.subheadline.weight(.semibold))
-                Text("Live FX + US CPI inflation align historical reports with current purchasing power.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+        BMICard {
+            HStack(spacing: 8) {
+                Image(systemName: "arrow.left.arrow.right.circle.fill")
+                    .foregroundStyle(.bmiBrown)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Normalized to \(normalizationCurrency)\(useTodaysDollars ? " in today's dollars" : "")")
+                        .font(BMITypography.ui(.subheadline, weight: .semibold))
+                    Text("Live FX + US CPI inflation align historical reports with current purchasing power.")
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
+                }
+                Spacer()
             }
-            Spacer()
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
     private var summaryCards: some View {
@@ -162,95 +162,83 @@ struct StatisticsView: View {
     }
 
     private func priceChart(data: [PriceAggregate], title: String) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(.headline)
+        BMICard {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(title)
+                    .font(BMITypography.display(18))
 
-            if data.isEmpty {
-                Text("No data yet")
-                    .foregroundStyle(.secondary)
-            } else {
-                Chart(data.prefix(12)) { item in
-                    BarMark(
-                        x: .value("Price", item.averageCost),
-                        y: .value("Location", item.label)
-                    )
-                    .foregroundStyle(Color.bmiRed.gradient)
-                    .annotation(position: .trailing) {
-                        Text(formatCost(item.averageCost, code: item.currencyCode))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                if data.isEmpty {
+                    Text("No data yet")
+                        .foregroundStyle(Color.bmiMuted)
+                } else {
+                    Chart(data.prefix(12)) { item in
+                        BarMark(
+                            x: .value("Price", item.averageCost),
+                            y: .value("Location", item.label)
+                        )
+                        .foregroundStyle(Color.bmiRed.gradient)
+                        .annotation(position: .trailing) {
+                            Text(formatCost(item.averageCost, code: item.currencyCode))
+                                .font(BMITypography.ui(.caption2))
+                                .foregroundStyle(Color.bmiMuted)
+                        }
                     }
+                    .frame(height: min(CGFloat(data.count) * 36, 420))
                 }
-                .frame(height: min(CGFloat(data.count) * 36, 420))
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
     private var ratingChart: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Rating Distribution")
-                .font(.headline)
+        BMICard {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Rating Distribution")
+                    .font(BMITypography.display(18))
 
-            Chart(ratingData, id: \.rating) { item in
-                BarMark(
-                    x: .value("Stars", "\(item.rating)★"),
-                    y: .value("Count", item.count)
-                )
-                .foregroundStyle(Color.bmiYellow.gradient)
+                Chart(ratingData, id: \.rating) { item in
+                    BarMark(
+                        x: .value("Stars", "\(item.rating)★"),
+                        y: .value("Count", item.count)
+                    )
+                    .foregroundStyle(Color.bmiYellow.gradient)
+                }
+                .frame(height: 220)
             }
-            .frame(height: 220)
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
     private func aggregateList(data: [PriceAggregate]) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Breakdown")
-                .font(.headline)
+        BMICard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Breakdown")
+                    .font(BMITypography.display(18))
 
-            ForEach(data) { item in
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(item.label)
-                            .font(.subheadline.weight(.medium))
-                        Text("\(item.reportCount) reports · \(String(format: "%.1f", item.averageRating))★ avg")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                ForEach(data) { item in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(item.label)
+                                .font(BMITypography.ui(.subheadline, weight: .medium))
+                            Text("\(item.reportCount) reports · \(String(format: "%.1f", item.averageRating))★ avg")
+                                .font(BMITypography.ui(.caption))
+                                .foregroundStyle(Color.bmiMuted)
+                        }
+                        Spacer()
+                        Text(formatCost(item.averageCost, code: item.currencyCode))
+                            .font(BMITypography.ui(.subheadline, weight: .bold))
+                            .foregroundStyle(.bmiRed)
                     }
-                    Spacer()
-                    Text(formatCost(item.averageCost, code: item.currencyCode))
-                        .font(.subheadline.bold())
-                        .foregroundStyle(.bmiRed)
-                }
-                .padding(.vertical, 4)
+                    .padding(.vertical, 4)
 
-                if item.id != data.last?.id {
-                    Divider()
+                    if item.id != data.last?.id {
+                        Divider()
+                    }
                 }
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
     private func filterChip(_ title: String, _ isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(.caption.weight(.medium))
-                .padding(.horizontal, 12)
-                .padding(.vertical, 7)
-                .background(isSelected ? Color.bmiRed : Color(.systemBackground))
-                .foregroundStyle(isSelected ? .white : .primary)
-                .clipShape(Capsule())
-        }
-        .buttonStyle(.plain)
+        BMIPillChip(title: title, isSelected: isSelected, action: action)
     }
 
     private func formatCost(_ value: Double, code: String) -> String {
@@ -265,19 +253,18 @@ struct SummaryCard: View {
     let color: Color
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image(systemName: icon)
-                .foregroundStyle(color)
-            Text(value)
-                .font(.title3.bold())
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        BMICard {
+            VStack(alignment: .leading, spacing: 8) {
+                Image(systemName: icon)
+                    .foregroundStyle(color)
+                Text(value)
+                    .font(BMITypography.data(20, weight: .bold))
+                Text(title)
+                    .font(BMITypography.ui(.caption))
+                    .foregroundStyle(Color.bmiMuted)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 
@@ -290,18 +277,22 @@ struct HighlightCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.caption.weight(.semibold))
+                .font(BMITypography.ui(.caption, weight: .semibold))
                 .foregroundStyle(tint)
             Text(location)
-                .font(.subheadline)
+                .font(BMITypography.ui(.subheadline))
                 .lineLimit(2)
             Text(value)
-                .font(.headline)
+                .font(BMITypography.data(18, weight: .bold))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
+        .padding(14)
         .background(tint.opacity(0.12))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(Color.bmiBorder, lineWidth: 1)
+        }
     }
 }
 

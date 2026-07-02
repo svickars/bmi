@@ -16,15 +16,18 @@ struct PurchasedItemsPicker: View {
                     }
                 } label: {
                     Text(item.displayName)
-                        .font(.caption.weight(.medium))
+                        .font(BMITypography.ui(.caption, weight: .medium))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .background(selection.contains(item) ? Color.bmiYellow.opacity(0.35) : Color(.systemGray6))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(selection.contains(item) ? Color.bmiBrown : .clear, lineWidth: 2)
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .background(selection.contains(item) ? Color.bmiYellow.opacity(0.35) : Color.bmiSurface)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .strokeBorder(
+                                    selection.contains(item) ? Color.bmiBrown : Color.bmiBorder,
+                                    lineWidth: selection.contains(item) ? 2 : 1
+                                )
+                        }
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
                 .buttonStyle(.plain)
             }
@@ -34,4 +37,6 @@ struct PurchasedItemsPicker: View {
 
 #Preview {
     PurchasedItemsPicker(selection: .constant([.bigMac, .fries]))
+        .padding()
+        .background(BMIScreenBackground())
 }

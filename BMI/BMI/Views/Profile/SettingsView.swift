@@ -137,6 +137,7 @@ struct SettingsView: View {
                 Text("Permanently removes your public CloudKit data and signs you out on this device.")
             }
         }
+        .bmiFormScreen()
         .navigationTitle("Settings")
         .task {
             await CPIService.shared.refreshIfNeeded()

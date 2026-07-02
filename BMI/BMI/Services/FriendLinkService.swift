@@ -123,6 +123,9 @@ final class FriendLinkService: ObservableObject {
                 displayName: record[CloudKitSchema.FriendConnection.fromDisplayName] as? String ?? "Friend",
                 username: record[CloudKitSchema.FriendConnection.fromUsername] as? String ?? "friend",
                 avatarEmoji: "🍔",
+                avatarStyleRaw: AvatarStyle.emoji.rawValue,
+                avatarInitials: "",
+                avatarBackgroundHex: AvatarAppearance.defaultBackgroundHex(for: .emoji),
                 homeCountry: ""
             )
             let localStatus: FriendLinkStatus = status == .pendingOutgoing ? .pendingIncoming : status
@@ -139,6 +142,9 @@ final class FriendLinkService: ObservableObject {
                 displayName: record[CloudKitSchema.FriendConnection.toDisplayName] as? String ?? "Friend",
                 username: record[CloudKitSchema.FriendConnection.toUsername] as? String ?? "friend",
                 avatarEmoji: "🍔",
+                avatarStyleRaw: AvatarStyle.emoji.rawValue,
+                avatarInitials: "",
+                avatarBackgroundHex: AvatarAppearance.defaultBackgroundHex(for: .emoji),
                 homeCountry: ""
             )
             upsertLocalLink(

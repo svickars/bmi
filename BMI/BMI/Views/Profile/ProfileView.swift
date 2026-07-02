@@ -31,17 +31,13 @@ struct ProfileView: View {
                 if let user = currentUser {
                     Section {
                         HStack(spacing: 16) {
-                            Text(user.avatarEmoji)
-                                .font(.system(size: 52))
-                                .frame(width: 72, height: 72)
-                                .background(Color.bmiCream)
-                                .clipShape(Circle())
+                            BMIAvatarView(user: user, size: 72)
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(user.displayName)
-                                    .font(.title2.bold())
+                                    .font(BMITypography.display(22))
                                 Text("@\(user.username)")
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.bmiMuted)
                                 if let email = user.email {
                                     Text(email)
                                         .font(.caption)
@@ -75,6 +71,12 @@ struct ProfileView: View {
                     }
 
                     Section("Social & Settings") {
+                        NavigationLink {
+                            AvatarEditorView(user: user)
+                        } label: {
+                            Label("Edit Avatar", systemImage: "face.smiling")
+                        }
+
                         NavigationLink {
                             PublicUserProfileView(username: user.username)
                         } label: {
@@ -125,6 +127,7 @@ struct ProfileView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .bmiFormScreen()
             .navigationTitle("Profile")
         }
     }

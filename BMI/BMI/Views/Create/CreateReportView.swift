@@ -145,6 +145,7 @@ struct CreateReportView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .bmiFormScreen()
             .navigationTitle("New Report")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -8,14 +8,26 @@ Use this checklist when you're back on your Mac to build, run on your iPhone, an
 **Marketing site:** https://bmi.bysam.fun  
 **GitHub Pages source:** `/docs` on `main`
 
+**Open PRs (merge before shipping):**
+
+| PR | Branch | What it adds |
+|----|--------|--------------|
+| [#1](https://github.com/svickars/bmi/pull/1) | `cursor/big-mac-index-ios-8bf8` | Core iOS app (CloudKit, auth, feed, friends, notifications) |
+| [#2](https://github.com/svickars/bmi/pull/2) | `cursor/ui-redesign-beli-8bf8` | Beli-inspired UI, custom avatars, layer mark, bite mask |
+
+> **Recommended:** merge PR #1 first, then PR #2 (or merge #2 into #1's branch if you prefer one PR). After merge, work from **`main`**.
+
 ---
 
 ## Phase 1 — Code on your Mac
 
-- [ ] Install **Xcode 15+**
+- [ ] Install **Xcode 15+** (iOS 17 SDK)
 - [ ] Clone: `git clone https://github.com/svickars/bmi.git && cd bmi`
-- [ ] Check out `main` (merge [PR #1](https://github.com/svickars/bmi/pull/1) if not merged yet)
+- [ ] Fetch latest: `git fetch origin`
+- [ ] Check out **`main`** after merging PRs, **or** preview UI work:  
+  `git checkout cursor/ui-redesign-beli-8bf8`
 - [ ] Open **`BMI/BMI.xcodeproj`**
+- [ ] **Product → Clean Build Folder**, then build once for **iPhone Simulator** (⌘B)
 
 ---
 
@@ -47,7 +59,7 @@ Target **BMI** → **Signing & Capabilities**:
   - [ ] iCloud → CloudKit → `iCloud.com.bigmacindex.bmi`
   - [ ] Push Notifications
   - [ ] **Associated Domains** → `applinks:bmi.bysam.fun`
-- [ ] Build for **iPhone Simulator** once to verify compile
+- [ ] Build for **iPhone Simulator** once to verify compile (no missing files in `BMI/Design/`)
 
 ---
 
@@ -68,8 +80,19 @@ Work in **Development** first. Promote to **Production** before App Store / exte
 | `UserNotification` | `recipientAppleUserID` (Queryable), `createdAt` (Sortable) |
 | `ReportReaction` | `reportID` (Queryable) |
 
-- [ ] Create all record types with fields matching `BMI/BMI/Services/CloudKitSchema.swift`
-- [ ] Set indexes above
+### `PublicUser` avatar fields (UI redesign — PR #2)
+
+Add these **String** fields to `PublicUser` if not already present (see `BMI/BMI/Services/CloudKitSchema.swift`):
+
+| Field | Type | Example values |
+|-------|------|----------------|
+| `avatarEmoji` | String | `🍔` |
+| `avatarStyleRaw` | String | `emoji` or `initials` |
+| `avatarInitials` | String | `SV` (max 2 chars) |
+| `avatarBackgroundHex` | String | `DC143C` (no `#`) |
+
+- [ ] Create all record types with fields matching `CloudKitSchema.swift`
+- [ ] Set queryable/sortable indexes in the table above
 - [ ] **Deploy Schema to Development**
 - [ ] After testing, **Deploy to Production**
 
@@ -95,13 +118,19 @@ Hosted files (in repo `docs/`):
 
 ### GitHub
 
-- [ ] Merge latest code to **`main`**
+- [ ] Merge latest code to **`main`** (PR #1 + PR #2)
 - [ ] Repo **Settings → Pages**
   - Source: **Deploy from a branch**
   - Branch: **`main`** / folder **`/docs`**
 - [ ] **Custom domain:** `bmi.bysam.fun` (GitHub adds this to `docs/CNAME` — already in repo)
 - [ ] Wait for DNS check → GitHub shows **DNS check successful** + HTTPS enabled (can take up to 24h)
 - [ ] Confirm site loads: https://bmi.bysam.fun
+
+### Landing page tweaks (after merge)
+
+- [ ] Replace TestFlight placeholder in **`docs/index.html`**:  
+  `https://testflight.apple.com/join/REPLACE_ME` → your real join link
+- [ ] Confirm layer mark + serif headline render on https://bmi.bysam.fun
 
 ### Porkbun (bysam.fun)
 
@@ -121,7 +150,7 @@ Add a **CNAME** record for the subdomain:
 
 ### After DNS propagates
 
-- [ ] https://bmi.bysam.fun — landing page
+- [ ] https://bmi.bysam.fun — landing page (layer mark, serif title)
 - [ ] https://bmi.bysam.fun/privacy.html — privacy policy
 - [ ] https://bmi.bysam.fun/support.html — support
 - [ ] https://bmi.bysam.fun/u/demo — web fallback (opens app if installed)
@@ -147,7 +176,7 @@ Without a key, bundled US CPI fallback still works.
 - [ ] Allow **Location**, **Photos**, **Notifications** when prompted
 - [ ] Flow: Sign in with Apple → choose username → create a public report → Profile → **Sync Now**
 
-### Smoke test
+### Core smoke test
 
 - [ ] Feed shows synced community reports
 - [ ] Tap author name → public profile page
@@ -155,6 +184,28 @@ Without a key, bundled US CPI fallback still works.
 - [ ] Second Apple ID / device: add friend, tag, react → Notifications inbox
 - [ ] Push notification tap opens the report (physical device recommended)
 - [ ] Settings → Delete Account (test on a throwaway Apple ID first)
+
+### UI redesign smoke test (PR #2)
+
+Visual pass — should feel **Beli-adjacent**: paper background, serif titles, thin borders, red only on prices/CTAs.
+
+| Screen | What to check |
+|--------|----------------|
+| **Sign in** | Layer mark, serif “The Big Mac Index”, cream paper background |
+| **Feed** | Serif “The Index” header, pill country filters, Beli-style cards with price badge |
+| **Report detail** | Hero photo with **bite mask** (corner clip), price in serif |
+| **Map** | Red price pins (no burger emoji) |
+| **New report** | Paper form, styled item/location pickers, friend tag avatars |
+| **Stats** | Paper background, bordered stat cards, pill segment filters |
+| **Profile** | Custom avatar circle, “Edit Avatar” link |
+| **Edit Avatar** | Toggle emoji vs initials, background colour grid, saves to CloudKit |
+| **Friends / Add friend** | Avatar circles on friend rows |
+| **Notifications** | Unread rows subtly highlighted on paper |
+| **Settings / Delete account** | Paper form chrome (not default gray grouped background) |
+| **Tab bar** | Paper-toned bar background |
+
+- [ ] Edit avatar → pick initials + red background → save → appears on feed cards after sync
+- [ ] Open https://bmi.bysam.fun on phone — landing matches app tone (layer mark, serif)
 
 ---
 
@@ -171,30 +222,40 @@ Without a key, bundled US CPI fallback still works.
 - [ ] Xcode → **Product → Archive** → **Distribute App** → App Store Connect
 - [ ] App Store Connect → **TestFlight** → add internal testers
 - [ ] Promote CloudKit schema to **Production** before external testers
+- [ ] Update **`docs/index.html`** TestFlight link, merge to `main`, wait for Pages deploy
 - [ ] For **external** TestFlight / App Store: complete App Privacy questionnaire, screenshots, 1024×1024 icon
 
 See **`docs/APP_STORE.md`** for copy-paste metadata templates.
+
+### Screenshot suggestions (show the redesign)
+
+1. Feed with country pills + report card  
+2. Report detail with bite-mask hero  
+3. Map with price pins  
+4. Stats summary cards  
+5. Profile + Edit Avatar screen  
 
 ---
 
 ## Phase 10 — App Store review prep
 
-- [ ] **App icon** — add 1024×1024 PNG to `Assets.xcassets/AppIcon` (starter icon included in repo)
+- [ ] **App icon** — 1024×1024 PNG in `Assets.xcassets/AppIcon` (included in repo)
 - [ ] **Account deletion** — Settings → Delete Account (implemented in app)
 - [ ] **Sign in with Apple** — if users can create accounts, deletion must be offered in-app ✓
 - [ ] Revoking Sign in with Apple: users can also revoke in iOS Settings → Apple ID → Sign in with Apple
 - [ ] Export compliance: standard HTTPS-only networking → typically "No" for custom encryption
 - [ ] Age rating questionnaire in App Store Connect
-- [ ] Screenshots: 6.7" and 6.5" iPhone (Feed, Map, Report, Stats, Profile)
+- [ ] Screenshots: 6.7" and 6.5" iPhone (see Phase 9)
 
 ---
 
 ## Phase 11 — GitHub repo housekeeping
 
-- [ ] Merge feature branch → `main`
+- [ ] Merge PR #1 and PR #2 → `main`
 - [ ] Enable GitHub Pages from `/docs` (Phase 6)
 - [ ] Add repo description + topics: `ios`, `swiftui`, `cloudkit`, `big-mac-index`
 - [ ] Optional: branch protection on `main`
+- [ ] Close draft PRs after merge
 
 ---
 
@@ -216,10 +277,20 @@ See **`docs/APP_STORE.md`** for copy-paste metadata templates.
 |---------|------------|
 | CloudKit errors on sync | Schema not deployed, or missing queryable indexes |
 | Username registration fails | `normalizedUsername` not queryable on `PublicUser` |
+| Avatar save fails / old emoji only | Deploy `avatarStyleRaw`, `avatarInitials`, `avatarBackgroundHex` on `PublicUser` |
+| Build error “cannot find BMISectionHeader” | Checkout PR #2 branch or merge UI redesign; ensure `BMI/Design/*.swift` in target |
 | Push never arrives | Physical device, iCloud signed in, notifications allowed, Development APNs entitlements |
 | Universal link opens Safari only | AASA not reachable, wrong Team ID in AASA, Associated Domains capability missing, reinstall app after entitlement change |
 | GitHub Pages 404 on `/report/...` | DNS not propagated yet, or Pages not enabled on `/docs` |
 | Porkbun DNS not resolving | Wait 5–30 min; confirm CNAME `bmi` → `svickars.github.io` with no trailing dot issues |
+| Forms look gray instead of paper | Expected on Simulator if on old branch — UI redesign uses `.bmiFormScreen()` on all forms |
+
+---
+
+## Design reference
+
+- **`docs/DESIGN_PLAN.md`** — confirmed decisions (New York + SF, emoji/initials avatars, bite mask, no index recap yet)
+- **`BMI/BMI/Design/`** — typography, cards, chips, layer mark, bite clip, form chrome
 
 ---
 

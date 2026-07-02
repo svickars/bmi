@@ -38,6 +38,7 @@ struct PublicUserProfileView: View {
                 )
             }
         }
+        .bmiFormScreen()
         .navigationTitle(isOwnProfile ? "Your Profile" : "@\(normalizedUsername)")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -62,20 +63,16 @@ struct PublicUserProfileView: View {
         List {
             Section {
                 HStack(spacing: 16) {
-                    Text(user.avatarEmoji)
-                        .font(.system(size: 52))
-                        .frame(width: 72, height: 72)
-                        .background(Color.bmiCream)
-                        .clipShape(Circle())
+                    BMIAvatarView(user: user, size: 72)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(user.displayName)
-                            .font(.title2.bold())
+                            .font(BMITypography.display(22))
                         Text("@\(user.username)")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.bmiMuted)
                         Label(user.homeCountry, systemImage: "globe")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .font(BMITypography.ui(.caption))
+                            .foregroundStyle(Color.bmiMuted)
                     }
                 }
                 .padding(.vertical, 8)
@@ -103,8 +100,8 @@ struct PublicUserProfileView: View {
             if let message {
                 Section {
                     Text(message)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(BMITypography.ui(.caption))
+                        .foregroundStyle(Color.bmiMuted)
                 }
             }
 
@@ -177,22 +174,19 @@ private struct ProfileViewEmbedded: View {
         List {
             Section {
                 HStack(spacing: 16) {
-                    Text(user.avatarEmoji)
-                        .font(.system(size: 52))
-                        .frame(width: 72, height: 72)
-                        .background(Color.bmiCream)
-                        .clipShape(Circle())
+                    BMIAvatarView(user: user, size: 72)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(user.displayName)
-                            .font(.title2.bold())
+                            .font(BMITypography.display(22))
                         Text("@\(user.username)")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.bmiMuted)
                         Label(user.homeCountry, systemImage: "globe")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .font(BMITypography.ui(.caption))
+                            .foregroundStyle(Color.bmiMuted)
                     }
                 }
+                .padding(.vertical, 8)
             }
 
             Section("Your Stats") {
@@ -210,6 +204,7 @@ private struct ProfileViewEmbedded: View {
                 }
             }
         }
+        .bmiFormScreen()
     }
 }
 

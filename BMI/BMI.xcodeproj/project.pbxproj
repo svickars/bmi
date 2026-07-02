@@ -62,6 +62,11 @@
 		A10000000000000000000054 /* AccountDeletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000055 /* AccountDeletionService.swift */; };
 		A10000000000000000000055 /* PublicUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000056 /* PublicUserProfileView.swift */; };
 		A10000000000000000000056 /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000057 /* DeleteAccountView.swift */; };
+		A10000000000000000000057 /* BMITypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000058 /* BMITypography.swift */; };
+		A10000000000000000000058 /* BMIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000059 /* BMIComponents.swift */; };
+		A10000000000000000000059 /* BMIAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000060 /* BMIAvatarView.swift */; };
+		A10000000000000000000060 /* AvatarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000061 /* AvatarAppearance.swift */; };
+		A10000000000000000000061 /* AvatarEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000062 /* AvatarEditorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -122,6 +127,11 @@
 		A20000000000000000000055 /* AccountDeletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionService.swift; sourceTree = "<group>"; };
 		A20000000000000000000056 /* PublicUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUserProfileView.swift; sourceTree = "<group>"; };
 		A20000000000000000000057 /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
+		A20000000000000000000058 /* BMITypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMITypography.swift; sourceTree = "<group>"; };
+		A20000000000000000000059 /* BMIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIComponents.swift; sourceTree = "<group>"; };
+		A20000000000000000000060 /* BMIAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIAvatarView.swift; sourceTree = "<group>"; };
+		A20000000000000000000061 /* AvatarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarAppearance.swift; sourceTree = "<group>"; };
+		A20000000000000000000062 /* AvatarEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarEditorView.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* BMI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -152,6 +162,7 @@
 				A50000000000000000000004 /* Models */,
 				A50000000000000000000005 /* Services */,
 				A50000000000000000000006 /* Extensions */,
+				A50000000000000000000015 /* Design */,
 				A50000000000000000000007 /* Views */,
 				A20000000000000000000024 /* Assets.xcassets */,
 				A20000000000000000000025 /* Info.plist */,
@@ -181,6 +192,7 @@
 				A20000000000000000000006 /* ReportPhoto.swift */,
 				A20000000000000000000049 /* UserNotification.swift */,
 				A20000000000000000000005 /* UserProfile.swift */,
+				A20000000000000000000061 /* AvatarAppearance.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -218,6 +230,16 @@
 				A20000000000000000000011 /* Color+Theme.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000015 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000060 /* BMIAvatarView.swift */,
+				A20000000000000000000059 /* BMIComponents.swift */,
+				A20000000000000000000058 /* BMITypography.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 		A50000000000000000000007 /* Views */ = {
@@ -286,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000041 /* AddFriendView.swift */,
+				A20000000000000000000062 /* AvatarEditorView.swift */,
 				A20000000000000000000057 /* DeleteAccountView.swift */,
 				A20000000000000000000042 /* FriendsManagementView.swift */,
 				A20000000000000000000052 /* NotificationsView.swift */,
@@ -427,6 +450,11 @@
 				A10000000000000000000054 /* AccountDeletionService.swift in Sources */,
 				A10000000000000000000055 /* PublicUserProfileView.swift in Sources */,
 				A10000000000000000000056 /* DeleteAccountView.swift in Sources */,
+				A10000000000000000000057 /* BMITypography.swift in Sources */,
+				A10000000000000000000058 /* BMIComponents.swift in Sources */,
+				A10000000000000000000059 /* BMIAvatarView.swift in Sources */,
+				A10000000000000000000060 /* AvatarAppearance.swift in Sources */,
+				A10000000000000000000061 /* AvatarEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

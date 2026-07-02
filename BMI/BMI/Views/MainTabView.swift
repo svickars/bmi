@@ -31,6 +31,8 @@ struct MainTabView: View {
                 .tag(4)
         }
         .tint(.bmiRed)
+        .toolbarBackground(Color.bmiPaper, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
         .onChange(of: navigationRouter.selectedTab) { _, newValue in
             if newValue == 2 {
                 showCreateReport = true

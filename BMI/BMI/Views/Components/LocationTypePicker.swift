@@ -11,12 +11,19 @@ struct LocationTypePicker: View {
                         selection = type
                     } label: {
                         Label(type.displayName, systemImage: type.icon)
-                            .font(.caption.weight(.medium))
+                            .font(BMITypography.ui(.caption, weight: .medium))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
-                            .background(selection == type ? Color.bmiRed : Color(.systemGray6))
-                            .foregroundStyle(selection == type ? .white : .primary)
+                            .background(selection == type ? Color.bmiRed : Color.bmiSurface)
+                            .foregroundStyle(selection == type ? .white : Color.bmiInk)
                             .clipShape(Capsule())
+                            .overlay {
+                                Capsule()
+                                    .strokeBorder(
+                                        selection == type ? Color.bmiRed : Color.bmiBorder,
+                                        lineWidth: 1
+                                    )
+                            }
                     }
                     .buttonStyle(.plain)
                 }
@@ -28,4 +35,6 @@ struct LocationTypePicker: View {
 
 #Preview {
     LocationTypePicker(selection: .constant(.urban))
+        .padding()
+        .background(BMIScreenBackground())
 }
