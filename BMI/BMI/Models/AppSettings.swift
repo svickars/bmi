@@ -9,6 +9,9 @@ final class AppSettings {
     var useTodaysDollars: Bool
     var enablePublicSync: Bool
     var lastPublicSyncAt: Date?
+    var notifyFriendReports: Bool
+    var notifyWhenTagged: Bool
+    var notifyOnReactions: Bool
 
     init(
         id: UUID = UUID(),
@@ -16,7 +19,10 @@ final class AppSettings {
         customNormalizationCurrencyCode: String = "USD",
         useTodaysDollars: Bool = true,
         enablePublicSync: Bool = true,
-        lastPublicSyncAt: Date? = nil
+        lastPublicSyncAt: Date? = nil,
+        notifyFriendReports: Bool = true,
+        notifyWhenTagged: Bool = true,
+        notifyOnReactions: Bool = true
     ) {
         self.id = id
         self.useDeviceLocaleCurrency = useDeviceLocaleCurrency
@@ -24,6 +30,9 @@ final class AppSettings {
         self.useTodaysDollars = useTodaysDollars
         self.enablePublicSync = enablePublicSync
         self.lastPublicSyncAt = lastPublicSyncAt
+        self.notifyFriendReports = notifyFriendReports
+        self.notifyWhenTagged = notifyWhenTagged
+        self.notifyOnReactions = notifyOnReactions
     }
 
     var effectiveNormalizationCurrency: String {
@@ -31,6 +40,14 @@ final class AppSettings {
             Locale.current.currency?.identifier ?? "USD"
         } else {
             customNormalizationCurrencyCode
+        }
+    }
+
+    func allows(_ type: ActivityNotificationType) -> Bool {
+        switch type {
+        case .friendReport: notifyFriendReports
+        case .taggedInReport: notifyWhenTagged
+        case .reaction: notifyOnReactions
         }
     }
 }

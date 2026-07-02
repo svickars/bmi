@@ -93,6 +93,27 @@ struct SettingsView: View {
                 }
             }
 
+            Section("Activity Notifications") {
+                Toggle("Friend Posts a Report", isOn: Binding(
+                    get: { settings.notifyFriendReports },
+                    set: { settings.notifyFriendReports = $0; save() }
+                ))
+
+                Toggle("Tagged in a Report", isOn: Binding(
+                    get: { settings.notifyWhenTagged },
+                    set: { settings.notifyWhenTagged = $0; save() }
+                ))
+
+                Toggle("Reactions to Your Reports", isOn: Binding(
+                    get: { settings.notifyOnReactions },
+                    set: { settings.notifyOnReactions = $0; save() }
+                ))
+
+                Text("Push alerts and the in-app inbox respect these toggles. Friend request alerts are always enabled.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             Section("Example") {
                 let target = settings.effectiveNormalizationCurrency
                 exampleRow(label: "¥890 JPY (today)", amount: 890, from: "JPY", to: target)

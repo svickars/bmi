@@ -9,6 +9,8 @@ final class SyncCoordinator: ObservableObject {
 
     let cloudSync = CloudKitPublicSyncService()
     let friendLinks = FriendLinkService()
+    let activityNotifications = ActivityNotificationService()
+    let reactions = ReactionService()
     let notifications = CloudKitNotificationService.shared
 
     init() {
@@ -51,14 +53,24 @@ final class SyncCoordinator: ObservableObject {
 
             var photoUploadCount = 0
             for report in pendingUploads {
+                let isFirstPublicUpload = report.cloudRecordName == nil
                 photoUploadCount += try await cloudSync.uploadReport(report, author: currentUser)
+                if isFirstPublicUpload {
+                    try await activityNotifications.fanOutReportNotifications(
+                        for: report,
+                        author: currentUser,
+                        in: modelContext
+                    )
+                }
             }
 
             let imported = try await cloudSync.fetchPublicReports(into: modelContext, currentUser: currentUser)
             try await friendLinks.syncFriendConnections(for: currentUser, in: modelContext)
+            let notificationCount = try await activityNotifications.fetchNotifications(for: currentUser, into: modelContext)
+            await notifications.deliverPendingNotifications(for: currentUser, in: modelContext, settings: settings)
 
             settings.lastPublicSyncAt = .now
-            lastSyncSummary = "Synced \(pendingUploads.count) reports, \(photoUploadCount) photos, imported \(imported) public reports."
+            lastSyncSummary = "Synced \(pendingUploads.count) reports, \(photoUploadCount) photos, imported \(imported) public reports, \(notificationCount) notifications."
             lastError = nil
             try? modelContext.save()
         } catch {
@@ -69,7 +81,14 @@ final class SyncCoordinator: ObservableObject {
     func uploadReport(_ report: BigMacReport, author: UserProfile, modelContext: ModelContext) async {
         guard report.isPublic, author.isRegisteredPublicly else { return }
         do {
+            let isFirstPublicUpload = report.cloudRecordName == nil
             _ = try await cloudSync.uploadReport(report, author: author)
+            if isFirstPublicUpload {
+                try await activityNotifications.fanOutReportNotifications(for: report, author: author, in: modelContext)
+            }
+            let settings = AppSettingsStore.current(in: modelContext)
+            _ = try await activityNotifications.fetchNotifications(for: author, into: modelContext)
+            await notifications.deliverPendingNotifications(for: author, in: modelContext, settings: settings)
             try? modelContext.save()
         } catch {
             lastError = error.localizedDescription

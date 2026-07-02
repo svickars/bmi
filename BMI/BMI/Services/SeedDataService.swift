@@ -8,6 +8,7 @@ enum PreviewData {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(
             for: BigMacReport.self, UserProfile.self, ReportPhoto.self, AppSettings.self, FriendLink.self,
+            ReportReaction.self, UserNotification.self,
             configurations: config
         )
         let context = container.mainContext

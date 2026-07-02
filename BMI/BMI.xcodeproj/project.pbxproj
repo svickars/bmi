@@ -51,6 +51,12 @@
 		A10000000000000000000043 /* CloudKitNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000044 /* CloudKitNotificationService.swift */; };
 		A10000000000000000000044 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* AppDelegate.swift */; };
 		A10000000000000000000045 /* UsernameSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000046 /* UsernameSetupView.swift */; };
+		A10000000000000000000046 /* ActivityNotificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000047 /* ActivityNotificationType.swift */; };
+		A10000000000000000000047 /* ReportReaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000048 /* ReportReaction.swift */; };
+		A10000000000000000000048 /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000049 /* UserNotification.swift */; };
+		A10000000000000000000049 /* ActivityNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000050 /* ActivityNotificationService.swift */; };
+		A10000000000000000000050 /* ReactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000051 /* ReactionService.swift */; };
+		A10000000000000000000051 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000052 /* NotificationsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +106,12 @@
 		A20000000000000000000044 /* CloudKitNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitNotificationService.swift; sourceTree = "<group>"; };
 		A20000000000000000000045 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A20000000000000000000046 /* UsernameSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameSetupView.swift; sourceTree = "<group>"; };
+		A20000000000000000000047 /* ActivityNotificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityNotificationType.swift; sourceTree = "<group>"; };
+		A20000000000000000000048 /* ReportReaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReaction.swift; sourceTree = "<group>"; };
+		A20000000000000000000049 /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
+		A20000000000000000000050 /* ActivityNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityNotificationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000051 /* ReactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionService.swift; sourceTree = "<group>"; };
+		A20000000000000000000052 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* BMI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -150,11 +162,14 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000007 /* BigMacReport.swift */,
+				A20000000000000000000047 /* ActivityNotificationType.swift */,
 				A20000000000000000000026 /* AppSettings.swift */,
 				A20000000000000000000032 /* FriendLink.swift */,
 				A20000000000000000000003 /* LocationType.swift */,
 				A20000000000000000000004 /* PurchasedItem.swift */,
+				A20000000000000000000048 /* ReportReaction.swift */,
 				A20000000000000000000006 /* ReportPhoto.swift */,
+				A20000000000000000000049 /* UserNotification.swift */,
 				A20000000000000000000005 /* UserProfile.swift */,
 			);
 			path = Models;
@@ -164,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000008 /* LocationService.swift */,
+				A20000000000000000000050 /* ActivityNotificationService.swift */,
 				A20000000000000000000027 /* AuthenticationService.swift */,
 				A20000000000000000000036 /* CloudKitSchema.swift */,
 				A20000000000000000000037 /* CloudKitPublicSyncService.swift */,
@@ -175,6 +191,7 @@
 				A20000000000000000000038 /* FriendLinkService.swift */,
 				A20000000000000000000034 /* InflationService.swift */,
 				A20000000000000000000035 /* PriceNormalizationService.swift */,
+				A20000000000000000000051 /* ReactionService.swift */,
 				A20000000000000000000010 /* SeedDataService.swift */,
 				A20000000000000000000009 /* StatisticsService.swift */,
 				A20000000000000000000039 /* SyncCoordinator.swift */,
@@ -257,6 +274,7 @@
 			children = (
 				A20000000000000000000041 /* AddFriendView.swift */,
 				A20000000000000000000042 /* FriendsManagementView.swift */,
+				A20000000000000000000052 /* NotificationsView.swift */,
 				A20000000000000000000022 /* ProfileView.swift */,
 				A20000000000000000000030 /* SettingsView.swift */,
 			);
@@ -383,6 +401,12 @@
 				A10000000000000000000043 /* CloudKitNotificationService.swift in Sources */,
 				A10000000000000000000044 /* AppDelegate.swift in Sources */,
 				A10000000000000000000045 /* UsernameSetupView.swift in Sources */,
+				A10000000000000000000046 /* ActivityNotificationType.swift in Sources */,
+				A10000000000000000000047 /* ReportReaction.swift in Sources */,
+				A10000000000000000000048 /* UserNotification.swift in Sources */,
+				A10000000000000000000049 /* ActivityNotificationService.swift in Sources */,
+				A10000000000000000000050 /* ReactionService.swift in Sources */,
+				A10000000000000000000051 /* NotificationsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

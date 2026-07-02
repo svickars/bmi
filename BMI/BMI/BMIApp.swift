@@ -14,7 +14,9 @@ struct BMIApp: App {
             UserProfile.self,
             ReportPhoto.self,
             AppSettings.self,
-            FriendLink.self
+            FriendLink.self,
+            ReportReaction.self,
+            UserNotification.self
         ], isAutosaveEnabled: true)
     }
 }

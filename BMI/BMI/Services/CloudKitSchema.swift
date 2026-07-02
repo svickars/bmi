@@ -8,6 +8,8 @@ enum CloudKitSchema {
         static let publicReport = "PublicReport"
         static let publicReportPhoto = "PublicReportPhoto"
         static let friendConnection = "FriendConnection"
+        static let userNotification = "UserNotification"
+        static let reportReaction = "ReportReaction"
     }
 
     enum PublicUser {
@@ -60,6 +62,30 @@ enum CloudKitSchema {
         static let toUsername = "toUsername"
         static let status = "status"
         static let updatedAt = "updatedAt"
+    }
+
+    enum UserNotification {
+        static let notificationID = "notificationID"
+        static let recipientAppleUserID = "recipientAppleUserID"
+        static let typeRaw = "typeRaw"
+        static let reportID = "reportID"
+        static let actorAppleUserID = "actorAppleUserID"
+        static let actorDisplayName = "actorDisplayName"
+        static let actorUsername = "actorUsername"
+        static let title = "title"
+        static let body = "body"
+        static let reactionEmoji = "reactionEmoji"
+        static let createdAt = "createdAt"
+        static let isRead = "isRead"
+    }
+
+    enum ReportReaction {
+        static let reactionID = "reactionID"
+        static let reportID = "reportID"
+        static let reactorAppleUserID = "reactorAppleUserID"
+        static let reactorDisplayName = "reactorDisplayName"
+        static let reactionEmoji = "reactionEmoji"
+        static let createdAt = "createdAt"
     }
 }
 

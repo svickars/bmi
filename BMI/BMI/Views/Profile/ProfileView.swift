@@ -9,8 +9,15 @@ struct ProfileView: View {
     @Query(sort: \BigMacReport.createdAt, order: .reverse) private var reports: [BigMacReport]
     @Query private var settingsList: [AppSettings]
 
+    @Query(sort: \UserNotification.createdAt, order: .reverse) private var allNotifications: [UserNotification]
+
     private var currentUser: UserProfile? {
         users.first { $0.isCurrentUser }
+    }
+
+    private var unreadNotificationCount: Int {
+        guard let appleUserID = currentUser?.appleUserID else { return 0 }
+        return allNotifications.filter { $0.recipientAppleUserID == appleUserID && !$0.isRead }.count
     }
 
     private var myReports: [BigMacReport] {
@@ -68,6 +75,13 @@ struct ProfileView: View {
                     }
 
                     Section("Social & Settings") {
+                        NavigationLink {
+                            NotificationsView()
+                        } label: {
+                            Label("Notifications", systemImage: "bell.fill")
+                        }
+                        .badge(unreadNotificationCount)
+
                         NavigationLink {
                             FriendsManagementView()
                         } label: {

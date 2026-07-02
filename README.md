@@ -9,6 +9,8 @@ An iOS app inspired by [The Economist's Big Mac Index](https://www.economist.com
 - **Live exchange rates** — Frankfurter API (current + historical per report date)
 - **Today's dollars** — US CPI-U inflation adjustment (live via FRED when API key configured)
 - **Friend linking** — search by username, accept requests, push notifications for incoming requests
+- **Activity notifications** — push + in-app inbox when friends post, tag you, or react to your reports
+- **Reactions** — emoji reactions on public reports (❤️ 👍 🔥 😋 🍔)
 - **Meal reporting** — price, rating, review, photos, location type, GPS, friend tags
 - **Feed, map, stats** — normalized global comparisons
 
@@ -28,6 +30,8 @@ An iOS app inspired by [The Economist's Big Mac Index](https://www.economist.com
    - `PublicReport` (includes `photoCount`)
    - `PublicReportPhoto` (includes `imageAsset` CKAsset)
    - `FriendConnection`
+   - `UserNotification` (activity inbox records)
+   - `ReportReaction`
 5. Optional: add your [FRED API key](https://fred.stlouisfed.org/docs/api/api_key.html) to `Info.plist` as `FRED_API_KEY` for live CPI data
 6. Build and run
 
@@ -41,6 +45,8 @@ An iOS app inspired by [The Economist's Big Mac Index](https://www.economist.com
 | FX | Frankfurter API |
 | Inflation | FRED CPI-U (live) + bundled fallback |
 | Friend push | CloudKit subscriptions + APNs |
+| Activity push | `UserNotification` records + per-user CloudKit subscriptions |
+| Reactions | `ReportReaction` records synced via CloudKit public database |
 | Auth | Sign in with Apple + unique username |
 
 ## Key flows
@@ -54,6 +60,12 @@ After Sign in with Apple, users choose a username checked against CloudKit `norm
 ### Friend request notifications
 CloudKit query subscriptions notify recipients when a pending friend request arrives. The app syncs connections and posts a local notification.
 
+### Activity notifications
+When a friend publishes a public report, tags you, or reacts to your report, the app writes a `UserNotification` record in CloudKit for each recipient. A per-user CloudKit subscription triggers a silent push; the app fetches the record, caches it in SwiftData, and shows a local alert (respecting Settings toggles). Profile → Notifications shows the full inbox with links to each report.
+
+### Reactions
+On any public report detail screen, signed-in users can react with emoji. Reactions sync globally via `ReportReaction` records; reacting to someone else's report notifies the author.
+
 ### Today's dollars
 1. Historical FX converts local price → USD at report date (`usdAtReportDate`)
 2. CPI inflation adjusts USD to today's purchasing power
@@ -65,7 +77,12 @@ Profile → Currency & Sync Settings:
 - Device locale vs custom comparison currency
 - Today's dollars toggle
 - CloudKit sync toggle + manual sync
+- Activity notification toggles (friend posts, tags, reactions)
 - Data source info (Frankfurter, FRED/bundled CPI)
+
+Profile → Notifications:
+- In-app inbox with unread badge
+- Tap through to the related report
 
 ## Privacy
 
