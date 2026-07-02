@@ -146,13 +146,24 @@ final class CloudKitNotificationService: ObservableObject {
         let title = record[CloudKitSchema.UserNotification.title] as? String ?? "BMI Update"
         let body = record[CloudKitSchema.UserNotification.body] as? String ?? ""
         let notificationID = record[CloudKitSchema.UserNotification.notificationID] as? String ?? UUID().uuidString
+        let reportID = record[CloudKitSchema.UserNotification.reportID] as? String ?? ""
 
-        await post(title: title, body: body, identifier: "activity.\(notificationID)")
+        await post(
+            title: title,
+            body: body,
+            identifier: "activity.\(notificationID)",
+            userInfo: ["route": "report", "reportID": reportID]
+        )
     }
 
     private func postLocalNotification(for notification: UserNotification, settings: AppSettings?) async {
         guard settings?.allows(notification.type) != false else { return }
-        await post(title: notification.title, body: notification.body, identifier: "activity.\(notification.id.uuidString)")
+        await post(
+            title: notification.title,
+            body: notification.body,
+            identifier: "activity.\(notification.id.uuidString)",
+            userInfo: ["route": "report", "reportID": notification.reportID.uuidString]
+        )
     }
 
     private func postFriendRequestNotifications(modelContext: ModelContext, currentUser: UserProfile) async {
@@ -169,15 +180,17 @@ final class CloudKitNotificationService: ObservableObject {
         await post(
             title: "New Friend Request",
             body: "\(latest.friendDisplayName) (@\(latest.friendUsername)) wants to connect on BMI.",
-            identifier: "friend-request.\(latest.id.uuidString)"
+            identifier: "friend-request.\(latest.id.uuidString)",
+            userInfo: ["route": "friends"]
         )
     }
 
-    private func post(title: String, body: String, identifier: String) async {
+    private func post(title: String, body: String, identifier: String, userInfo: [String: String] = [:]) async {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = .default
+        content.userInfo = userInfo
 
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
         try? await UNUserNotificationCenter.current().add(request)

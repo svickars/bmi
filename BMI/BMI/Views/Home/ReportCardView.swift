@@ -2,6 +2,9 @@ import SwiftUI
 
 struct ReportCardView: View {
     let report: BigMacReport
+    var showsAuthor: Bool = true
+
+    @EnvironmentObject private var navigationRouter: AppNavigationRouter
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -44,13 +47,18 @@ struct ReportCardView: View {
             }
 
             HStack {
-                if let author = report.author {
-                    Label {
-                        Text(author.displayName)
-                    } icon: {
-                        Text(author.avatarEmoji)
+                if showsAuthor, let author = report.author {
+                    Button {
+                        navigationRouter.openUserProfile(username: author.username)
+                    } label: {
+                        Label {
+                            Text(author.displayName)
+                        } icon: {
+                            Text(author.avatarEmoji)
+                        }
+                        .font(.caption)
                     }
-                    .font(.caption)
+                    .buttonStyle(.plain)
                 }
 
                 Spacer()
@@ -98,4 +106,5 @@ struct ReportCardView: View {
         subRegion: "California"
     ))
     .padding()
+    .environmentObject(AppNavigationRouter.shared)
 }

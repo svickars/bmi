@@ -37,19 +37,24 @@ struct AddFriendView: View {
                 }
 
                 ForEach(searchResults) { user in
-                    HStack {
-                        Text(user.avatarEmoji)
-                        VStack(alignment: .leading) {
-                            Text(user.displayName)
-                            Text("@\(user.username)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                    NavigationLink {
+                        PublicUserProfileView(username: user.username)
+                    } label: {
+                        HStack {
+                            Text(user.avatarEmoji)
+                            VStack(alignment: .leading) {
+                                Text(user.displayName)
+                                Text("@\(user.username)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
                         }
-                        Spacer()
+                    }
+                    .swipeActions(edge: .trailing) {
                         Button("Add") {
                             Task { await sendRequest(to: user) }
                         }
-                        .buttonStyle(.borderedProminent)
                         .tint(.bmiRed)
                     }
                 }

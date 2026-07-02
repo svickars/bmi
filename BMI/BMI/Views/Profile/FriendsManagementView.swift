@@ -82,15 +82,19 @@ struct FriendsManagementView: View {
     }
 
     private func friendRow(_ link: FriendLink) -> some View {
-        HStack(spacing: 12) {
-            Text(link.friendAvatarEmoji)
-                .font(.title2)
-            VStack(alignment: .leading) {
-                Text(link.friendDisplayName)
-                    .font(.subheadline.weight(.medium))
-                Text("@\(link.friendUsername)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+        NavigationLink {
+            PublicUserProfileView(username: link.friendUsername)
+        } label: {
+            HStack(spacing: 12) {
+                Text(link.friendAvatarEmoji)
+                    .font(.title2)
+                VStack(alignment: .leading) {
+                    Text(link.friendDisplayName)
+                        .font(.subheadline.weight(.medium))
+                    Text("@\(link.friendUsername)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }

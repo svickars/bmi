@@ -125,6 +125,17 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            Section {
+                NavigationLink {
+                    DeleteAccountView()
+                } label: {
+                    Label("Delete Account", systemImage: "trash")
+                        .foregroundStyle(.red)
+                }
+            } footer: {
+                Text("Permanently removes your public CloudKit data and signs you out on this device.")
+            }
         }
         .navigationTitle("Settings")
         .task {
@@ -168,4 +179,6 @@ struct SettingsView: View {
     }
     .modelContainer(PreviewData.previewContainer)
     .environmentObject(SyncCoordinator())
+    .environmentObject(AuthenticationService())
+    .environmentObject(AppNavigationRouter.shared)
 }

@@ -5,6 +5,7 @@ struct ReportDetailView: View {
     let report: BigMacReport
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
+    @EnvironmentObject private var navigationRouter: AppNavigationRouter
     @Query private var settingsList: [AppSettings]
     @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
     @State private var reactionRefreshToken = UUID()
@@ -153,7 +154,12 @@ struct ReportDetailView: View {
                     }
 
                     if let author = report.author {
-                        detailRow(icon: "person.fill", title: "Reporter", value: "\(author.avatarEmoji) \(author.displayName)")
+                        Button {
+                            navigationRouter.openUserProfile(username: author.username)
+                        } label: {
+                            detailRow(icon: "person.fill", title: "Reporter", value: "\(author.avatarEmoji) \(author.displayName)")
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     if let tagged = report.taggedFriends, !tagged.isEmpty {
@@ -169,6 +175,15 @@ struct ReportDetailView: View {
         }
         .background(Color.bmiCream.opacity(0.3))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if report.isPublic {
+                ToolbarItem(placement: .topBarTrailing) {
+                    ShareLink(item: DeepLinkRouter.reportURL(id: report.id)) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
         .task(id: report.id) {
             guard report.isPublic else { return }
             try? await syncCoordinator.reactions.syncReactions(for: report.id, into: modelContext)
@@ -341,4 +356,5 @@ private struct FlowLayout: Layout {
     }
     .modelContainer(PreviewData.previewContainer)
     .environmentObject(SyncCoordinator())
+    .environmentObject(AppNavigationRouter.shared)
 }

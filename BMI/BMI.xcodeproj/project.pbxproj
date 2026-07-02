@@ -57,6 +57,11 @@
 		A10000000000000000000049 /* ActivityNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000050 /* ActivityNotificationService.swift */; };
 		A10000000000000000000050 /* ReactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000051 /* ReactionService.swift */; };
 		A10000000000000000000051 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000052 /* NotificationsView.swift */; };
+		A10000000000000000000052 /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000053 /* DeepLinkRouter.swift */; };
+		A10000000000000000000053 /* AppNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000054 /* AppNavigationRouter.swift */; };
+		A10000000000000000000054 /* AccountDeletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000055 /* AccountDeletionService.swift */; };
+		A10000000000000000000055 /* PublicUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000056 /* PublicUserProfileView.swift */; };
+		A10000000000000000000056 /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000057 /* DeleteAccountView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +117,11 @@
 		A20000000000000000000050 /* ActivityNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityNotificationService.swift; sourceTree = "<group>"; };
 		A20000000000000000000051 /* ReactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionService.swift; sourceTree = "<group>"; };
 		A20000000000000000000052 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000053 /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
+		A20000000000000000000054 /* AppNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationRouter.swift; sourceTree = "<group>"; };
+		A20000000000000000000055 /* AccountDeletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionService.swift; sourceTree = "<group>"; };
+		A20000000000000000000056 /* PublicUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUserProfileView.swift; sourceTree = "<group>"; };
+		A20000000000000000000057 /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* BMI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -180,6 +190,8 @@
 			children = (
 				A20000000000000000000008 /* LocationService.swift */,
 				A20000000000000000000050 /* ActivityNotificationService.swift */,
+				A20000000000000000000055 /* AccountDeletionService.swift */,
+				A20000000000000000000054 /* AppNavigationRouter.swift */,
 				A20000000000000000000027 /* AuthenticationService.swift */,
 				A20000000000000000000036 /* CloudKitSchema.swift */,
 				A20000000000000000000037 /* CloudKitPublicSyncService.swift */,
@@ -187,6 +199,7 @@
 				A20000000000000000000043 /* CPIService.swift */,
 				A20000000000000000000044 /* CloudKitNotificationService.swift */,
 				A20000000000000000000045 /* AppDelegate.swift */,
+				A20000000000000000000053 /* DeepLinkRouter.swift */,
 				A20000000000000000000033 /* ExchangeRateService.swift */,
 				A20000000000000000000038 /* FriendLinkService.swift */,
 				A20000000000000000000034 /* InflationService.swift */,
@@ -273,8 +286,10 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000041 /* AddFriendView.swift */,
+				A20000000000000000000057 /* DeleteAccountView.swift */,
 				A20000000000000000000042 /* FriendsManagementView.swift */,
 				A20000000000000000000052 /* NotificationsView.swift */,
+				A20000000000000000000056 /* PublicUserProfileView.swift */,
 				A20000000000000000000022 /* ProfileView.swift */,
 				A20000000000000000000030 /* SettingsView.swift */,
 			);
@@ -407,6 +422,11 @@
 				A10000000000000000000049 /* ActivityNotificationService.swift in Sources */,
 				A10000000000000000000050 /* ReactionService.swift in Sources */,
 				A10000000000000000000051 /* NotificationsView.swift in Sources */,
+				A10000000000000000000052 /* DeepLinkRouter.swift in Sources */,
+				A10000000000000000000053 /* AppNavigationRouter.swift in Sources */,
+				A10000000000000000000054 /* AccountDeletionService.swift in Sources */,
+				A10000000000000000000055 /* PublicUserProfileView.swift in Sources */,
+				A10000000000000000000056 /* DeleteAccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

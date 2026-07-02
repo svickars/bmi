@@ -1,0 +1,20 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["TEAMID.com.bigmacindex.bmi"],
+        "components": [
+          {
+            "/": "/report/*",
+            "comment": "Opens a Big Mac report in the app"
+          },
+          {
+            "/": "/u/*",
+            "comment": "Opens a public user profile in the app"
+          }
+        ]
+      }
+    ]
+  }
+}

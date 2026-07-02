@@ -76,6 +76,12 @@ struct ProfileView: View {
 
                     Section("Social & Settings") {
                         NavigationLink {
+                            PublicUserProfileView(username: user.username)
+                        } label: {
+                            Label("Public Profile", systemImage: "person.crop.circle")
+                        }
+
+                        NavigationLink {
                             NotificationsView()
                         } label: {
                             Label("Notifications", systemImage: "bell.fill")
@@ -129,4 +135,5 @@ struct ProfileView: View {
         .modelContainer(PreviewData.previewContainer)
         .environmentObject(AuthenticationService())
         .environmentObject(SyncCoordinator())
+        .environmentObject(AppNavigationRouter.shared)
 }

@@ -11,6 +11,7 @@ final class SyncCoordinator: ObservableObject {
     let friendLinks = FriendLinkService()
     let activityNotifications = ActivityNotificationService()
     let reactions = ReactionService()
+    let accountDeletion = AccountDeletionService()
     let notifications = CloudKitNotificationService.shared
 
     init() {

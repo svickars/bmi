@@ -260,6 +260,58 @@ final class CloudKitPublicSyncService: ObservableObject {
         }
     }
 
+    func fetchPublicUser(username: String) async throws -> PublicUserDTO? {
+        try await searchPublicUsers(username: username).first
+    }
+
+    func fetchPublicReports(
+        authorAppleUserID: String,
+        into context: ModelContext,
+        currentUser: UserProfile?
+    ) async throws -> [BigMacReport] {
+        let predicate = NSPredicate(format: "%K == %@", CloudKitSchema.PublicReport.authorAppleUserID, authorAppleUserID)
+        let query = CKQuery(recordType: CloudKitSchema.RecordType.publicReport, predicate: predicate)
+        query.sortDescriptors = [NSSortDescriptor(key: CloudKitSchema.PublicReport.createdAt, ascending: false)]
+
+        let (results, _) = try await publicDatabase.records(matching: query, resultsLimit: 100)
+        var reports: [BigMacReport] = []
+
+        for (_, result) in results {
+            guard case .success(let record) = result,
+                  let reportIDString = record[CloudKitSchema.PublicReport.reportID] as? String,
+                  let reportUUID = UUID(uuidString: reportIDString) else { continue }
+
+            let descriptor = FetchDescriptor<BigMacReport>(
+                predicate: #Predicate { $0.id == reportUUID }
+            )
+
+            let report: BigMacReport
+            if let existing = try? context.fetch(descriptor).first {
+                report = existing
+            } else {
+                report = BigMacReport(
+                    id: reportUUID,
+                    cost: 0,
+                    currencyCode: "USD",
+                    rating: 0,
+                    locationName: "",
+                    latitude: 0,
+                    longitude: 0,
+                    country: "",
+                    subRegion: ""
+                )
+                context.insert(report)
+            }
+
+            apply(record: record, to: report, currentUser: currentUser, context: context)
+            try await fetchPhotos(for: report, into: context)
+            reports.append(report)
+        }
+
+        try? context.save()
+        return reports
+    }
+
     private func apply(record: CKRecord, to report: BigMacReport, currentUser: UserProfile?, context: ModelContext) {
         report.cost = record[CloudKitSchema.PublicReport.cost] as? Double ?? report.cost
         report.currencyCode = record[CloudKitSchema.PublicReport.currencyCode] as? String ?? report.currencyCode

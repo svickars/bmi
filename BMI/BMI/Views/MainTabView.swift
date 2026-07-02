@@ -2,11 +2,14 @@ import SwiftUI
 import SwiftData
 
 struct MainTabView: View {
-    @State private var selectedTab = 0
+    @EnvironmentObject private var navigationRouter: AppNavigationRouter
+    @Environment(\.modelContext) private var modelContext
+    @Query private var reports: [BigMacReport]
+
     @State private var showCreateReport = false
 
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $navigationRouter.selectedTab) {
             HomeView()
                 .tabItem { Label("Feed", systemImage: "list.bullet.rectangle") }
                 .tag(0)
@@ -28,15 +31,58 @@ struct MainTabView: View {
                 .tag(4)
         }
         .tint(.bmiRed)
-        .onChange(of: selectedTab) { _, newValue in
+        .onChange(of: navigationRouter.selectedTab) { _, newValue in
             if newValue == 2 {
                 showCreateReport = true
-                selectedTab = 0
+                navigationRouter.selectedTab = 0
             }
         }
         .sheet(isPresented: $showCreateReport) {
             CreateReportView()
         }
+        .sheet(isPresented: reportSheetBinding) {
+            if let report = presentedReport {
+                NavigationStack {
+                    ReportDetailView(report: report)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button("Close") { navigationRouter.presentedReportID = nil }
+                            }
+                        }
+                }
+            }
+        }
+        .sheet(isPresented: profileSheetBinding) {
+            if let username = navigationRouter.presentedUsername {
+                NavigationStack {
+                    PublicUserProfileView(username: username)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button("Close") { navigationRouter.presentedUsername = nil }
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    private var presentedReport: BigMacReport? {
+        guard let id = navigationRouter.presentedReportID else { return nil }
+        return reports.first { $0.id == id }
+    }
+
+    private var reportSheetBinding: Binding<Bool> {
+        Binding(
+            get: { navigationRouter.presentedReportID != nil },
+            set: { if !$0 { navigationRouter.presentedReportID = nil } }
+        )
+    }
+
+    private var profileSheetBinding: Binding<Bool> {
+        Binding(
+            get: { navigationRouter.presentedUsername != nil },
+            set: { if !$0 { navigationRouter.presentedUsername = nil } }
+        )
     }
 }
 
@@ -45,4 +91,5 @@ struct MainTabView: View {
         .modelContainer(PreviewData.previewContainer)
         .environmentObject(AuthenticationService())
         .environmentObject(SyncCoordinator())
+        .environmentObject(AppNavigationRouter.shared)
 }

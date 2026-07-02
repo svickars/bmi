@@ -5,6 +5,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var authService = AuthenticationService()
     @StateObject private var syncCoordinator = SyncCoordinator()
+    @StateObject private var navigationRouter = AppNavigationRouter.shared
     @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
 
     private var currentUser: UserProfile? { currentUsers.first }
@@ -25,6 +26,17 @@ struct ContentView: View {
         }
         .environmentObject(authService)
         .environmentObject(syncCoordinator)
+        .environmentObject(navigationRouter)
+        .onOpenURL { url in
+            if let route = DeepLinkRouter.parse(url: url) {
+                navigationRouter.open(route: route)
+            }
+        }
+        .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in
+            guard let url = activity.webpageURL,
+                  let route = DeepLinkRouter.parse(url: url) else { return }
+            navigationRouter.open(route: route)
+        }
         .onAppear {
             authService.configure(modelContext: modelContext)
             authService.checkExistingCredential()
@@ -66,4 +78,5 @@ struct LaunchLoadingView: View {
 #Preview {
     ContentView()
         .modelContainer(PreviewData.previewContainer)
+        .environmentObject(AppNavigationRouter.shared)
 }
