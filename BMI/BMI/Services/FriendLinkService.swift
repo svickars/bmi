@@ -164,9 +164,10 @@ final class FriendLinkService: ObservableObject {
         cloudRecordName: String?,
         in context: ModelContext
     ) {
+        let friendAppleUserID = friend.appleUserID
         let descriptor = FetchDescriptor<FriendLink>(
             predicate: #Predicate {
-                $0.ownerAppleUserID == ownerAppleUserID && $0.friendAppleUserID == friend.appleUserID
+                $0.ownerAppleUserID == ownerAppleUserID && $0.friendAppleUserID == friendAppleUserID
             }
         )
 
@@ -199,8 +200,9 @@ final class FriendLinkService: ObservableObject {
     }
 
     private func ensureAcceptedFriendProfile(for link: FriendLink, context: ModelContext) {
+        let friendAppleUserID = link.friendAppleUserID
         let descriptor = FetchDescriptor<UserProfile>(
-            predicate: #Predicate { $0.appleUserID == link.friendAppleUserID }
+            predicate: #Predicate { $0.appleUserID == friendAppleUserID }
         )
 
         if (try? context.fetch(descriptor).first) == nil {

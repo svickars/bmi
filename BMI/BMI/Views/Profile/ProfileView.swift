@@ -49,7 +49,7 @@ struct ProfileView: View {
                                 if user.isRegisteredPublicly {
                                     Label("Public profile active", systemImage: "icloud.fill")
                                         .font(.caption2)
-                                        .foregroundStyle(.bmiGreen)
+                                        .foregroundStyle(Color.bmiGreen)
                                 }
                             }
                         }

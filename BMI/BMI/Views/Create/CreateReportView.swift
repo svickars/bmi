@@ -221,8 +221,9 @@ struct CreateReportView: View {
         let taggedProfiles = acceptedFriends
             .filter { selectedFriendAppleUserIDs.contains($0.friendAppleUserID) }
             .compactMap { link -> UserProfile? in
+                let friendAppleUserID = link.friendAppleUserID
                 let descriptor = FetchDescriptor<UserProfile>(
-                    predicate: #Predicate { $0.appleUserID == link.friendAppleUserID }
+                    predicate: #Predicate { $0.appleUserID == friendAppleUserID }
                 )
                 return try? modelContext.fetch(descriptor).first
             }

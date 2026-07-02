@@ -84,7 +84,7 @@ private struct NotificationRow: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: notification.type.icon)
                 .font(.title3)
-                .foregroundStyle(notification.isRead ? .secondary : .bmiRed)
+                .foregroundStyle(notification.isRead ? Color.secondary : Color.bmiRed)
                 .frame(width: 28)
 
             VStack(alignment: .leading, spacing: 4) {
