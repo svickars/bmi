@@ -1,0 +1,558 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* BMIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* BMIApp.swift */; };
+		A10000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* ContentView.swift */; };
+		A10000000000000000000003 /* LocationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* LocationType.swift */; };
+		A10000000000000000000004 /* PurchasedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* PurchasedItem.swift */; };
+		A10000000000000000000005 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* UserProfile.swift */; };
+		A10000000000000000000006 /* ReportPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* ReportPhoto.swift */; };
+		A10000000000000000000007 /* BigMacReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* BigMacReport.swift */; };
+		A10000000000000000000008 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* LocationService.swift */; };
+		A10000000000000000000009 /* StatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* StatisticsService.swift */; };
+		A10000000000000000000010 /* SeedDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* SeedDataService.swift */; };
+		A10000000000000000000011 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* Color+Theme.swift */; };
+		A10000000000000000000012 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* StarRatingView.swift */; };
+		A10000000000000000000013 /* LocationTypePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* LocationTypePicker.swift */; };
+		A10000000000000000000014 /* PurchasedItemsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* PurchasedItemsPicker.swift */; };
+		A10000000000000000000015 /* TagFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* TagFriendsView.swift */; };
+		A10000000000000000000016 /* ReportCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000016 /* ReportCardView.swift */; };
+		A10000000000000000000017 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* HomeView.swift */; };
+		A10000000000000000000018 /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* ReportDetailView.swift */; };
+		A10000000000000000000019 /* CreateReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* CreateReportView.swift */; };
+		A10000000000000000000020 /* MapReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000020 /* MapReportsView.swift */; };
+		A10000000000000000000021 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000021 /* StatisticsView.swift */; };
+		A10000000000000000000022 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000022 /* ProfileView.swift */; };
+		A10000000000000000000023 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000023 /* MainTabView.swift */; };
+		A10000000000000000000024 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000024 /* Assets.xcassets */; };
+		A10000000000000000000025 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000026 /* AppSettings.swift */; };
+		A10000000000000000000026 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000027 /* AuthenticationService.swift */; };
+		A10000000000000000000027 /* CurrencyConversionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000028 /* CurrencyConversionService.swift */; };
+		A10000000000000000000028 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000029 /* SignInView.swift */; };
+		A10000000000000000000029 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000030 /* SettingsView.swift */; };
+		A10000000000000000000031 /* FriendLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000032 /* FriendLink.swift */; };
+		A10000000000000000000032 /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000033 /* ExchangeRateService.swift */; };
+		A10000000000000000000033 /* InflationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000034 /* InflationService.swift */; };
+		A10000000000000000000034 /* PriceNormalizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000035 /* PriceNormalizationService.swift */; };
+		A10000000000000000000035 /* CloudKitSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000036 /* CloudKitSchema.swift */; };
+		A10000000000000000000036 /* CloudKitPublicSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000037 /* CloudKitPublicSyncService.swift */; };
+		A10000000000000000000037 /* FriendLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000038 /* FriendLinkService.swift */; };
+		A10000000000000000000038 /* SyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000039 /* SyncCoordinator.swift */; };
+		A10000000000000000000039 /* TagLinkedFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000040 /* TagLinkedFriendsView.swift */; };
+		A10000000000000000000040 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000041 /* AddFriendView.swift */; };
+		A10000000000000000000041 /* FriendsManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000042 /* FriendsManagementView.swift */; };
+		A10000000000000000000042 /* CPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000043 /* CPIService.swift */; };
+		A10000000000000000000043 /* CloudKitNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000044 /* CloudKitNotificationService.swift */; };
+		A10000000000000000000044 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* AppDelegate.swift */; };
+		A10000000000000000000045 /* UsernameSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000046 /* UsernameSetupView.swift */; };
+		A10000000000000000000046 /* ActivityNotificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000047 /* ActivityNotificationType.swift */; };
+		A10000000000000000000047 /* ReportReaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000048 /* ReportReaction.swift */; };
+		A10000000000000000000048 /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000049 /* UserNotification.swift */; };
+		A10000000000000000000049 /* ActivityNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000050 /* ActivityNotificationService.swift */; };
+		A10000000000000000000050 /* ReactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000051 /* ReactionService.swift */; };
+		A10000000000000000000051 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000052 /* NotificationsView.swift */; };
+		A10000000000000000000052 /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000053 /* DeepLinkRouter.swift */; };
+		A10000000000000000000053 /* AppNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000054 /* AppNavigationRouter.swift */; };
+		A10000000000000000000054 /* AccountDeletionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000055 /* AccountDeletionService.swift */; };
+		A10000000000000000000055 /* PublicUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000056 /* PublicUserProfileView.swift */; };
+		A10000000000000000000056 /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000057 /* DeleteAccountView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000001 /* BMIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* LocationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationType.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* PurchasedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedItem.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* ReportPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportPhoto.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* BigMacReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigMacReport.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* SeedDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataService.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
+		A20000000000000000000012 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
+		A20000000000000000000013 /* LocationTypePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTypePicker.swift; sourceTree = "<group>"; };
+		A20000000000000000000014 /* PurchasedItemsPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedItemsPicker.swift; sourceTree = "<group>"; };
+		A20000000000000000000015 /* TagFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFriendsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000016 /* ReportCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCardView.swift; sourceTree = "<group>"; };
+		A20000000000000000000017 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A20000000000000000000018 /* ReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000019 /* CreateReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReportView.swift; sourceTree = "<group>"; };
+		A20000000000000000000020 /* MapReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReportsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000021 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000022 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A20000000000000000000023 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A20000000000000000000024 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000000000000000000025 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000000000000000000026 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		A20000000000000000000027 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000028 /* CurrencyConversionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConversionService.swift; sourceTree = "<group>"; };
+		A20000000000000000000029 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		A20000000000000000000030 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000031 /* BMI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BMI.entitlements; sourceTree = "<group>"; };
+		A20000000000000000000032 /* FriendLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLink.swift; sourceTree = "<group>"; };
+		A20000000000000000000033 /* ExchangeRateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateService.swift; sourceTree = "<group>"; };
+		A20000000000000000000034 /* InflationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InflationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000035 /* PriceNormalizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceNormalizationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000036 /* CloudKitSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSchema.swift; sourceTree = "<group>"; };
+		A20000000000000000000037 /* CloudKitPublicSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitPublicSyncService.swift; sourceTree = "<group>"; };
+		A20000000000000000000038 /* FriendLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLinkService.swift; sourceTree = "<group>"; };
+		A20000000000000000000039 /* SyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000000000040 /* TagLinkedFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagLinkedFriendsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000041 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
+		A20000000000000000000042 /* FriendsManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsManagementView.swift; sourceTree = "<group>"; };
+		A20000000000000000000043 /* CPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPIService.swift; sourceTree = "<group>"; };
+		A20000000000000000000044 /* CloudKitNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitNotificationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000045 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A20000000000000000000046 /* UsernameSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameSetupView.swift; sourceTree = "<group>"; };
+		A20000000000000000000047 /* ActivityNotificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityNotificationType.swift; sourceTree = "<group>"; };
+		A20000000000000000000048 /* ReportReaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportReaction.swift; sourceTree = "<group>"; };
+		A20000000000000000000049 /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
+		A20000000000000000000050 /* ActivityNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityNotificationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000051 /* ReactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionService.swift; sourceTree = "<group>"; };
+		A20000000000000000000052 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000053 /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
+		A20000000000000000000054 /* AppNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationRouter.swift; sourceTree = "<group>"; };
+		A20000000000000000000055 /* AccountDeletionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionService.swift; sourceTree = "<group>"; };
+		A20000000000000000000056 /* PublicUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUserProfileView.swift; sourceTree = "<group>"; };
+		A20000000000000000000057 /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
+		A30000000000000000000001 /* BMI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A40000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A50000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A50000000000000000000002 /* BMI */,
+				A50000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A50000000000000000000002 /* BMI */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* BMIApp.swift */,
+				A20000000000000000000002 /* ContentView.swift */,
+				A50000000000000000000004 /* Models */,
+				A50000000000000000000005 /* Services */,
+				A50000000000000000000006 /* Extensions */,
+				A50000000000000000000007 /* Views */,
+				A20000000000000000000024 /* Assets.xcassets */,
+				A20000000000000000000025 /* Info.plist */,
+				A20000000000000000000031 /* BMI.entitlements */,
+			);
+			path = BMI;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A30000000000000000000001 /* BMI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000007 /* BigMacReport.swift */,
+				A20000000000000000000047 /* ActivityNotificationType.swift */,
+				A20000000000000000000026 /* AppSettings.swift */,
+				A20000000000000000000032 /* FriendLink.swift */,
+				A20000000000000000000003 /* LocationType.swift */,
+				A20000000000000000000004 /* PurchasedItem.swift */,
+				A20000000000000000000048 /* ReportReaction.swift */,
+				A20000000000000000000006 /* ReportPhoto.swift */,
+				A20000000000000000000049 /* UserNotification.swift */,
+				A20000000000000000000005 /* UserProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000005 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000008 /* LocationService.swift */,
+				A20000000000000000000050 /* ActivityNotificationService.swift */,
+				A20000000000000000000055 /* AccountDeletionService.swift */,
+				A20000000000000000000054 /* AppNavigationRouter.swift */,
+				A20000000000000000000027 /* AuthenticationService.swift */,
+				A20000000000000000000036 /* CloudKitSchema.swift */,
+				A20000000000000000000037 /* CloudKitPublicSyncService.swift */,
+				A20000000000000000000028 /* CurrencyConversionService.swift */,
+				A20000000000000000000043 /* CPIService.swift */,
+				A20000000000000000000044 /* CloudKitNotificationService.swift */,
+				A20000000000000000000045 /* AppDelegate.swift */,
+				A20000000000000000000053 /* DeepLinkRouter.swift */,
+				A20000000000000000000033 /* ExchangeRateService.swift */,
+				A20000000000000000000038 /* FriendLinkService.swift */,
+				A20000000000000000000034 /* InflationService.swift */,
+				A20000000000000000000035 /* PriceNormalizationService.swift */,
+				A20000000000000000000051 /* ReactionService.swift */,
+				A20000000000000000000010 /* SeedDataService.swift */,
+				A20000000000000000000009 /* StatisticsService.swift */,
+				A20000000000000000000039 /* SyncCoordinator.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000006 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000011 /* Color+Theme.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000007 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000023 /* MainTabView.swift */,
+				A50000000000000000000014 /* Auth */,
+				A50000000000000000000008 /* Components */,
+				A50000000000000000000009 /* Create */,
+				A50000000000000000000010 /* Home */,
+				A50000000000000000000011 /* Map */,
+				A50000000000000000000012 /* Profile */,
+				A50000000000000000000013 /* Stats */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000008 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000013 /* LocationTypePicker.swift */,
+				A20000000000000000000014 /* PurchasedItemsPicker.swift */,
+				A20000000000000000000012 /* StarRatingView.swift */,
+				A20000000000000000000015 /* TagFriendsView.swift */,
+				A20000000000000000000040 /* TagLinkedFriendsView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000009 /* Create */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000019 /* CreateReportView.swift */,
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000010 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000017 /* HomeView.swift */,
+				A20000000000000000000016 /* ReportCardView.swift */,
+				A20000000000000000000018 /* ReportDetailView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000011 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000020 /* MapReportsView.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000014 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000029 /* SignInView.swift */,
+				A20000000000000000000046 /* UsernameSetupView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000012 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000041 /* AddFriendView.swift */,
+				A20000000000000000000057 /* DeleteAccountView.swift */,
+				A20000000000000000000042 /* FriendsManagementView.swift */,
+				A20000000000000000000052 /* NotificationsView.swift */,
+				A20000000000000000000056 /* PublicUserProfileView.swift */,
+				A20000000000000000000022 /* ProfileView.swift */,
+				A20000000000000000000030 /* SettingsView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000013 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000021 /* StatisticsView.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A60000000000000000000001 /* BMI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000003 /* Build configuration list for PBXNativeTarget "BMI" */;
+			buildPhases = (
+				A70000000000000000000001 /* Sources */,
+				A40000000000000000000001 /* Frameworks */,
+				A70000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BMI;
+			productName = BMI;
+			productReference = A30000000000000000000001 /* BMI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A90000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A60000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A80000000000000000000001 /* Build configuration list for PBXProject "BMI" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A50000000000000000000001;
+			productRefGroup = A50000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A60000000000000000000001 /* BMI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A70000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000024 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A70000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* BMIApp.swift in Sources */,
+				A10000000000000000000002 /* ContentView.swift in Sources */,
+				A10000000000000000000003 /* LocationType.swift in Sources */,
+				A10000000000000000000004 /* PurchasedItem.swift in Sources */,
+				A10000000000000000000005 /* UserProfile.swift in Sources */,
+				A10000000000000000000006 /* ReportPhoto.swift in Sources */,
+				A10000000000000000000007 /* BigMacReport.swift in Sources */,
+				A10000000000000000000008 /* LocationService.swift in Sources */,
+				A10000000000000000000009 /* StatisticsService.swift in Sources */,
+				A10000000000000000000010 /* SeedDataService.swift in Sources */,
+				A10000000000000000000011 /* Color+Theme.swift in Sources */,
+				A10000000000000000000012 /* StarRatingView.swift in Sources */,
+				A10000000000000000000013 /* LocationTypePicker.swift in Sources */,
+				A10000000000000000000014 /* PurchasedItemsPicker.swift in Sources */,
+				A10000000000000000000015 /* TagFriendsView.swift in Sources */,
+				A10000000000000000000016 /* ReportCardView.swift in Sources */,
+				A10000000000000000000017 /* HomeView.swift in Sources */,
+				A10000000000000000000018 /* ReportDetailView.swift in Sources */,
+				A10000000000000000000019 /* CreateReportView.swift in Sources */,
+				A10000000000000000000020 /* MapReportsView.swift in Sources */,
+				A10000000000000000000021 /* StatisticsView.swift in Sources */,
+				A10000000000000000000022 /* ProfileView.swift in Sources */,
+				A10000000000000000000023 /* MainTabView.swift in Sources */,
+				A10000000000000000000025 /* AppSettings.swift in Sources */,
+				A10000000000000000000026 /* AuthenticationService.swift in Sources */,
+				A10000000000000000000027 /* CurrencyConversionService.swift in Sources */,
+				A10000000000000000000028 /* SignInView.swift in Sources */,
+				A10000000000000000000029 /* SettingsView.swift in Sources */,
+				A10000000000000000000031 /* FriendLink.swift in Sources */,
+				A10000000000000000000032 /* ExchangeRateService.swift in Sources */,
+				A10000000000000000000033 /* InflationService.swift in Sources */,
+				A10000000000000000000034 /* PriceNormalizationService.swift in Sources */,
+				A10000000000000000000035 /* CloudKitSchema.swift in Sources */,
+				A10000000000000000000036 /* CloudKitPublicSyncService.swift in Sources */,
+				A10000000000000000000037 /* FriendLinkService.swift in Sources */,
+				A10000000000000000000038 /* SyncCoordinator.swift in Sources */,
+				A10000000000000000000039 /* TagLinkedFriendsView.swift in Sources */,
+				A10000000000000000000040 /* AddFriendView.swift in Sources */,
+				A10000000000000000000041 /* FriendsManagementView.swift in Sources */,
+				A10000000000000000000042 /* CPIService.swift in Sources */,
+				A10000000000000000000043 /* CloudKitNotificationService.swift in Sources */,
+				A10000000000000000000044 /* AppDelegate.swift in Sources */,
+				A10000000000000000000045 /* UsernameSetupView.swift in Sources */,
+				A10000000000000000000046 /* ActivityNotificationType.swift in Sources */,
+				A10000000000000000000047 /* ReportReaction.swift in Sources */,
+				A10000000000000000000048 /* UserNotification.swift in Sources */,
+				A10000000000000000000049 /* ActivityNotificationService.swift in Sources */,
+				A10000000000000000000050 /* ReactionService.swift in Sources */,
+				A10000000000000000000051 /* NotificationsView.swift in Sources */,
+				A10000000000000000000052 /* DeepLinkRouter.swift in Sources */,
+				A10000000000000000000053 /* AppNavigationRouter.swift in Sources */,
+				A10000000000000000000054 /* AccountDeletionService.swift in Sources */,
+				A10000000000000000000055 /* PublicUserProfileView.swift in Sources */,
+				A10000000000000000000056 /* DeleteAccountView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AA0000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA0000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AA0000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BMI/BMI.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BMI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Big Mac Index";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bigmacindex.bmi;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA0000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BMI/BMI.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BMI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Big Mac Index";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bigmacindex.bmi;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A80000000000000000000001 /* Build configuration list for PBXProject "BMI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000000000000000000001 /* Debug */,
+				AA0000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000003 /* Build configuration list for PBXNativeTarget "BMI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000000000000000000003 /* Debug */,
+				AA0000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A90000000000000000000001 /* Project object */;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Big Mac Index</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <meta name="apple-itunes-app" content="app-id=REPLACE_APP_ID">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="hero-emoji" id="emoji">🍔</div>
+      <h1 id="title">The Big Mac Index</h1>
+      <p id="subtitle">Open this link in the BMI app on iPhone.</p>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <div class="card">
+        <p id="description">If you have BMI installed, iOS should open the app automatically. Otherwise, install from TestFlight or the App Store.</p>
+        <div class="deep-link-box">
+          <code id="canonical-url"></code>
+        </div>
+        <div class="cta-row open-app">
+          <a class="button" id="open-link" href="/">Open in app</a>
+          <a class="button secondary" href="/">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      <nav>
+        <a href="/">Home</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/support.html">Support</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var path = window.location.pathname.replace(/^\/|\/$/g, "");
+      var segments = path.split("/").filter(Boolean);
+      var title = document.getElementById("title");
+      var subtitle = document.getElementById("subtitle");
+      var description = document.getElementById("description");
+      var canonical = document.getElementById("canonical-url");
+      var openLink = document.getElementById("open-link");
+      var emoji = document.getElementById("emoji");
+
+      canonical.textContent = window.location.href;
+      openLink.href = window.location.href;
+
+      if (segments[0] === "report" && segments[1]) {
+        title.textContent = "Big Mac Report";
+        subtitle.textContent = "Shared report";
+        description.textContent = "View price, photos, ratings, and index comparison for this meal in the BMI app.";
+        emoji.textContent = "🍟";
+      } else if (segments[0] === "u" && segments[1]) {
+        title.textContent = "@" + decodeURIComponent(segments[1]);
+        subtitle.textContent = "BMI profile";
+        description.textContent = "See this contributor's public Big Mac reports and stats in the app.";
+        emoji.textContent = "👤";
+      } else {
+        window.location.replace("/");
+      }
+    })();
+  </script>
+</body>
+</html>
