@@ -1,0 +1,422 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* BMIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* BMIApp.swift */; };
+		A10000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* ContentView.swift */; };
+		A10000000000000000000003 /* LocationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* LocationType.swift */; };
+		A10000000000000000000004 /* PurchasedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* PurchasedItem.swift */; };
+		A10000000000000000000005 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* UserProfile.swift */; };
+		A10000000000000000000006 /* ReportPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* ReportPhoto.swift */; };
+		A10000000000000000000007 /* BigMacReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* BigMacReport.swift */; };
+		A10000000000000000000008 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* LocationService.swift */; };
+		A10000000000000000000009 /* StatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* StatisticsService.swift */; };
+		A10000000000000000000010 /* SeedDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* SeedDataService.swift */; };
+		A10000000000000000000011 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* Color+Theme.swift */; };
+		A10000000000000000000012 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* StarRatingView.swift */; };
+		A10000000000000000000013 /* LocationTypePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* LocationTypePicker.swift */; };
+		A10000000000000000000014 /* PurchasedItemsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* PurchasedItemsPicker.swift */; };
+		A10000000000000000000015 /* TagFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* TagFriendsView.swift */; };
+		A10000000000000000000016 /* ReportCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000016 /* ReportCardView.swift */; };
+		A10000000000000000000017 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* HomeView.swift */; };
+		A10000000000000000000018 /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* ReportDetailView.swift */; };
+		A10000000000000000000019 /* CreateReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* CreateReportView.swift */; };
+		A10000000000000000000020 /* MapReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000020 /* MapReportsView.swift */; };
+		A10000000000000000000021 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000021 /* StatisticsView.swift */; };
+		A10000000000000000000022 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000022 /* ProfileView.swift */; };
+		A10000000000000000000023 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000023 /* MainTabView.swift */; };
+		A10000000000000000000024 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000024 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000001 /* BMIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* LocationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationType.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* PurchasedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedItem.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* ReportPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportPhoto.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* BigMacReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigMacReport.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* SeedDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataService.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
+		A20000000000000000000012 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
+		A20000000000000000000013 /* LocationTypePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTypePicker.swift; sourceTree = "<group>"; };
+		A20000000000000000000014 /* PurchasedItemsPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedItemsPicker.swift; sourceTree = "<group>"; };
+		A20000000000000000000015 /* TagFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFriendsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000016 /* ReportCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCardView.swift; sourceTree = "<group>"; };
+		A20000000000000000000017 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A20000000000000000000018 /* ReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000019 /* CreateReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReportView.swift; sourceTree = "<group>"; };
+		A20000000000000000000020 /* MapReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapReportsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000021 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000022 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A20000000000000000000023 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A20000000000000000000024 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000000000000000000025 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A30000000000000000000001 /* BMI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A40000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A50000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A50000000000000000000002 /* BMI */,
+				A50000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A50000000000000000000002 /* BMI */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* BMIApp.swift */,
+				A20000000000000000000002 /* ContentView.swift */,
+				A50000000000000000000004 /* Models */,
+				A50000000000000000000005 /* Services */,
+				A50000000000000000000006 /* Extensions */,
+				A50000000000000000000007 /* Views */,
+				A20000000000000000000024 /* Assets.xcassets */,
+				A20000000000000000000025 /* Info.plist */,
+			);
+			path = BMI;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A30000000000000000000001 /* BMI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000007 /* BigMacReport.swift */,
+				A20000000000000000000003 /* LocationType.swift */,
+				A20000000000000000000004 /* PurchasedItem.swift */,
+				A20000000000000000000006 /* ReportPhoto.swift */,
+				A20000000000000000000005 /* UserProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000005 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000008 /* LocationService.swift */,
+				A20000000000000000000010 /* SeedDataService.swift */,
+				A20000000000000000000009 /* StatisticsService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000006 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000011 /* Color+Theme.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000007 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000023 /* MainTabView.swift */,
+				A50000000000000000000008 /* Components */,
+				A50000000000000000000009 /* Create */,
+				A50000000000000000000010 /* Home */,
+				A50000000000000000000011 /* Map */,
+				A50000000000000000000012 /* Profile */,
+				A50000000000000000000013 /* Stats */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000008 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000013 /* LocationTypePicker.swift */,
+				A20000000000000000000014 /* PurchasedItemsPicker.swift */,
+				A20000000000000000000012 /* StarRatingView.swift */,
+				A20000000000000000000015 /* TagFriendsView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000009 /* Create */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000019 /* CreateReportView.swift */,
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000010 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000017 /* HomeView.swift */,
+				A20000000000000000000016 /* ReportCardView.swift */,
+				A20000000000000000000018 /* ReportDetailView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000011 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000020 /* MapReportsView.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000012 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000022 /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000013 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000021 /* StatisticsView.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A60000000000000000000001 /* BMI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000003 /* Build configuration list for PBXNativeTarget "BMI" */;
+			buildPhases = (
+				A70000000000000000000001 /* Sources */,
+				A40000000000000000000001 /* Frameworks */,
+				A70000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BMI;
+			productName = BMI;
+			productReference = A30000000000000000000001 /* BMI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A90000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A60000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A80000000000000000000001 /* Build configuration list for PBXProject "BMI" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A50000000000000000000001;
+			productRefGroup = A50000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A60000000000000000000001 /* BMI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A70000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000024 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A70000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* BMIApp.swift in Sources */,
+				A10000000000000000000002 /* ContentView.swift in Sources */,
+				A10000000000000000000003 /* LocationType.swift in Sources */,
+				A10000000000000000000004 /* PurchasedItem.swift in Sources */,
+				A10000000000000000000005 /* UserProfile.swift in Sources */,
+				A10000000000000000000006 /* ReportPhoto.swift in Sources */,
+				A10000000000000000000007 /* BigMacReport.swift in Sources */,
+				A10000000000000000000008 /* LocationService.swift in Sources */,
+				A10000000000000000000009 /* StatisticsService.swift in Sources */,
+				A10000000000000000000010 /* SeedDataService.swift in Sources */,
+				A10000000000000000000011 /* Color+Theme.swift in Sources */,
+				A10000000000000000000012 /* StarRatingView.swift in Sources */,
+				A10000000000000000000013 /* LocationTypePicker.swift in Sources */,
+				A10000000000000000000014 /* PurchasedItemsPicker.swift in Sources */,
+				A10000000000000000000015 /* TagFriendsView.swift in Sources */,
+				A10000000000000000000016 /* ReportCardView.swift in Sources */,
+				A10000000000000000000017 /* HomeView.swift in Sources */,
+				A10000000000000000000018 /* ReportDetailView.swift in Sources */,
+				A10000000000000000000019 /* CreateReportView.swift in Sources */,
+				A10000000000000000000020 /* MapReportsView.swift in Sources */,
+				A10000000000000000000021 /* StatisticsView.swift in Sources */,
+				A10000000000000000000022 /* ProfileView.swift in Sources */,
+				A10000000000000000000023 /* MainTabView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AA0000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA0000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AA0000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BMI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Big Mac Index";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bigmacindex.bmi;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA0000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BMI/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Big Mac Index";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bigmacindex.bmi;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A80000000000000000000001 /* Build configuration list for PBXProject "BMI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000000000000000000001 /* Debug */,
+				AA0000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000003 /* Build configuration list for PBXNativeTarget "BMI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000000000000000000003 /* Debug */,
+				AA0000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A90000000000000000000001 /* Project object */;
+}
