@@ -165,13 +165,10 @@ struct ReportDetailView: View {
                     .clipped()
                     .bmiBiteClip()
             } else {
-                ZStack {
-                    Color.bmiPaper
-                    BMILayerMark(width: 160)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 220)
-                .bmiBiteClip()
+                BMIBurgerStripesBackground()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 220)
+                    .bmiBiteClip()
             }
 
             LinearGradient(

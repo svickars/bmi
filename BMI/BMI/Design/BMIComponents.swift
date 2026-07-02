@@ -95,71 +95,72 @@ struct BMIPrimaryButton: View {
 struct BMILayerMark: View {
     var width: CGFloat = 220
 
-    private var height: CGFloat { width * 0.55 }
-
     var body: some View {
-        VStack(spacing: width * 0.028) {
-            layerBand(color: .bmiSesame, height: height * 0.18, topRadius: width * 0.08)
-                .overlay(alignment: .top) {
-                    HStack(spacing: width * 0.04) {
-                        ForEach(0..<5, id: \.self) { _ in
-                            Circle()
-                                .fill(Color.white.opacity(0.85))
-                                .frame(width: width * 0.018, height: width * 0.018)
-                        }
-                    }
-                    .padding(.top, height * 0.04)
-                }
-            layerBand(color: .bmiPatty, height: height * 0.09)
-            layerBand(color: .bmiSesame, height: height * 0.05)
-            layerBand(color: .bmiPatty, height: height * 0.09)
-            layerBand(color: .bmiLettuce, height: height * 0.08, wavy: true)
-            layerBand(color: .bmiPatty, height: height * 0.09)
-            layerBand(color: .bmiCheese, height: height * 0.07)
-            layerBand(color: .bmiLettuce, height: height * 0.08, wavy: true)
-            layerBand(color: .bmiSesame, height: height * 0.14, bottomRadius: width * 0.06)
-        }
-        .frame(width: width, height: height)
-        .accessibilityHidden(true)
-    }
-
-    @ViewBuilder
-    private func layerBand(
-        color: Color,
-        height: CGFloat,
-        topRadius: CGFloat = 0,
-        bottomRadius: CGFloat = 0,
-        wavy: Bool = false
-    ) -> some View {
-        if wavy {
-            WavyLayerBand(color: color)
-                .frame(height: height)
-        } else {
-            RoundedRectangle(cornerRadius: min(topRadius, bottomRadius, height / 2), style: .continuous)
-                .fill(color)
-                .frame(height: height)
-        }
+        Image("BMIMark")
+            .resizable()
+            .scaledToFit()
+            .frame(width: width, height: width)
+            .accessibilityHidden(true)
     }
 }
 
-private struct WavyLayerBand: View {
-    let color: Color
-
+/// Full-bleed horizontal stripe background inspired by the BMI mark artwork.
+/// Use for splash moments: sign-in, launch, photo-less report heroes.
+struct BMIBurgerStripesBackground: View {
     var body: some View {
         GeometryReader { geo in
-            Path { path in
-                let w = geo.size.width
-                let h = geo.size.height
-                path.move(to: .zero)
-                path.addLine(to: CGPoint(x: w, y: 0))
-                path.addLine(to: CGPoint(x: w, y: h * 0.45))
-                path.addQuadCurve(to: CGPoint(x: w * 0.75, y: h), control: CGPoint(x: w, y: h))
-                path.addQuadCurve(to: CGPoint(x: w * 0.25, y: h * 0.55), control: CGPoint(x: w * 0.5, y: h * 1.1))
-                path.addQuadCurve(to: CGPoint(x: 0, y: h * 0.4), control: CGPoint(x: w * 0.05, y: h))
-                path.closeSubpath()
+            VStack(spacing: 0) {
+                stripeBand(color: .bmiStripeBun, weight: 115.673, in: geo.size.height)
+                stripeBand(color: .bmiStripeOlive, weight: 17.3259, in: geo.size.height)
+                stripeBand(color: .bmiStripeCheese, weight: 17.3259, in: geo.size.height)
+                lettuceBand(weight: 11, in: geo.size.height)
+                stripeBand(color: .bmiStripePatty, weight: 73.2097, in: geo.size.height)
+                stripeBand(color: .bmiStripeSauce, weight: 21.8017, in: geo.size.height)
+                stripeBand(color: .bmiStripeBunMid, weight: 69, in: geo.size.height)
+                stripeBand(color: .bmiStripeCheese, weight: 17.3259, in: geo.size.height)
+                stripeBand(color: .bmiStripePatty, weight: 73.2097, in: geo.size.height)
+                stripeBand(color: .bmiStripeOlive, weight: 17.3259, in: geo.size.height)
+                stripeBand(color: .bmiStripeSauce, weight: 21.8017, in: geo.size.height)
+                stripeBand(color: .bmiStripeBunMid, weight: 69, in: geo.size.height)
             }
-            .fill(color)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
+        .ignoresSafeArea()
+        .accessibilityHidden(true)
+    }
+
+    private func stripeBand(color: Color, weight: CGFloat, in totalHeight: CGFloat) -> some View {
+        color
+            .frame(height: totalHeight * (weight / 524))
+            .frame(maxWidth: .infinity)
+    }
+
+    private func lettuceBand(weight: CGFloat, in totalHeight: CGFloat) -> some View {
+        HStack(spacing: 0) {
+            ForEach(0..<5, id: \.self) { index in
+                (index.isMultiple(of: 2) ? Color.bmiStripeLettuce : Color.bmiStripeLettuceDark)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .frame(height: totalHeight * (weight / 524))
+        .frame(maxWidth: .infinity)
+    }
+}
+
+/// Softens full-bleed stripe backgrounds so foreground text and controls stay readable.
+struct BMIMomentScrim: View {
+    var body: some View {
+        LinearGradient(
+            stops: [
+                .init(color: .clear, location: 0.28),
+                .init(color: Color.bmiPaper.opacity(0.75), location: 0.62),
+                .init(color: Color.bmiPaper.opacity(0.96), location: 1.0)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
     }
 }
 

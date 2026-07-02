@@ -191,7 +191,9 @@ Visual pass — should feel **Beli-adjacent**: paper background, serif titles, t
 
 | Screen | What to check |
 |--------|----------------|
-| **Sign in** | Layer mark, serif “The Big Mac Index”, cream paper background |
+| **Sign in** | Full stripe takeover + scrim, centered BMI mark, serif title |
+| **Launch** | Stripe takeover + frosted card with mark + spinner |
+| **Report detail (no photo)** | Stripe hero with bite mask |
 | **Feed** | Serif “The Index” header, pill country filters, Beli-style cards with price badge |
 | **Report detail** | Hero photo with **bite mask** (corner clip), price in serif |
 | **Map** | Red price pins (no burger emoji) |
@@ -239,7 +241,7 @@ See **`docs/APP_STORE.md`** for copy-paste metadata templates.
 
 ## Phase 10 — App Store review prep
 
-- [ ] **App icon** — 1024×1024 PNG in `Assets.xcassets/AppIcon` (included in repo)
+- [ ] **App icon** — 1024×1024 PNG in `Assets.xcassets/AppIcon` (generated from Sam's BMI mark SVG)
 - [ ] **Account deletion** — Settings → Delete Account (implemented in app)
 - [ ] **Sign in with Apple** — if users can create accounts, deletion must be offered in-app ✓
 - [ ] Revoking Sign in with Apple: users can also revoke in iOS Settings → Apple ID → Sign in with Apple

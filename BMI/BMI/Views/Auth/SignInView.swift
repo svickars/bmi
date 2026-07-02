@@ -8,7 +8,8 @@ struct SignInView: View {
 
     var body: some View {
         ZStack {
-            BMIScreenBackground()
+            BMIBurgerStripesBackground()
+            BMIMomentScrim()
 
             VStack(spacing: 32) {
                 Spacer()
