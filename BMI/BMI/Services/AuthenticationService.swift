@@ -88,13 +88,17 @@ final class AuthenticationService: NSObject, ObservableObject {
         try? modelContext.save()
     }
 
-    func refreshPublicProfileStatus(from context: ModelContext) {
-        hasPublicProfile = currentUserProfile(in: context)?.isRegisteredPublicly ?? false
+    func refreshPublicProfileStatus(from context: ModelContext? = nil) {
+        guard let context = context ?? modelContext else { return }
+        if currentUserProfile(in: context)?.isRegisteredPublicly == true {
+            hasPublicProfile = true
+        }
     }
 
-    func markPublicProfileRegistered() {
+    func markPublicProfileRegistered(with profile: UserProfile) {
+        profile.isRegisteredPublicly = true
+        activeProfile = profile
         hasPublicProfile = true
-        activeProfile?.isRegisteredPublicly = true
     }
 
     func currentUserProfile(in context: ModelContext? = nil) -> UserProfile? {
@@ -152,8 +156,10 @@ final class AuthenticationService: NSObject, ObservableObject {
             activeProfile = profile
             if profile.isRegisteredPublicly {
                 SeedDataService.seedCommunityData(into: modelContext)
+                markPublicProfileRegistered(with: profile)
+            } else {
+                refreshPublicProfileStatus(from: modelContext)
             }
-            refreshPublicProfileStatus(from: modelContext)
             return profile
         }
 
@@ -286,7 +292,7 @@ final class AuthenticationService: NSObject, ObservableObject {
 
         SeedDataService.seedCommunityData(into: context)
         try? context.save()
-        markPublicProfileRegistered()
+        markPublicProfileRegistered(with: profile)
         isAuthenticated = true
         isCheckingCredential = false
     }
