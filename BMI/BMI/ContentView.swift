@@ -58,7 +58,6 @@ struct ContentView: View {
         }
         .onChange(of: authService.hasPublicProfile) { _, isRegistered in
             guard authService.isAuthenticated, isRegistered else { return }
-            authService.refreshPublicProfileStatus(from: modelContext)
             let user = authService.currentUserProfile(in: modelContext)
             Task {
                 await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: user)

@@ -76,9 +76,14 @@ struct UsernameSetupView: View {
                 }
             }
             .onAppear {
-                authService.refreshPublicProfileStatus(from: modelContext)
+                if authService.hasPublicProfile {
+                    return
+                }
                 if let profile = authService.currentUserProfile(in: modelContext),
-                   !profile.username.hasPrefix("user_") {
+                   profile.isRegisteredPublicly {
+                    authService.markPublicProfileRegistered(with: profile)
+                } else if let profile = authService.currentUserProfile(in: modelContext),
+                          !profile.username.hasPrefix("user_") {
                     username = profile.username
                 }
             }
@@ -137,6 +142,11 @@ struct UsernameSetupView: View {
             return
         }
 
+        if currentUser.isRegisteredPublicly {
+            authService.markPublicProfileRegistered(with: currentUser)
+            return
+        }
+
         isSaving = true
         availabilityMessage = nil
         validationMessage = nil
@@ -147,10 +157,8 @@ struct UsernameSetupView: View {
         do {
             try await syncCoordinator.cloudSync.registerCurrentUser(currentUser)
             try modelContext.save()
-            authService.markPublicProfileRegistered()
-            authService.refreshPublicProfileStatus(from: modelContext)
+            authService.markPublicProfileRegistered(with: currentUser)
             SeedDataService.seedCommunityData(into: modelContext)
-            await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
         } catch {
             presentError(error.localizedDescription)
         }
