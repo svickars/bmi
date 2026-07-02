@@ -105,7 +105,7 @@ final class AuthenticationService: NSObject, ObservableObject {
         }
 
         if let appleUserID = AuthStorage.appleUserID,
-           let profile = profile(withAppleUserID: appleUserID, in: context) {
+           let profile = findProfile(withAppleUserID: appleUserID, in: context) {
             activeProfile = profile
             markCurrentUser(profile, in: context)
             return profile
@@ -147,7 +147,7 @@ final class AuthenticationService: NSObject, ObservableObject {
     private func ensureCurrentUserProfile(for userID: String) -> UserProfile? {
         guard let modelContext else { return nil }
 
-        if let profile = profile(withAppleUserID: userID, in: modelContext) {
+        if let profile = findProfile(withAppleUserID: userID, in: modelContext) {
             markCurrentUser(profile, in: modelContext)
             activeProfile = profile
             if profile.isRegisteredPublicly {
@@ -168,7 +168,7 @@ final class AuthenticationService: NSObject, ObservableObject {
         userID: String,
         in context: ModelContext
     ) -> UserProfile {
-        if let existing = profile(withAppleUserID: userID, in: context) {
+        if let existing = findProfile(withAppleUserID: userID, in: context) {
             if let fullName = formattedName(from: credential.fullName), !fullName.isEmpty {
                 existing.displayName = fullName
             }
@@ -199,7 +199,7 @@ final class AuthenticationService: NSObject, ObservableObject {
         return profile
     }
 
-    private func profile(withAppleUserID appleUserID: String, in context: ModelContext) -> UserProfile? {
+    private func findProfile(withAppleUserID appleUserID: String, in context: ModelContext) -> UserProfile? {
         (try? context.fetch(FetchDescriptor<UserProfile>()))?
             .first { $0.appleUserID == appleUserID }
     }
@@ -261,7 +261,7 @@ final class AuthenticationService: NSObject, ObservableObject {
         AuthStorage.appleUserID = "preview.apple.user"
 
         let profile: UserProfile
-        if let existing = profile(withAppleUserID: "preview.apple.user", in: context) {
+        if let existing = findProfile(withAppleUserID: "preview.apple.user", in: context) {
             profile = existing
             profile.isRegisteredPublicly = true
         } else {
