@@ -33,13 +33,7 @@ An iOS app inspired by [The Economist's Big Mac Index](https://www.economist.com
 2. Set your **Development Team** in Signing & Capabilities
 3. Enable capabilities: Sign in with Apple, iCloud (CloudKit), Push Notifications, Associated Domains (`applinks:bmi.bysam.fun`)
 4. CloudKit container: `iCloud.com.bigmacindex.bmi`
-5. Deploy CloudKit schema record types in [CloudKit Dashboard](https://icloud.developer.apple.com/):
-   - `PublicUser` (includes `normalizedUsername`)
-   - `PublicReport` (includes `photoCount`, **`authorAppleUserID` queryable**)
-   - `PublicReportPhoto` (includes `imageAsset` CKAsset)
-   - `FriendConnection`
-   - `UserNotification` (activity inbox records)
-   - `ReportReaction`
+5. Deploy CloudKit schema in [CloudKit Dashboard](https://icloud.developer.apple.com/) — **import [`docs/cloudkit-schema.ckdb`](docs/cloudkit-schema.ckdb)** (recommended) or create record types manually (see checklist)
 6. Replace **`TEAMID`** in `docs/.well-known/apple-app-site-association` with your Apple Team ID
 7. Enable GitHub Pages from **`/docs`** and point DNS `bmi.bysam.fun` → `svickars.github.io` (see checklist)
 8. Optional: add your [FRED API key](https://fred.stlouisfed.org/docs/api/api_key.html) to `Info.plist` as `FRED_API_KEY`

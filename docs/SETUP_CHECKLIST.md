@@ -69,7 +69,60 @@ Portal: https://icloud.developer.apple.com/ → container **`iCloud.com.bigmacin
 
 Work in **Development** first. Promote to **Production** before App Store / external TestFlight.
 
-### Record types & indexes
+### Recommended: import the schema file
+
+The repo includes a CloudKit Schema Language file with all record types, fields, and indexes:
+
+**`docs/cloudkit-schema.ckdb`**
+
+This matches `BMI/BMI/Services/CloudKitSchema.swift`. Import it once instead of creating types by hand.
+
+#### Option A — CloudKit Dashboard (easiest)
+
+1. Open https://icloud.developer.apple.com/ → container **`iCloud.com.bigmacindex.bmi`**
+2. Confirm **Development** is selected (top of page)
+3. **Schema** → **Import Schema** (or **Actions → Import**)
+4. Choose **`docs/cloudkit-schema.ckdb`** from this repo
+5. Review the diff → **Import** → **Deploy Schema Changes…** → **Development**
+6. Force-quit BMI on your iPhone and reopen, then retry username registration
+
+> **Do not import `CloudKitSchema.swift`.** That is Swift source code. The dashboard expects a `.ckdb` file starting with `DEFINE SCHEMA`.
+
+#### Option B — cktool (CLI)
+
+From the repo root on your Mac (requires Xcode / cktool auth):
+
+```bash
+xcrun cktool validate-schema \
+  --team-id YOUR_TEAM_ID \
+  --container-id iCloud.com.bigmacindex.bmi \
+  --file docs/cloudkit-schema.ckdb
+
+xcrun cktool import-schema \
+  --team-id YOUR_TEAM_ID \
+  --container-id iCloud.com.bigmacindex.bmi \
+  --environment development \
+  --file docs/cloudkit-schema.ckdb
+```
+
+Replace `YOUR_TEAM_ID` with your 10-character Apple Team ID.
+
+#### After import — verify in the app
+
+1. Sign in with Apple → **Check Availability** on a username (should succeed)
+2. **Continue** → main tabs appear
+3. Create a public report → Profile → **Sync Now**
+4. Feed should load without “record type not found” errors
+
+#### Production
+
+After TestFlight / App Store testing in Development, promote the schema to **Production** in the Dashboard before external testers.
+
+---
+
+### Manual setup (alternative)
+
+If you prefer not to import, create types and indexes by hand. See `CloudKitSchema.swift` for field names.
 
 | Record type | Queryable / sortable fields |
 |-------------|----------------------------|
@@ -80,9 +133,7 @@ Work in **Development** first. Promote to **Production** before App Store / exte
 | `UserNotification` | `recipientAppleUserID` (Queryable), `createdAt` (Sortable) |
 | `ReportReaction` | `reportID` (Queryable) |
 
-### `PublicUser` avatar fields (UI redesign — PR #2)
-
-Add these **String** fields to `PublicUser` if not already present (see `BMI/BMI/Services/CloudKitSchema.swift`):
+### `PublicUser` avatar fields
 
 | Field | Type | Example values |
 |-------|------|----------------|
@@ -91,9 +142,9 @@ Add these **String** fields to `PublicUser` if not already present (see `BMI/BMI
 | `avatarInitials` | String | `SV` (max 2 chars) |
 | `avatarBackgroundHex` | String | `DC143C` (no `#`) |
 
-- [ ] Create all record types with fields matching `CloudKitSchema.swift`
-- [ ] Set queryable/sortable indexes in the table above
+- [ ] Import **`docs/cloudkit-schema.ckdb`** (recommended) **or** create all record types manually
 - [ ] **Deploy Schema to Development**
+- [ ] Retry username registration + sync in the app
 - [ ] After testing, **Deploy to Production**
 
 ---
@@ -277,8 +328,8 @@ See **`docs/APP_STORE.md`** for copy-paste metadata templates.
 
 | Problem | Likely fix |
 |---------|------------|
-| CloudKit errors on sync | Schema not deployed, or missing queryable indexes |
-| Username registration fails | `normalizedUsername` not queryable on `PublicUser` |
+| CloudKit errors on sync | Schema not deployed — import **`docs/cloudkit-schema.ckdb`** and deploy to Development |
+| Username registration fails | `PublicUser` missing or `normalizedUsername` not queryable — import schema file |
 | Avatar save fails / old emoji only | Deploy `avatarStyleRaw`, `avatarInitials`, `avatarBackgroundHex` on `PublicUser` |
 | Build error “cannot find BMISectionHeader” | Checkout PR #2 branch or merge UI redesign; ensure `BMI/Design/*.swift` in target |
 | Push never arrives | Physical device, iCloud signed in, notifications allowed, Development APNs entitlements |
