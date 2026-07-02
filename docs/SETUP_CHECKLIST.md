@@ -329,7 +329,7 @@ See **`docs/APP_STORE.md`** for copy-paste metadata templates.
 | Problem | Likely fix |
 |---------|------------|
 | CloudKit errors on sync | Schema not deployed — import **`docs/cloudkit-schema.ckdb`** and deploy to Development |
-| Username registration fails | `PublicUser` missing or `normalizedUsername` not queryable — import schema file |
+| Continue on username screen does nothing | CloudKit save failed silently, or UI did not refresh after registration — pull latest; check Xcode console; confirm iCloud signed in on device |
 | Avatar save fails / old emoji only | Deploy `avatarStyleRaw`, `avatarInitials`, `avatarBackgroundHex` on `PublicUser` |
 | Build error “cannot find BMISectionHeader” | Checkout PR #2 branch or merge UI redesign; ensure `BMI/Design/*.swift` in target |
 | Push never arrives | Physical device, iCloud signed in, notifications allowed, Development APNs entitlements |

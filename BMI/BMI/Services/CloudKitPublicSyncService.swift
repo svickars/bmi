@@ -34,7 +34,9 @@ final class CloudKitPublicSyncService: ObservableObject {
     }
 
     func registerCurrentUser(_ profile: UserProfile) async throws {
-        guard let appleUserID = profile.appleUserID else { return }
+        guard let appleUserID = profile.appleUserID else {
+            throw UsernameError.missingAppleUserID
+        }
 
         let normalized = UsernameValidator.normalize(profile.username)
         if let validationError = UsernameValidator.validate(normalized) {

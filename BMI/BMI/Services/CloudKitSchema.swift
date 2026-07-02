@@ -155,6 +155,7 @@ enum UsernameError: LocalizedError {
     case taken
     case invalid(String)
     case registrationFailed
+    case missingAppleUserID
 
     var errorDescription: String? {
         switch self {
@@ -164,6 +165,8 @@ enum UsernameError: LocalizedError {
             message
         case .registrationFailed:
             "Could not register your username. Try again."
+        case .missingAppleUserID:
+            "Your Apple sign-in is missing an account identifier. Sign out and sign in again."
         }
     }
 }

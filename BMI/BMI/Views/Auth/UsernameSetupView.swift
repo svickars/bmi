@@ -3,6 +3,7 @@ import SwiftData
 
 struct UsernameSetupView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var authService: AuthenticationService
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
     @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
 
@@ -11,6 +12,8 @@ struct UsernameSetupView: View {
     @State private var isSaving = false
     @State private var validationMessage: String?
     @State private var availabilityMessage: String?
+    @State private var showsErrorAlert = false
+    @State private var alertMessage = ""
 
     private var currentUser: UserProfile? { currentUsers.first }
 
@@ -53,6 +56,16 @@ struct UsernameSetupView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+
+                if isSaving {
+                    Section {
+                        HStack {
+                            ProgressView()
+                            Text("Registering username…")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
             }
             .bmiFormScreen()
             .navigationTitle("Choose Username")
@@ -62,13 +75,18 @@ struct UsernameSetupView: View {
                         Task { await saveUsername() }
                     }
                     .fontWeight(.semibold)
-                    .disabled(isSaving)
+                    .disabled(isSaving || username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
             .onAppear {
                 if let currentUser, !currentUser.username.hasPrefix("user_") {
                     username = currentUser.username
                 }
+            }
+            .alert("Could Not Register Username", isPresented: $showsErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(alertMessage)
             }
         }
     }
@@ -94,12 +112,20 @@ struct UsernameSetupView: View {
             availabilityMessage = available ? "@\(normalized) is available." : nil
             validationMessage = available ? nil : UsernameError.taken.errorDescription
         } catch {
-            validationMessage = error.localizedDescription
+            presentError(error.localizedDescription)
         }
     }
 
     private func saveUsername() async {
-        guard let currentUser else { return }
+        guard let currentUser else {
+            presentError("No signed-in profile was found. Force-quit the app and sign in again.")
+            return
+        }
+
+        guard currentUser.appleUserID != nil else {
+            presentError(UsernameError.missingAppleUserID.errorDescription ?? "Missing Apple account identifier.")
+            return
+        }
 
         let normalized = UsernameValidator.normalize(username)
         if let error = UsernameValidator.validate(normalized) {
@@ -108,18 +134,28 @@ struct UsernameSetupView: View {
         }
 
         isSaving = true
+        availabilityMessage = nil
+        validationMessage = nil
         defer { isSaving = false }
 
         currentUser.username = normalized
 
         do {
             try await syncCoordinator.cloudSync.registerCurrentUser(currentUser)
-            try? modelContext.save()
+            try modelContext.save()
+            authService.markPublicProfileRegistered()
+            authService.refreshPublicProfileStatus(from: modelContext)
             SeedDataService.seedCommunityData(into: modelContext)
             await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUser)
         } catch {
-            validationMessage = error.localizedDescription
+            presentError(error.localizedDescription)
         }
+    }
+
+    private func presentError(_ message: String) {
+        validationMessage = message
+        alertMessage = message
+        showsErrorAlert = true
     }
 }
 
