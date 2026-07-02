@@ -85,14 +85,38 @@ final class AuthenticationService: NSObject, ObservableObject {
     }
 
     func refreshPublicProfileStatus(from context: ModelContext) {
-        let descriptor = FetchDescriptor<UserProfile>(
-            predicate: #Predicate { $0.isCurrentUser }
-        )
-        hasPublicProfile = (try? context.fetch(descriptor).first?.isRegisteredPublicly) ?? false
+        hasPublicProfile = currentUserProfile(in: context)?.isRegisteredPublicly ?? false
     }
 
     func markPublicProfileRegistered() {
         hasPublicProfile = true
+    }
+
+    func currentUserProfile(in context: ModelContext) -> UserProfile? {
+        if let appleUserID = AuthStorage.appleUserID {
+            let descriptor = FetchDescriptor<UserProfile>(
+                predicate: #Predicate { $0.appleUserID == appleUserID }
+            )
+            if let profile = try? context.fetch(descriptor).first {
+                markCurrentUser(profile, in: context)
+                return profile
+            }
+        }
+
+        let fallbackDescriptor = FetchDescriptor<UserProfile>(
+            predicate: #Predicate { $0.isCurrentUser == true }
+        )
+        return try? context.fetch(fallbackDescriptor).first
+    }
+
+    private func markCurrentUser(_ profile: UserProfile, in context: ModelContext) {
+        guard !profile.isCurrentUser else { return }
+
+        if let users = try? context.fetch(FetchDescriptor<UserProfile>()) {
+            users.forEach { $0.isCurrentUser = ($0.id == profile.id) }
+        }
+        profile.isCurrentUser = true
+        try? context.save()
     }
 
     private func completeSignIn(with credential: ASAuthorizationAppleIDCredential) {
@@ -121,20 +145,26 @@ final class AuthenticationService: NSObject, ObservableObject {
         )
 
         if let profile = try? modelContext.fetch(descriptor).first {
-            if let users = try? modelContext.fetch(FetchDescriptor<UserProfile>()) {
-                users.forEach { $0.isCurrentUser = ($0.id == profile.id) }
-            }
-            profile.isCurrentUser = true
+            markCurrentUser(profile, in: modelContext)
             if profile.isRegisteredPublicly {
                 SeedDataService.seedCommunityData(into: modelContext)
             }
-            try? modelContext.save()
             refreshPublicProfileStatus(from: modelContext)
             return profile
         }
 
-        AuthStorage.clear()
-        return nil
+        let profile = UserProfile(
+            displayName: "BMI Contributor",
+            username: "user_\(userID.prefix(6))",
+            avatarEmoji: "🍔",
+            homeCountry: localizedRegionName(for: Locale.current.region?.identifier) ?? "Unknown",
+            isCurrentUser: true,
+            appleUserID: userID
+        )
+        modelContext.insert(profile)
+        try? modelContext.save()
+        refreshPublicProfileStatus(from: modelContext)
+        return profile
     }
 
     private func upsertProfile(
@@ -153,9 +183,7 @@ final class AuthenticationService: NSObject, ObservableObject {
             if let email = credential.email {
                 existing.email = email
             }
-            if let users = try? context.fetch(FetchDescriptor<UserProfile>()) {
-                users.forEach { $0.isCurrentUser = ($0.id == existing.id) }
-            }
+            markCurrentUser(existing, in: context)
             return existing
         }
 

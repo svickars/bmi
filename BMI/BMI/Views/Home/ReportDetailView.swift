@@ -7,7 +7,7 @@ struct ReportDetailView: View {
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
     @EnvironmentObject private var navigationRouter: AppNavigationRouter
     @Query private var settingsList: [AppSettings]
-    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
+    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser == true }) private var currentUsers: [UserProfile]
     @State private var reactionRefreshToken = UUID()
     @State private var isReacting = false
 

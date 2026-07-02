@@ -4,7 +4,7 @@ import SwiftUI
 struct NotificationsView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
-    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
+    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser == true }) private var currentUsers: [UserProfile]
     @Query(sort: \UserNotification.createdAt, order: .reverse) private var allNotifications: [UserNotification]
     @Query private var reports: [BigMacReport]
 

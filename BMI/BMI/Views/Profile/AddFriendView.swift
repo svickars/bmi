@@ -4,7 +4,7 @@ import SwiftData
 struct AddFriendView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var syncCoordinator: SyncCoordinator
-    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
+    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser == true }) private var currentUsers: [UserProfile]
 
     @State private var usernameQuery = ""
     @State private var searchResults: [PublicUserDTO] = []

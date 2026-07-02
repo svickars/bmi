@@ -12,7 +12,7 @@ struct ProfileView: View {
     @Query(sort: \UserNotification.createdAt, order: .reverse) private var allNotifications: [UserNotification]
 
     private var currentUser: UserProfile? {
-        users.first { $0.isCurrentUser }
+        users.first { $0.isCurrentUser == true }
     }
 
     private var unreadNotificationCount: Int {
