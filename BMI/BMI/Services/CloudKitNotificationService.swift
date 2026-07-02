@@ -1,6 +1,7 @@
 import CloudKit
 import Foundation
 import SwiftData
+import UIKit
 import UserNotifications
 
 @MainActor
@@ -196,5 +197,3 @@ final class CloudKitNotificationService: ObservableObject {
         try? await UNUserNotificationCenter.current().add(request)
     }
 }
-
-import UIKit
