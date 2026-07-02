@@ -54,6 +54,8 @@ struct UsernameSetupView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(BMIScreenBackground())
             .navigationTitle("Choose Username")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

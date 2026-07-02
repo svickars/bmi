@@ -8,26 +8,26 @@ struct SignInView: View {
 
     var body: some View {
         ZStack {
-            BMIGradient.header
-                .ignoresSafeArea()
+            BMIScreenBackground()
 
-            VStack(spacing: 28) {
+            VStack(spacing: 32) {
                 Spacer()
 
-                VStack(spacing: 12) {
-                    Text("🍔")
-                        .font(.system(size: 72))
+                VStack(spacing: 20) {
+                    BMILayerMark(width: 200)
 
-                    Text("The Big Mac Index")
-                        .font(.largeTitle.bold())
-                        .foregroundStyle(.white)
-                        .multilineTextAlignment(.center)
+                    VStack(spacing: 10) {
+                        Text("The Big Mac Index")
+                            .font(BMITypography.display(34))
+                            .foregroundStyle(Color.bmiInk)
+                            .multilineTextAlignment(.center)
 
-                    Text("Track Big Mac prices and quality worldwide. Sign in to submit reports and compare the index in your currency.")
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.9))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 24)
+                        Text("Track prices and quality worldwide.")
+                            .font(BMITypography.ui(.subheadline))
+                            .foregroundStyle(Color.bmiMuted)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 24)
+                    }
                 }
 
                 Spacer()
@@ -38,20 +38,20 @@ struct SignInView: View {
                     } onCompletion: { result in
                         authService.handleSignInCompletion(result)
                     }
-                    .signInWithAppleButtonStyle(.white)
+                    .signInWithAppleButtonStyle(.black)
                     .frame(height: 50)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .clipShape(Capsule())
 
                     if let errorMessage = authService.errorMessage {
                         Text(errorMessage)
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.95))
+                            .font(BMITypography.ui(.caption))
+                            .foregroundStyle(Color.bmiRed)
                             .multilineTextAlignment(.center)
                     }
 
-                    Text("Your Apple ID is used to identify your reports. Name and email are only shared on first sign-in.")
-                        .font(.caption2)
-                        .foregroundStyle(.white.opacity(0.75))
+                    Text("Your Apple ID identifies your reports. Name and email are only shared on first sign-in.")
+                        .font(BMITypography.ui(.caption2))
+                        .foregroundStyle(Color.bmiMuted)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 8)
 
@@ -59,8 +59,8 @@ struct SignInView: View {
                     Button("Continue with Preview Account") {
                         authService.signInAsPreviewUser(in: modelContext)
                     }
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.9))
+                    .font(BMITypography.ui(.caption, weight: .semibold))
+                    .foregroundStyle(Color.bmiInk)
                     #endif
                 }
                 .padding(.horizontal, 24)

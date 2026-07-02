@@ -18,6 +18,9 @@ enum CloudKitSchema {
         static let username = "username"
         static let normalizedUsername = "normalizedUsername"
         static let avatarEmoji = "avatarEmoji"
+        static let avatarStyleRaw = "avatarStyleRaw"
+        static let avatarInitials = "avatarInitials"
+        static let avatarBackgroundHex = "avatarBackgroundHex"
         static let homeCountry = "homeCountry"
         static let updatedAt = "updatedAt"
     }
@@ -94,9 +97,16 @@ struct PublicUserDTO: Identifiable, Hashable {
     let displayName: String
     let username: String
     let avatarEmoji: String
+    let avatarStyleRaw: String
+    let avatarInitials: String
+    let avatarBackgroundHex: String
     let homeCountry: String
 
     var id: String { appleUserID }
+
+    var avatarStyle: AvatarStyle {
+        AvatarStyle(rawValue: avatarStyleRaw) ?? .emoji
+    }
 }
 
 import CloudKit
@@ -115,6 +125,10 @@ extension CKRecord {
             displayName: displayName,
             username: username,
             avatarEmoji: self[CloudKitSchema.PublicUser.avatarEmoji] as? String ?? "🍔",
+            avatarStyleRaw: self[CloudKitSchema.PublicUser.avatarStyleRaw] as? String ?? AvatarStyle.emoji.rawValue,
+            avatarInitials: self[CloudKitSchema.PublicUser.avatarInitials] as? String ?? "",
+            avatarBackgroundHex: self[CloudKitSchema.PublicUser.avatarBackgroundHex] as? String
+                ?? AvatarAppearance.defaultBackgroundHex(for: .emoji),
             homeCountry: self[CloudKitSchema.PublicUser.homeCountry] as? String ?? ""
         )
     }

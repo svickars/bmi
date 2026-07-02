@@ -64,12 +64,11 @@ struct ContentView: View {
 struct LaunchLoadingView: View {
     var body: some View {
         ZStack {
-            BMIGradient.header.ignoresSafeArea()
-            VStack(spacing: 16) {
-                Text("🍔")
-                    .font(.system(size: 56))
+            BMIScreenBackground()
+            VStack(spacing: 20) {
+                BMILayerMark(width: 140)
                 ProgressView()
-                    .tint(.white)
+                    .tint(.bmiRed)
             }
         }
     }

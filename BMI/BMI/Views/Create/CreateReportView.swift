@@ -145,6 +145,8 @@ struct CreateReportView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(BMIScreenBackground())
             .navigationTitle("New Report")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

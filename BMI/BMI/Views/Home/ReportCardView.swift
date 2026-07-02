@@ -7,89 +7,99 @@ struct ReportCardView: View {
     @EnvironmentObject private var navigationRouter: AppNavigationRouter
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(report.locationName)
-                        .font(.headline)
-                        .lineLimit(2)
-
-                    Label(report.locationType.displayName, systemImage: report.locationType.icon)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text(report.formattedCost)
-                        .font(.title3.bold())
-                        .foregroundStyle(.bmiRed)
-
-                    StarRatingView(rating: report.rating, size: 12)
-                }
-            }
-
-            if let photo = report.photos?.first,
-               let uiImage = UIImage(data: photo.imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 140)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-
-            if !report.reviewText.isEmpty {
-                Text(report.reviewText)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(3)
-            }
-
-            HStack {
-                if showsAuthor, let author = report.author {
-                    Button {
-                        navigationRouter.openUserProfile(username: author.username)
-                    } label: {
-                        Label {
-                            Text(author.displayName)
-                        } icon: {
-                            Text(author.avatarEmoji)
+        BMICard(padding: 0) {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .top, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        if showsAuthor, let author = report.author {
+                            Button {
+                                navigationRouter.openUserProfile(username: author.username)
+                            } label: {
+                                HStack(spacing: 8) {
+                                    BMIAvatarView(user: author, size: 28)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(author.displayName)
+                                            .font(BMITypography.ui(.subheadline, weight: .semibold))
+                                            .foregroundStyle(Color.bmiInk)
+                                        Text(report.locationName)
+                                            .font(BMITypography.ui(.caption))
+                                            .foregroundStyle(Color.bmiMuted)
+                                            .lineLimit(1)
+                                    }
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            Text(report.locationName)
+                                .font(BMITypography.ui(.headline))
+                                .foregroundStyle(Color.bmiInk)
+                                .lineLimit(2)
                         }
-                        .font(.caption)
+
+                        Label(report.locationType.displayName, systemImage: report.locationType.icon)
+                            .font(BMITypography.ui(.caption))
+                            .foregroundStyle(Color.bmiMuted)
                     }
-                    .buttonStyle(.plain)
+
+                    Spacer(minLength: 8)
+
+                    BMIPriceBadge(text: report.formattedCost, diameter: 58)
+                }
+                .padding(16)
+
+                if let photo = report.photos?.first,
+                   let uiImage = UIImage(data: photo.imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 180)
+                        .clipped()
+                        .bmiBiteClip()
+                        .padding(.horizontal, 16)
                 }
 
-                Spacer()
+                VStack(alignment: .leading, spacing: 10) {
+                    if !report.reviewText.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Notes:")
+                                .font(BMITypography.ui(.subheadline, weight: .semibold))
+                            Text(report.reviewText)
+                                .font(BMITypography.ui(.subheadline))
+                                .foregroundStyle(Color.bmiMuted)
+                                .lineLimit(3)
+                        }
+                    }
 
-                Text("\(report.country) · \(report.subRegion)")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-            }
+                    HStack {
+                        StarRatingView(rating: report.rating, size: 12)
+                        Spacer()
+                        Text("\(report.country) · \(report.subRegion)")
+                            .font(BMITypography.ui(.caption2))
+                            .foregroundStyle(Color.bmiMuted)
+                    }
 
-            if let tagged = report.taggedFriends, !tagged.isEmpty {
-                HStack(spacing: 4) {
-                    Image(systemName: "person.2.fill")
-                        .font(.caption2)
-                    Text(tagged.map(\.displayName).joined(separator: ", "))
-                        .font(.caption2)
-                        .lineLimit(1)
+                    if let tagged = report.taggedFriends, !tagged.isEmpty {
+                        HStack(spacing: 4) {
+                            Image(systemName: "person.2.fill")
+                                .font(.caption2)
+                            Text(tagged.map(\.displayName).joined(separator: ", "))
+                                .font(BMITypography.ui(.caption2))
+                                .lineLimit(1)
+                        }
+                        .foregroundStyle(Color.bmiBrown)
+                    }
+
+                    Text(report.purchasedItemsSummary)
+                        .font(BMITypography.ui(.caption))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Color.bmiCream)
+                        .clipShape(Capsule())
                 }
-                .foregroundStyle(.bmiBrown)
+                .padding(16)
             }
-
-            Text(report.purchasedItemsSummary)
-                .font(.caption)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(Color.bmiCream)
-                .clipShape(Capsule())
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.06), radius: 8, y: 4)
     }
 }
 
@@ -106,5 +116,6 @@ struct ReportCardView: View {
         subRegion: "California"
     ))
     .padding()
+    .background(BMIScreenBackground())
     .environmentObject(AppNavigationRouter.shared)
 }

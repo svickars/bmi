@@ -61,7 +61,7 @@ Work in **Development** first. Promote to **Production** before App Store / exte
 
 | Record type | Queryable / sortable fields |
 |-------------|----------------------------|
-| `PublicUser` | `normalizedUsername` (Queryable) |
+| `PublicUser` | `normalizedUsername` (Queryable); also stores `avatarStyleRaw`, `avatarInitials`, `avatarBackgroundHex` for custom avatars |
 | `PublicReport` | `createdAt` (Sortable), **`authorAppleUserID` (Queryable)** |
 | `PublicReportPhoto` | `reportID` (Queryable) |
 | `FriendConnection` | `fromAppleUserID`, `toAppleUserID`, `status` (Queryable) |

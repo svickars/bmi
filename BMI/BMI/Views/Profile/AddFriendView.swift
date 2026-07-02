@@ -41,7 +41,7 @@ struct AddFriendView: View {
                         PublicUserProfileView(username: user.username)
                     } label: {
                         HStack {
-                            Text(user.avatarEmoji)
+                            BMIAvatarView(user: user, size: 44)
                             VStack(alignment: .leading) {
                                 Text(user.displayName)
                                 Text("@\(user.username)")

@@ -41,6 +41,8 @@ struct NotificationsView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(BMIScreenBackground())
         .navigationTitle("Notifications")
         .toolbar {
             if notifications.contains(where: { !$0.isRead }) {
@@ -89,7 +91,7 @@ private struct NotificationRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(notification.title)
-                        .font(.subheadline.weight(notification.isRead ? .regular : .semibold))
+                        .font(BMITypography.ui(.subheadline, weight: notification.isRead ? .regular : .semibold))
                     Spacer()
                     Text(notification.createdAt.formatted(date: .abbreviated, time: .shortened))
                         .font(.caption2)

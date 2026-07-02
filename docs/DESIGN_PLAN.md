@@ -314,7 +314,7 @@ No parallax, no particle confetti, no haptic overload.
 ## 9. What we’re explicitly not doing
 
 - Purple/blue AI startup gradients
-- Emoji as primary identity (limit to friend avatars if kept)
+- Emoji as the only avatar option (users can pick emoji **or** initials)
 - Gradient headers on every screen
 - Skeuomorphic burger UI chrome
 - Literal McDonald’s logo or campaign asset reproduction
@@ -336,12 +336,14 @@ When you run on device, it should feel:
 
 ---
 
-## 11. Open decisions for Sam
+## 11. Decisions (confirmed)
 
-1. **Serif font:** New York (zero bundle size) vs bundled editorial face?
-2. **Emoji avatars:** keep for friends or switch to initials circles (more Beli)?
-3. **Feed header:** remove gradient entirely or keep as rare “announcement” banner?
-4. **Bite mask:** subtle design easter egg or skip (some may read as too cute)?
-5. **Index recap:** manual share only vs prompt after N reports?
+| Decision | Choice |
+|----------|--------|
+| **Serif font** | **New York + San Francisco** — New York for display titles, SF Pro for UI/data |
+| **Avatars** | User chooses **emoji OR initials**, plus a **background colour** from preset palette (`AvatarEditorView`) |
+| **Feed header** | Editorial paper header — no gradient banner |
+| **Bite mask** | **Yes** — subtle corner clip on report hero photos (`BMIBiteClipShape`) |
+| **Index recap** | **Deferred** — nice annual/quarterly feature later; not in MVP UI |
 
-Answer these before Phase 4 to avoid rework.
+These decisions are implemented on branch `cursor/ui-redesign-beli-8bf8`.
