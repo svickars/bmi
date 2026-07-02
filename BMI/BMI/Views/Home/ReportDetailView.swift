@@ -115,19 +115,7 @@ struct ReportDetailView: View {
                 }
 
                 if let photos = report.photos, photos.count > 1 {
-                    TabView {
-                        ForEach(Array(photos.dropFirst()), id: \.id) { photo in
-                            if let uiImage = UIImage(data: photo.imageData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 220)
-                                    .bmiBiteClip()
-                            }
-                        }
-                    }
-                    .frame(height: 220)
-                    .tabViewStyle(.page)
+                    additionalPhotosCarousel(Array(photos.dropFirst()))
                 }
 
                 locationDetailsSection
@@ -153,17 +141,34 @@ struct ReportDetailView: View {
     }
 
     @ViewBuilder
+    private func additionalPhotosCarousel(_ photos: [ReportPhoto]) -> some View {
+        TabView {
+            ForEach(photos, id: \.id) { photo in
+                reportPhotoImage(photo, height: 220)
+            }
+        }
+        .frame(height: 220)
+        .tabViewStyle(.page)
+    }
+
+    @ViewBuilder
+    private func reportPhotoImage(_ photo: ReportPhoto, height: CGFloat) -> some View {
+        if let uiImage = UIImage(data: photo.imageData) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFill()
+                .frame(height: height)
+                .clipped()
+                .bmiBiteClip()
+        }
+    }
+
+    @ViewBuilder
     private var heroSection: some View {
         ZStack(alignment: .bottomLeading) {
-            if let photo = report.photos?.first,
-               let uiImage = UIImage(data: photo.imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
+            if let photo = report.photos?.first {
+                reportPhotoImage(photo, height: 280)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 280)
-                    .clipped()
-                    .bmiBiteClip()
             } else {
                 BMIBurgerStripesBackground()
                     .frame(maxWidth: .infinity)

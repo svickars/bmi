@@ -12,7 +12,7 @@ struct StarRatingView: View {
             ForEach(1...maxRating, id: \.self) { star in
                 Image(systemName: star <= rating ? "star.fill" : "star")
                     .font(.system(size: size))
-                    .foregroundStyle(star <= rating ? .bmiYellow : .gray.opacity(0.4))
+                    .foregroundStyle(star <= rating ? Color.bmiYellow : Color.gray.opacity(0.4))
                     .onTapGesture {
                         if interactive {
                             onRatingChanged?(star)

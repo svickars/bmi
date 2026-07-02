@@ -90,7 +90,7 @@ final class CloudKitNotificationService: ObservableObject {
 
     private func saveFriendRequestSubscription(for appleUserID: String) async throws {
         let subscriptionID = "friend-requests.\(appleUserID)"
-        try? await publicDatabase.deleteSubscription(withID: subscriptionID)
+        _ = try? await publicDatabase.deleteSubscription(withID: subscriptionID)
 
         let predicate = NSPredicate(
             format: "%K == %@ AND %K == %@",
@@ -115,7 +115,7 @@ final class CloudKitNotificationService: ObservableObject {
 
     private func saveActivitySubscription(for appleUserID: String) async throws {
         let subscriptionID = "activity.\(appleUserID)"
-        try? await publicDatabase.deleteSubscription(withID: subscriptionID)
+        _ = try? await publicDatabase.deleteSubscription(withID: subscriptionID)
 
         let predicate = NSPredicate(
             format: "%K == %@",
