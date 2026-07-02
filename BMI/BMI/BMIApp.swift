@@ -11,7 +11,8 @@ struct BMIApp: App {
             BigMacReport.self,
             UserProfile.self,
             ReportPhoto.self,
-            AppSettings.self
+            AppSettings.self,
+            FriendLink.self
         ], isAutosaveEnabled: true)
     }
 }

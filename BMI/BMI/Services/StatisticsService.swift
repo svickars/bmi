@@ -16,13 +16,22 @@ struct StatisticsSummary {
     let cheapestCountry: PriceAggregate?
     let priciestCountry: PriceAggregate?
     let normalizationCurrency: String
+    let usesTodaysDollars: Bool
 }
 
 enum StatisticsService {
-    static func summary(from reports: [BigMacReport], normalizationCurrency: String) -> StatisticsSummary {
+    static func summary(
+        from reports: [BigMacReport],
+        normalizationCurrency: String,
+        useTodaysDollars: Bool = true
+    ) -> StatisticsSummary {
         let bigMacReports = bigMacReports(from: reports)
         let countryGroups = Dictionary(grouping: bigMacReports, by: \.country)
-        let countryAggregates = aggregates(from: countryGroups, normalizationCurrency: normalizationCurrency)
+        let countryAggregates = aggregates(
+            from: countryGroups,
+            normalizationCurrency: normalizationCurrency,
+            useTodaysDollars: useTodaysDollars
+        )
 
         let avgRating = bigMacReports.isEmpty
             ? 0
@@ -36,31 +45,53 @@ enum StatisticsService {
             countriesTracked: countryAggregates.count,
             cheapestCountry: sortedByPrice.first,
             priciestCountry: sortedByPrice.last,
-            normalizationCurrency: normalizationCurrency
+            normalizationCurrency: normalizationCurrency,
+            usesTodaysDollars: useTodaysDollars
         )
     }
 
-    static func byCountry(from reports: [BigMacReport], normalizationCurrency: String) -> [PriceAggregate] {
+    static func byCountry(
+        from reports: [BigMacReport],
+        normalizationCurrency: String,
+        useTodaysDollars: Bool = true
+    ) -> [PriceAggregate] {
         let groups = Dictionary(grouping: bigMacReports(from: reports), by: \.country)
-        return aggregates(from: groups, normalizationCurrency: normalizationCurrency)
-            .sorted { $0.averageCost > $1.averageCost }
+        return aggregates(
+            from: groups,
+            normalizationCurrency: normalizationCurrency,
+            useTodaysDollars: useTodaysDollars
+        )
+        .sorted { $0.averageCost > $1.averageCost }
     }
 
     static func bySubRegion(
         from reports: [BigMacReport],
         country: String? = nil,
-        normalizationCurrency: String
+        normalizationCurrency: String,
+        useTodaysDollars: Bool = true
     ) -> [PriceAggregate] {
         let filtered = bigMacReports(from: reports).filter { country == nil || $0.country == country }
         let groups = Dictionary(grouping: filtered) { "\($0.country) · \($0.subRegion)" }
-        return aggregates(from: groups, normalizationCurrency: normalizationCurrency)
-            .sorted { $0.averageCost > $1.averageCost }
+        return aggregates(
+            from: groups,
+            normalizationCurrency: normalizationCurrency,
+            useTodaysDollars: useTodaysDollars
+        )
+        .sorted { $0.averageCost > $1.averageCost }
     }
 
-    static func byLocationType(from reports: [BigMacReport], normalizationCurrency: String) -> [PriceAggregate] {
+    static func byLocationType(
+        from reports: [BigMacReport],
+        normalizationCurrency: String,
+        useTodaysDollars: Bool = true
+    ) -> [PriceAggregate] {
         let groups = Dictionary(grouping: bigMacReports(from: reports)) { $0.locationType.displayName }
-        return aggregates(from: groups, normalizationCurrency: normalizationCurrency)
-            .sorted { $0.averageCost > $1.averageCost }
+        return aggregates(
+            from: groups,
+            normalizationCurrency: normalizationCurrency,
+            useTodaysDollars: useTodaysDollars
+        )
+        .sorted { $0.averageCost > $1.averageCost }
     }
 
     static func ratingDistribution(from reports: [BigMacReport]) -> [(rating: Int, count: Int)] {
@@ -77,11 +108,16 @@ enum StatisticsService {
 
     private static func aggregates(
         from groups: [String: [BigMacReport]],
-        normalizationCurrency: String
+        normalizationCurrency: String,
+        useTodaysDollars: Bool
     ) -> [PriceAggregate] {
         groups.map { label, items in
             let normalizedCosts = items.map {
-                CurrencyConversionService.convert($0.cost, from: $0.currencyCode, to: normalizationCurrency)
+                PriceNormalizationService.comparableAmountSync(
+                    for: $0,
+                    targetCurrency: normalizationCurrency,
+                    useTodaysDollars: useTodaysDollars
+                )
             }
             let avgCost = normalizedCosts.reduce(0, +) / Double(items.count)
             let avgRating = Double(items.map(\.rating).reduce(0, +)) / Double(items.count)

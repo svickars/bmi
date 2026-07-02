@@ -12,8 +12,16 @@ struct StatisticsView: View {
         settingsList.first?.effectiveNormalizationCurrency ?? CurrencyConversionService.deviceLocaleCurrencyCode()
     }
 
+    private var useTodaysDollars: Bool {
+        settingsList.first?.useTodaysDollars ?? true
+    }
+
     private var summary: StatisticsSummary {
-        StatisticsService.summary(from: reports, normalizationCurrency: normalizationCurrency)
+        StatisticsService.summary(
+            from: reports,
+            normalizationCurrency: normalizationCurrency,
+            useTodaysDollars: useTodaysDollars
+        )
     }
 
     private var countries: [String] {
@@ -21,15 +29,15 @@ struct StatisticsView: View {
     }
 
     private var countryData: [PriceAggregate] {
-        StatisticsService.byCountry(from: reports, normalizationCurrency: normalizationCurrency)
+        StatisticsService.byCountry(from: reports, normalizationCurrency: normalizationCurrency, useTodaysDollars: useTodaysDollars)
     }
 
     private var subRegionData: [PriceAggregate] {
-        StatisticsService.bySubRegion(from: reports, country: selectedCountry, normalizationCurrency: normalizationCurrency)
+        StatisticsService.bySubRegion(from: reports, country: selectedCountry, normalizationCurrency: normalizationCurrency, useTodaysDollars: useTodaysDollars)
     }
 
     private var locationTypeData: [PriceAggregate] {
-        StatisticsService.byLocationType(from: reports, normalizationCurrency: normalizationCurrency)
+        StatisticsService.byLocationType(from: reports, normalizationCurrency: normalizationCurrency, useTodaysDollars: useTodaysDollars)
     }
 
     private var ratingData: [(rating: Int, count: Int)] {
@@ -82,9 +90,9 @@ struct StatisticsView: View {
             Image(systemName: "arrow.left.arrow.right.circle.fill")
                 .foregroundStyle(.bmiBrown)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Normalized to \(normalizationCurrency)")
+                Text("Normalized to \(normalizationCurrency)\(useTodaysDollars ? " in today's dollars" : "")")
                     .font(.subheadline.weight(.semibold))
-                Text("Original local prices are converted for cross-country comparison.")
+                Text("Live FX + US CPI inflation align historical reports with current purchasing power.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

@@ -18,6 +18,15 @@ final class BigMacReport {
     var locationTypeRaw: String
     var createdAt: Date
 
+    /// USD equivalent at the historical exchange rate on the report date.
+    var usdAtReportDate: Double
+    var exchangeRateDate: Date
+    var authorAppleUserID: String?
+    var taggedFriendAppleUserIDs: [String]
+    var cloudRecordName: String?
+    var isPublic: Bool
+    var lastSyncedAt: Date?
+
     @Relationship(deleteRule: .nullify)
     var author: UserProfile?
 
@@ -45,12 +54,19 @@ final class BigMacReport {
         CurrencyConversionService.format(cost, currencyCode: currencyCode)
     }
 
-    func normalizedCost(in currencyCode: String) -> Double {
-        CurrencyConversionService.convert(cost, from: self.currencyCode, to: currencyCode)
+    func comparableAmount(in currencyCode: String, useTodaysDollars: Bool = true) -> Double {
+        PriceNormalizationService.comparableAmountSync(
+            for: self,
+            targetCurrency: currencyCode,
+            useTodaysDollars: useTodaysDollars
+        )
     }
 
-    func formattedNormalizedCost(in currencyCode: String) -> String {
-        CurrencyConversionService.format(normalizedCost(in: currencyCode), currencyCode: currencyCode)
+    func formattedComparableValue(in currencyCode: String, useTodaysDollars: Bool = true) -> String {
+        CurrencyConversionService.format(
+            comparableAmount(in: currencyCode, useTodaysDollars: useTodaysDollars),
+            currencyCode: currencyCode
+        )
     }
 
     var purchasedItemsSummary: String {
@@ -71,6 +87,13 @@ final class BigMacReport {
         subRegion: String,
         locationType: LocationType = .urban,
         createdAt: Date = .now,
+        usdAtReportDate: Double = 0,
+        exchangeRateDate: Date = .now,
+        authorAppleUserID: String? = nil,
+        taggedFriendAppleUserIDs: [String] = [],
+        cloudRecordName: String? = nil,
+        isPublic: Bool = true,
+        lastSyncedAt: Date? = nil,
         author: UserProfile? = nil,
         taggedFriends: [UserProfile] = [],
         photos: [ReportPhoto] = []
@@ -88,6 +111,13 @@ final class BigMacReport {
         self.subRegion = subRegion
         self.locationTypeRaw = locationType.rawValue
         self.createdAt = createdAt
+        self.usdAtReportDate = usdAtReportDate
+        self.exchangeRateDate = exchangeRateDate
+        self.authorAppleUserID = authorAppleUserID
+        self.taggedFriendAppleUserIDs = taggedFriendAppleUserIDs
+        self.cloudRecordName = cloudRecordName
+        self.isPublic = isPublic
+        self.lastSyncedAt = lastSyncedAt
         self.author = author
         self.taggedFriends = taggedFriends
         self.photos = photos

@@ -44,4 +44,5 @@ struct MainTabView: View {
     MainTabView()
         .modelContainer(PreviewData.previewContainer)
         .environmentObject(AuthenticationService())
+        .environmentObject(SyncCoordinator())
 }

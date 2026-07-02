@@ -5,8 +5,9 @@ import SwiftData
 struct CreateReportView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var syncCoordinator: SyncCoordinator
 
-    @Query private var friends: [UserProfile]
+    @Query private var friendLinks: [FriendLink]
     @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
 
     @StateObject private var locationService = LocationService()
@@ -20,16 +21,20 @@ struct CreateReportView: View {
     @State private var subRegion = ""
     @State private var locationType: LocationType = .urban
     @State private var purchasedItems: Set<PurchasedItem> = [.bigMac]
-    @State private var selectedFriendIDs: Set<UUID> = []
+    @State private var selectedFriendAppleUserIDs: Set<String> = []
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoData: [Data] = []
     @State private var showValidationAlert = false
     @State private var validationMessage = ""
+    @State private var isSubmitting = false
 
     private var currentUser: UserProfile? { currentUsers.first }
 
-    private var friendList: [UserProfile] {
-        friends.filter { !$0.isCurrentUser }
+    private var acceptedFriends: [FriendLink] {
+        guard let appleUserID = currentUser?.appleUserID else { return [] }
+        return friendLinks.filter {
+            $0.ownerAppleUserID == appleUserID && $0.statusRaw == FriendLinkStatus.accepted.rawValue
+        }
     }
 
     var body: some View {
@@ -118,11 +123,26 @@ struct CreateReportView: View {
                         .lineLimit(3...6)
                 }
 
-                if !friendList.isEmpty {
+                if !acceptedFriends.isEmpty {
                     Section("Tag Friends") {
-                        TagFriendsView(friends: friendList, selectedFriends: $selectedFriendIDs)
-                            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                        TagLinkedFriendsView(
+                            friends: acceptedFriends,
+                            selectedFriendAppleUserIDs: $selectedFriendAppleUserIDs
+                        )
+                        .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                     }
+                } else {
+                    Section("Tag Friends") {
+                        Text("Add accepted friends in Profile → Friends to tag them in reports.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Section("Sharing") {
+                    Text("Reports are published to the global BMI public index via CloudKit. Meal photos stay on your device for now.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
             .navigationTitle("New Report")
@@ -131,8 +151,11 @@ struct CreateReportView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Submit") { submitReport() }
-                        .fontWeight(.semibold)
+                    Button(isSubmitting ? "Saving…" : "Submit") {
+                        Task { await submitReport() }
+                    }
+                    .fontWeight(.semibold)
+                    .disabled(isSubmitting)
                 }
             }
             .onChange(of: locationService.currentLocation) { _, location in
@@ -160,7 +183,9 @@ struct CreateReportView: View {
         await MainActor.run { photoData = loaded }
     }
 
-    private func submitReport() {
+    private func submitReport() async {
+        guard let currentUser else { return }
+
         guard let cost = Double(costText.replacingOccurrences(of: ",", with: ".")),
               cost > 0 else {
             validationMessage = "Enter a valid price for your meal."
@@ -180,10 +205,27 @@ struct CreateReportView: View {
             return
         }
 
+        isSubmitting = true
+        defer { isSubmitting = false }
+
+        let reportDate = Date()
+        let snapshot = await PriceNormalizationService.captureUSDSnapshot(
+            for: cost,
+            currencyCode: currencyCode.uppercased(),
+            on: reportDate
+        )
+
         let latitude = locationService.currentLocation?.latitude ?? 0
         let longitude = locationService.currentLocation?.longitude ?? 0
+        let taggedProfiles = acceptedFriends
+            .filter { selectedFriendAppleUserIDs.contains($0.friendAppleUserID) }
+            .compactMap { link -> UserProfile? in
+                let descriptor = FetchDescriptor<UserProfile>(
+                    predicate: #Predicate { $0.appleUserID == link.friendAppleUserID }
+                )
+                return try? modelContext.fetch(descriptor).first
+            }
 
-        let taggedFriends = friendList.filter { selectedFriendIDs.contains($0.id) }
         let photos = photoData.map { ReportPhoto(imageData: $0) }
 
         let report = BigMacReport(
@@ -198,13 +240,21 @@ struct CreateReportView: View {
             country: country,
             subRegion: subRegion.isEmpty ? country : subRegion,
             locationType: locationType,
+            createdAt: reportDate,
+            usdAtReportDate: snapshot.usd,
+            exchangeRateDate: snapshot.rateDate,
+            authorAppleUserID: currentUser.appleUserID,
+            taggedFriendAppleUserIDs: Array(selectedFriendAppleUserIDs),
+            isPublic: true,
             author: currentUser,
-            taggedFriends: taggedFriends,
+            taggedFriends: taggedProfiles,
             photos: photos
         )
 
         modelContext.insert(report)
         try? modelContext.save()
+
+        await syncCoordinator.uploadReport(report, author: currentUser, modelContext: modelContext)
         dismiss()
     }
 }
@@ -212,4 +262,5 @@ struct CreateReportView: View {
 #Preview {
     CreateReportView()
         .modelContainer(PreviewData.previewContainer)
+        .environmentObject(SyncCoordinator())
 }

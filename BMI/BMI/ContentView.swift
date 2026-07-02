@@ -4,6 +4,8 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var authService = AuthenticationService()
+    @StateObject private var syncCoordinator = SyncCoordinator()
+    @Query(filter: #Predicate<UserProfile> { $0.isCurrentUser }) private var currentUsers: [UserProfile]
 
     var body: some View {
         Group {
@@ -16,10 +18,17 @@ struct ContentView: View {
             }
         }
         .environmentObject(authService)
+        .environmentObject(syncCoordinator)
         .onAppear {
             authService.configure(modelContext: modelContext)
             authService.checkExistingCredential()
             _ = AppSettingsStore.current(in: modelContext)
+        }
+        .onChange(of: authService.isAuthenticated) { _, isAuthenticated in
+            guard isAuthenticated else { return }
+            Task {
+                await syncCoordinator.bootstrap(modelContext: modelContext, currentUser: currentUsers.first)
+            }
         }
     }
 }

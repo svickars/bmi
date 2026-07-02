@@ -7,7 +7,7 @@ enum PreviewData {
     static let previewContainer: ModelContainer = {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(
-            for: BigMacReport.self, UserProfile.self, ReportPhoto.self, AppSettings.self,
+            for: BigMacReport.self, UserProfile.self, ReportPhoto.self, AppSettings.self, FriendLink.self,
             configurations: config
         )
         let context = container.mainContext
@@ -121,6 +121,8 @@ enum SeedDataService {
                 subRegion: subRegion,
                 locationType: locationType,
                 createdAt: Calendar.current.date(byAdding: .day, value: -index, to: .now) ?? .now,
+                usdAtReportDate: CurrencyConversionService.convertToUSD(cost, from: currency),
+                exchangeRateDate: Calendar.current.date(byAdding: .day, value: -index, to: .now) ?? .now,
                 author: author,
                 taggedFriends: tagged
             )

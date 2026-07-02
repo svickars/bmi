@@ -5,98 +5,71 @@ An iOS app inspired by [The Economist's Big Mac Index](https://www.economist.com
 ## Features
 
 - **Sign in with Apple** — Secure account identity for your reports
-- **Report meals** — Log price, star rating, written review, and what you purchased
-- **Tag locations** — Auto-detect via GPS or enter manually, with location types (urban, suburban, rural, highway, airport, mall, etc.)
-- **Tag friends** — Mention friends who shared the meal
-- **Add photos** — Attach up to 5 photos per report
-- **Global feed** — Browse all community reports with search and country filters
-- **Interactive map** — See reports pinned worldwide with price and rating
-- **Currency normalization** — Compare global prices in your device locale currency, or pick a specific currency in Settings
-- **Index statistics** — Charts by country, sub-region, and location type
-- **Profile** — Your submission history, settings, and sign out
+- **Global public index** — Reports sync to CloudKit's public database for real multi-user data
+- **Live exchange rates** — Frankfurter API for current and historical FX on each report date
+- **Today's dollars** — US CPI inflation adjustment so a meal logged today still compares fairly years later
+- **Real friend linking** — Search by username, send/accept friend requests via CloudKit, tag friends in reports
+- **Report meals** — Price, rating, review, photos (local), location type, GPS tagging
+- **Feed, map, and stats** — Browse and visualize the global index with normalized comparisons
 
 ## Requirements
 
 - Xcode 15+
 - iOS 17+
-- iPhone or iPad
-- Apple Developer account (for Sign in with Apple capability)
+- Apple Developer account with **Sign in with Apple** and **CloudKit** enabled
+- iCloud signed in on device/simulator for public sync
 
 ## Getting Started
 
-1. Clone the repository
-2. Open `BMI/BMI.xcodeproj` in Xcode
-3. Select your development team under **Signing & Capabilities**
-4. Ensure **Sign in with Apple** capability is enabled (uses `BMI/BMI.entitlements`)
-5. Build and run on a simulator or device (`⌘R`)
+1. Open `BMI/BMI.xcodeproj` in Xcode
+2. Set your development team under **Signing & Capabilities**
+3. Enable capabilities (entitlements included):
+   - Sign in with Apple
+   - iCloud → CloudKit → container `iCloud.com.bigmacindex.bmi`
+4. In [CloudKit Dashboard](https://icloud.developer.apple.com/), deploy schema record types:
+   - `PublicUser`
+   - `PublicReport`
+   - `FriendConnection`
+   (Fields match `CloudKitSchema.swift`)
+5. Build and run (`⌘R`)
 
-On first launch you'll see the Sign in with Apple screen. After signing in, 15 sample global reports load so you can explore the feed, map, and charts.
+Debug builds include a preview account for simulator testing without Apple ID.
 
-In **Debug** builds, a "Continue with Preview Account" button is available for simulator testing without an Apple ID.
+## Architecture
 
-## Data Storage & Sync
+### Data layers
 
-### Where is data stored today?
+| Layer | Purpose |
+|-------|---------|
+| **SwiftData (local)** | Offline cache, photos, settings, friend links |
+| **CloudKit Public DB** | Shared global reports, public profiles, friend requests |
+| **Frankfurter API** | Live + historical exchange rates |
+| **Bundled US CPI-U** | Inflation adjustment for "today's dollars" |
 
-All app data is stored **locally on the device** using **SwiftData** (Apple's persistence framework, backed by SQLite). Typical location:
+### How pricing normalization works
 
-```
-Library/Application Support/default.store
-```
+When someone submits a ¥890 Big Mac in Tokyo:
 
-This includes:
+1. **Historical FX** — Frankfurter converts ¥890 → USD using the rate on the report date
+2. **Snapshot stored** — `usdAtReportDate` saved on the report (and uploaded to CloudKit)
+3. **Today's dollars** — When viewing later, US CPI adjusts that USD for inflation
+4. **Display currency** — Adjusted USD converts to the viewer's locale or chosen currency using live rates
 
-| Data | Storage |
-|------|---------|
-| Big Mac reports | SwiftData (`BigMacReport`) |
-| Photos | SwiftData as binary blobs (`ReportPhoto`) |
-| User profile | SwiftData (`UserProfile`) |
-| App settings | SwiftData (`AppSettings`) |
-| Apple user ID (for session restore) | `UserDefaults` |
+This means a $10 Big Mac logged today will show its inflation-adjusted equivalent when someone views the index a year from now — apples-to-apples across time and country.
 
-**Nothing is uploaded to a server yet.** Each device has its own copy of the data. The sample "community" reports are seeded locally after sign-in for demo purposes.
+### Multi-user public data
 
-### What is CloudKit sync?
+Each signed-in user registers a `PublicUser` record (username, display name). Reports upload as `PublicReport` records. All clients fetch the public database to build the global feed and statistics.
 
-**CloudKit** is Apple's cloud database service, tied to a user's **iCloud account**. When SwiftData (or Core Data) is configured with a CloudKit container:
+Photos remain local for now (CloudKit asset upload can be added later).
 
-- Data syncs automatically across the user's iPhone, iPad, and Mac
-- Changes made on one device appear on others signed into the same iCloud account
-- Apple handles server infrastructure, conflict resolution, and encryption in transit/at rest
-- No custom backend required for basic multi-device sync
+### Friend linking
 
-CloudKit is **not enabled yet** in BMI. Adding it would look like:
-
-```swift
-ModelConfiguration(cloudKitDatabase: .automatic)
-```
-
-That would sync the signed-in user's reports and settings across their devices via iCloud. To share data **between different users** (a true global feed), you'd still need either:
-
-- **CloudKit Public Database** — Apple-hosted shared records with per-user write access, or
-- **Custom backend** — e.g. Firebase, Supabase, or a REST API with your own auth
-
-### User authentication
-
-| Aspect | Current implementation |
-|--------|------------------------|
-| Method | **Sign in with Apple** (`AuthenticationServices`) |
-| Identity | Apple's opaque `user` identifier stored in `UserProfile.appleUserID` |
-| Session | Credential state checked on launch via `ASAuthorizationAppleIDProvider` |
-| Profile | Name/email captured on first sign-in; email may be hidden by Apple thereafter |
-| Sign out | Clears local session; does not delete SwiftData records |
-| Friends | Local demo profiles only — not linked to real Apple IDs yet |
-
-Sign in with Apple provides privacy-friendly auth without managing passwords. The app never sees the user's Apple ID password.
-
-## Currency Normalization
-
-Stats and index comparisons convert all local prices into one **normalization currency**:
-
-- **Default:** Device locale currency (`Locale.current.currency`)
-- **Override:** Profile → Currency & Settings → pick any supported currency
-
-Original local prices are always preserved on each report. Normalized values are computed on the fly using bundled approximate exchange rates (offline-friendly). Live rate fetching can be added later.
+1. Register a unique username (from Sign in with Apple profile)
+2. Search friends by username in the public database
+3. Send a `FriendConnection` request via CloudKit
+4. Recipient accepts in **Profile → Friends**
+5. Accepted friends appear in the report tagging picker
 
 ## Project Structure
 
@@ -104,34 +77,28 @@ Original local prices are always preserved on each report. Normalized values are
 BMI/
 ├── BMI.xcodeproj/
 └── BMI/
-    ├── Models/             # SwiftData models
-    ├── Services/           # Auth, location, currency, statistics, seed data
-    ├── Views/              # SwiftUI screens
-    ├── Extensions/         # Theme colors
-    ├── BMI.entitlements    # Sign in with Apple
+    ├── Models/          # SwiftData models
+    ├── Services/        # Auth, CloudKit sync, FX, inflation, stats
+    ├── Views/           # SwiftUI screens
+    ├── BMI.entitlements
     └── Assets.xcassets/
 ```
 
-## Architecture
+## Settings
 
-| Layer | Technology |
-|-------|------------|
-| UI | SwiftUI |
-| Persistence | SwiftData (local; CloudKit-ready) |
-| Auth | Sign in with Apple |
-| Location | CoreLocation + CLGeocoder |
-| Maps | MapKit |
-| Charts | Swift Charts |
-| Photos | PhotosUI |
-| Currency | Bundled exchange rates → normalization at display time |
+**Profile → Currency & Sync Settings**
+
+- **Use Device Locale** — Default comparison currency from iPhone region
+- **Express in Today's Dollars** — CPI inflation adjustment (recommended ON)
+- **Sync with CloudKit** — Toggle public index participation
+- **Sync Now** — Manual refresh of global data
 
 ## Privacy
 
-The app requests:
-
-- **Location (When In Use)** — To tag McDonald's locations and infer country/region
-- **Photo Library** — To attach meal photos to reports
-- **Sign in with Apple** — To identify your account
+- Location (When In Use) — Tag McDonald's locations
+- Photo Library — Attach meal photos (stored locally)
+- Sign in with Apple — Account identity
+- iCloud / CloudKit — Public report metadata sync
 
 ## License
 

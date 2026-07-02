@@ -9,6 +9,10 @@ struct ReportDetailView: View {
         settingsList.first?.effectiveNormalizationCurrency ?? CurrencyConversionService.deviceLocaleCurrencyCode()
     }
 
+    private var useTodaysDollars: Bool {
+        settingsList.first?.useTodaysDollars ?? true
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -25,30 +29,56 @@ struct ReportDetailView: View {
                     .foregroundStyle(.secondary)
                 }
 
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Local Price")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(report.formattedCost)
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(.bmiRed)
-                        if report.currencyCode.uppercased() != normalizationCurrency.uppercased() {
-                            Text("≈ \(report.formattedNormalizedCost(in: normalizationCurrency)) normalized")
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Local Price")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            Text(report.formattedCost)
+                                .font(.largeTitle.bold())
+                                .foregroundStyle(.bmiRed)
+                        }
+
+                        Spacer()
+
+                        VStack(alignment: .trailing) {
+                            Text("Purchased")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text(report.purchasedItemsSummary)
+                                .font(.subheadline.weight(.medium))
+                                .multilineTextAlignment(.trailing)
                         }
                     }
 
-                    Spacer()
+                    Divider()
 
-                    VStack(alignment: .trailing) {
-                        Text("Purchased")
-                            .font(.caption)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Index Comparison")
+                            .font(.caption.weight(.semibold))
                             .foregroundStyle(.secondary)
-                        Text(report.purchasedItemsSummary)
-                            .font(.subheadline.weight(.medium))
-                            .multilineTextAlignment(.trailing)
+
+                        if report.usdAtReportDate > 0 {
+                            let todaysUSD = useTodaysDollars
+                                ? InflationService.toTodaysDollars(usdAtReportDate: report.usdAtReportDate, reportDate: report.createdAt)
+                                : report.usdAtReportDate
+                            detailLine(
+                                title: "USD at report date",
+                                value: CurrencyConversionService.format(report.usdAtReportDate, currencyCode: "USD")
+                            )
+                            if useTodaysDollars {
+                                detailLine(
+                                    title: "Today's dollars",
+                                    value: CurrencyConversionService.format(todaysUSD, currencyCode: "USD")
+                                )
+                            }
+                        }
+
+                        detailLine(
+                            title: "In \(normalizationCurrency)",
+                            value: report.formattedComparableValue(in: normalizationCurrency, useTodaysDollars: useTodaysDollars)
+                        )
                     }
                 }
                 .padding()
@@ -88,6 +118,11 @@ struct ReportDetailView: View {
                     detailRow(icon: "globe", title: "Country", value: report.country)
                     detailRow(icon: "map", title: "Region", value: report.subRegion)
                     detailRow(icon: "calendar", title: "Reported", value: report.createdAt.formatted(date: .abbreviated, time: .shortened))
+                    detailRow(icon: "arrow.left.arrow.right", title: "FX snapshot", value: report.exchangeRateDate.formatted(date: .abbreviated, time: .omitted))
+
+                    if report.isPublic {
+                        detailRow(icon: "icloud.fill", title: "Public index", value: report.cloudRecordName == nil ? "Pending sync" : "Synced")
+                    }
 
                     if let author = report.author {
                         detailRow(icon: "person.fill", title: "Reporter", value: "\(author.avatarEmoji) \(author.displayName)")
@@ -106,6 +141,17 @@ struct ReportDetailView: View {
         }
         .background(Color.bmiCream.opacity(0.3))
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func detailLine(title: String, value: String) -> some View {
+        HStack {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .font(.caption.weight(.medium))
+        }
     }
 
     private func detailRow(icon: String, title: String, value: String) -> some View {
@@ -136,7 +182,9 @@ struct ReportDetailView: View {
             latitude: 0,
             longitude: 0,
             country: "United States",
-            subRegion: "California"
+            subRegion: "California",
+            usdAtReportDate: 5.69
         ))
     }
+    .modelContainer(PreviewData.previewContainer)
 }

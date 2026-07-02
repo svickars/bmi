@@ -12,6 +12,8 @@ final class UserProfile {
     var isCurrentUser: Bool
     var appleUserID: String?
     var email: String?
+    var isRegisteredPublicly: Bool
+    var publicRecordName: String?
 
     @Relationship(deleteRule: .nullify, inverse: \BigMacReport.author)
     var reports: [BigMacReport]?
@@ -28,7 +30,9 @@ final class UserProfile {
         createdAt: Date = .now,
         isCurrentUser: Bool = false,
         appleUserID: String? = nil,
-        email: String? = nil
+        email: String? = nil,
+        isRegisteredPublicly: Bool = false,
+        publicRecordName: String? = nil
     ) {
         self.id = id
         self.displayName = displayName
@@ -39,5 +43,7 @@ final class UserProfile {
         self.isCurrentUser = isCurrentUser
         self.appleUserID = appleUserID
         self.email = email
+        self.isRegisteredPublicly = isRegisteredPublicly
+        self.publicRecordName = publicRecordName
     }
 }

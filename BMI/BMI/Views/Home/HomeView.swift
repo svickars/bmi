@@ -7,6 +7,10 @@ struct HomeView: View {
     @State private var searchText = ""
     @State private var selectedCountry: String?
 
+    private var useTodaysDollars: Bool {
+        settingsList.first?.useTodaysDollars ?? true
+    }
+
     private var normalizationCurrency: String {
         settingsList.first?.effectiveNormalizationCurrency ?? CurrencyConversionService.deviceLocaleCurrencyCode()
     }
@@ -68,7 +72,11 @@ struct HomeView: View {
     }
 
     private var headerBanner: some View {
-        let summary = StatisticsService.summary(from: reports, normalizationCurrency: normalizationCurrency)
+        let summary = StatisticsService.summary(
+            from: reports,
+            normalizationCurrency: normalizationCurrency,
+            useTodaysDollars: useTodaysDollars
+        )
 
         return VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -91,7 +99,7 @@ struct HomeView: View {
                 statPill(value: "\(summary.countriesTracked)", label: "Countries")
             }
 
-            Text("Index comparisons shown in \(normalizationCurrency)")
+            Text("Index in \(normalizationCurrency)\(useTodaysDollars ? ", today's dollars" : "")")
                 .font(.caption2)
                 .foregroundStyle(.white.opacity(0.8))
         }

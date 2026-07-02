@@ -3,8 +3,11 @@ import SwiftData
 
 struct ProfileView: View {
     @EnvironmentObject private var authService: AuthenticationService
+    @EnvironmentObject private var syncCoordinator: SyncCoordinator
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \UserProfile.displayName) private var users: [UserProfile]
     @Query(sort: \BigMacReport.createdAt, order: .reverse) private var reports: [BigMacReport]
+    @Query private var settingsList: [AppSettings]
 
     private var currentUser: UserProfile? {
         users.first { $0.isCurrentUser }
@@ -12,11 +15,7 @@ struct ProfileView: View {
 
     private var myReports: [BigMacReport] {
         guard let currentUser else { return [] }
-        return reports.filter { $0.author?.id == currentUser.id }
-    }
-
-    private var friends: [UserProfile] {
-        users.filter { !$0.isCurrentUser && $0.appleUserID == nil }
+        return reports.filter { $0.author?.id == currentUser.id || $0.authorAppleUserID == currentUser.appleUserID }
     }
 
     var body: some View {
@@ -44,6 +43,11 @@ struct ProfileView: View {
                                 Label(user.homeCountry, systemImage: "globe")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
+                                if user.isRegisteredPublicly {
+                                    Label("Public profile active", systemImage: "icloud.fill")
+                                        .font(.caption2)
+                                        .foregroundStyle(.bmiGreen)
+                                }
                             }
                         }
                         .padding(.vertical, 8)
@@ -63,44 +67,40 @@ struct ProfileView: View {
                         }
                     }
 
-                    Section("Account") {
+                    Section("Social & Settings") {
+                        NavigationLink {
+                            FriendsManagementView()
+                        } label: {
+                            Label("Friends", systemImage: "person.2.fill")
+                        }
+
                         NavigationLink {
                             SettingsView()
                         } label: {
-                            Label("Currency & Settings", systemImage: "dollarsign.circle")
+                            Label("Currency & Sync Settings", systemImage: "dollarsign.circle")
                         }
 
                         Button("Sign Out", role: .destructive) {
                             authService.signOut()
                         }
                     }
-                }
 
-                Section("Community Friends (\(friends.count))") {
-                    ForEach(friends, id: \.id) { friend in
-                        HStack(spacing: 12) {
-                            Text(friend.avatarEmoji)
-                                .font(.title2)
-                            VStack(alignment: .leading) {
-                                Text(friend.displayName)
-                                    .font(.subheadline.weight(.medium))
-                                Text("@\(friend.username) · \(friend.homeCountry)")
-                                    .font(.caption)
+                    if syncCoordinator.isSyncing {
+                        Section("Cloud Sync") {
+                            ProgressView("Syncing global index…")
+                        }
+                    } else if let lastSync = settingsList.first?.lastPublicSyncAt {
+                        Section("Cloud Sync") {
+                            LabeledContent("Last Public Sync") {
+                                Text(lastSync.formatted(date: .abbreviated, time: .shortened))
                                     .foregroundStyle(.secondary)
                             }
-                            Spacer()
-                            Text("\(reports.filter { $0.author?.id == friend.id }.count)")
-                                .font(.caption.bold())
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.bmiCream)
-                                .clipShape(Capsule())
                         }
                     }
                 }
 
                 Section("About BMI") {
-                    Text("The Big Mac Index (BMI) tracks real-world Big Mac prices and quality ratings from contributors worldwide — inspired by The Economist's purchasing power benchmark.")
+                    Text("The Big Mac Index combines live exchange rates, inflation-adjusted USD, and CloudKit public data so contributors worldwide build a real global price index.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -114,4 +114,5 @@ struct ProfileView: View {
     ProfileView()
         .modelContainer(PreviewData.previewContainer)
         .environmentObject(AuthenticationService())
+        .environmentObject(SyncCoordinator())
 }
